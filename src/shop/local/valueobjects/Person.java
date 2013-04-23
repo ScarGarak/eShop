@@ -3,8 +3,7 @@ package shop.local.valueobjects;
 public class Person {
 
 	private int id;
-	private String vorname;
-	private String nachname;
+	private String name;
 	private String passwort;
 
 	
@@ -28,10 +27,9 @@ public class Person {
 	 * @param vorname Vorname der Person.
 	 * @param nachname Nachname der Person.
 	 */
-	public Person(int id, String vorname, String nachname){
+	public Person(int id, String name){
 		this.id = id;
-		this.vorname = vorname;
-		this.nachname = nachname;
+		this.name = name;
 	}
 	
 	@Override
@@ -47,20 +45,13 @@ public class Person {
 		 * 			GETTERS			 |
 		 *----------------------------*/
 	/**
-	 * Getter für "vorname".
-	 * @return Den Vornamen der Person.
+	 * Getter für "name".
+	 * @return Den Namen der Person.
 	 */
-	public String getVorname(){
-		return this.vorname;
+	public String getName(){
+		return this.name;
 	}
 	
-	/**
-	 * Getter für "nachname".
-	 * @return Den Nachnamen der Person.
-	 */
-	public String getNachname(){
-		return this.nachname;
-	}
 	
 	
 	/**
@@ -85,19 +76,11 @@ public class Person {
 		 *----------------------------*/
 	
 	/**
-	 * Setter für "vorname".
+	 * Setter für "Name".
 	 * @param vorname Den Vornamen der Person.
 	 */
-	public void setVorname(String vorname){
-		this.vorname = vorname;
-	}
-	
-	/**
-	 * Setter für "nachname".
-	 * @param nachname Den Nachnamen der Person.
-	 */
-	public void setNachname(String nachname){
-		this.nachname = nachname;
+	public void setVorname(String name){
+		this.name = name;
 	}
 	
 	/**

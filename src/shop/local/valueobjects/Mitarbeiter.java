@@ -1,3 +1,6 @@
+
+package shop.local.valueobjects;
+
 /**
  * Diese Klasse beinhaltet alle Informationen die nur auf Mitarbeiter zutreffen 
  * und erbt von der Super-Klasse Person.
@@ -9,7 +12,6 @@
  */
 
 
-package shop.local.valueobjects;
 
 public class Mitarbeiter extends Person{
 	
@@ -44,8 +46,8 @@ public class Mitarbeiter extends Person{
 	 * @param nachname Nachname des Mitarbeiters.
 	 * @see Person
 	 */
-	public Mitarbeiter(int id, String vorname, String nachname){
-		super(id, vorname, nachname);
+	public Mitarbeiter(int id, String name){
+		super(id, name);
 		gehalt = 0;
 	}
 	
@@ -68,7 +70,7 @@ public class Mitarbeiter extends Person{
 	
 	@Override
 	public String toString(){
-		String output = "Mitarbeiter ID = "+this.getId()+" \t Name = "+this.getVorname()+" "+this.getNachname();
+		String output = "Mitarbeiter ID = "+this.getId()+" \t Name = "+this.getName();
 		
 		if(this.gehalt != 0){
 			output += "\tGehalt = "+this.gehalt;
