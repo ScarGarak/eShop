@@ -62,8 +62,8 @@ public class ShopVerwaltung {
 	 * @throws MitarbeiterExistiertBereitsException 
 	 * @throws IDExistiertBereitsException Wird geworfen, wenn die angegebene ID schon existiert.
 	 */
-	public void fuegeMitarbeiterHinzu(int id, String vorname, String nachname) throws MitarbeiterExistiertBereitsException{
-		Mitarbeiter m = new Mitarbeiter(id, vorname, nachname);
+	public void fuegeMitarbeiterHinzu(int id, String name) throws MitarbeiterExistiertBereitsException{
+		Mitarbeiter m = new Mitarbeiter(id, name);
 		meineMitarbeiter.einfuegen(m);
 	}
 

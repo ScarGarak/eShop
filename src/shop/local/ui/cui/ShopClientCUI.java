@@ -127,12 +127,10 @@ public class ShopClientCUI {
 			System.out.print("Mitarbeiter ID >");
 			String strId = liesEingabe();
 			int id = Integer.parseInt(strId);
-			System.out.print("Vorname >");
-			String vorname = liesEingabe();
-			System.out.print("Nachname >");
-			String nachname = liesEingabe();
+			System.out.print("Name >");
+			String name = liesEingabe();
 			try{
-				shop.fuegeMitarbeiterHinzu(id, vorname, nachname);
+				shop.fuegeMitarbeiterHinzu(id, name);
 			}catch(MitarbeiterExistiertBereitsException e){
 				System.err.println(e.getMessage());
 				e.printStackTrace();
