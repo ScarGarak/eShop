@@ -2,8 +2,6 @@ package shop.local.valueobjects;
 
 import shop.local.domain.ArtikelVerwaltung;
 
-// nur ein Test
-
 public class Kunde extends Person {
 
 	private String strasse;
