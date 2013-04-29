@@ -153,11 +153,7 @@ public class ShopClientCUI {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
-		}else/*{
-			System.out.println("Dieser Befehl existiert nicht!");
-		}*/
-		
-		//////////////////////////////////////////////////////////////////
+		}else
 		
 		if(line.equals("ke")){
 			System.out.print("Kunden ID >");
@@ -195,7 +191,6 @@ public class ShopClientCUI {
 			System.out.println("Dieser Befehl existiert nicht!");
 		}
 		
-		//////////////////////////////////////////////////////////////////
 		
 	}
 	
