@@ -4,20 +4,28 @@ import java.util.Date;
 
 import shop.local.domain.ArtikelVerwaltung;
 import shop.local.domain.KundenVerwaltung;
+import shop.local.domain.WarenkorbVerwaltung;
 
+
+/**
+ *  Klasse zur erstellung eines Rechnungsobjektes
+ * 
+ * @author Oliver Thummerer
+ *
+ */
 
 public class Rechnung {
 	
 	
 	private KundenVerwaltung kunde;
 	private Date datum;
-	private ArtikelVerwaltung warenkorb;
+	private WarenkorbVerwaltung warenkorb;
 	
 	
 	public Rechnung(Date datum) {
 		kunde = new KundenVerwaltung();
 		this.datum = datum;
-		warenkorb = new ArtikelVerwaltung();
+		warenkorb = new WarenkorbVerwaltung();
 	}
 	
 	public KundenVerwaltung getKunden() {
@@ -32,7 +40,7 @@ public class Rechnung {
 		return datum;
 	}
 	
-	public ArtikelVerwaltung getWarenkorb() {
+	public WarenkorbVerwaltung getWarenkorb() {
 		return warenkorb;
 	}
 		
