@@ -56,13 +56,9 @@ public class ShopVerwaltung {
 	/**
 	 * Diese Methode bidet eine neue Mitarbeiter Instanz und fŸgt sie
 	 * zur Mitarbeiterverwaltung hinzu.
-	 * Bevor diese Instanz gebildet wird, wird geprŸft, ob die
-	 * angegebene id noch nicht existiert.
 	 * @param id Id des neuen Mitarbeiters
-	 * @param vorname Vorname des neuen Mitarbeiters
-	 * @param nachname Nachname des neuen Mitarbeiters
-	 * @throws MitarbeiterExistiertBereitsException 
-	 * @throws IDExistiertBereitsException Wird geworfen, wenn die angegebene ID schon existiert.
+	 * @param name Name des neuen Mitarbeiters
+	 * @throws MitarbeiterExistiertBereitsException
 	 */
 	public void fuegeMitarbeiterHinzu(int id, String name) throws MitarbeiterExistiertBereitsException{
 		Mitarbeiter m = new Mitarbeiter(id, name);
@@ -108,12 +104,9 @@ public class ShopVerwaltung {
 	/**
 	* Diese Methode bidet eine neue Kunden Instanz und fuegt sie
 	* zur Kundenverwaltung hinzu.
-	* Bevor diese Instanz gebildet wird, wird geprüft, ob die
-	* angegebene id noch nicht existiert.
 	* @param id Id des neuen Kunden
 	* @param name Name des neuen Kunden
-	* @throws KundeExistiertBereitsException 
-	* @throws IDExistiertBereitsException Wird geworfen, wenn die angegebene ID schon existiert.
+	* @throws KundeExistiertBereitsException
 	*/
 	public void fuegeKundenHinzu(int id, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException{
 		Kunde k = new Kunde(name, id, strasse, plz, wohnort);
@@ -127,6 +120,9 @@ public class ShopVerwaltung {
 	public void schreibeKunden() throws IOException{
 		meineKunden.schreibeDaten("test");
 	}
+	
+	
+	//Artikel Methoden
 		
 	
 	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, int bestand) throws ArtikelExistiertBereitsException {
