@@ -2,7 +2,7 @@ package shop.local.valueobjects;
 
 import shop.local.domain.ArtikelVerwaltung;
 
-public class Kunde extends Person {
+public class Kunde extends ABCs {
 
 	private String strasse;
 	private int plz;
@@ -49,9 +49,12 @@ public class Kunde extends Person {
 		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort;
 	}
 	
-	/*public boolean equals(Object obj) {
-		if (this.id == k.getId())
-			return true;
-	}*/
+	// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)
+	
+	@Override
+	public boolean equals(Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
