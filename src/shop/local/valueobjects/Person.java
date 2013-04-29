@@ -79,7 +79,7 @@ public class Person {
 	 * Setter für "Name".
 	 * @param vorname Den Vornamen der Person.
 	 */
-	public void setVorname(String name){
+	public void setName(String name){
 		this.name = name;
 	}
 	

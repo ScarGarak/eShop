@@ -13,8 +13,9 @@ public class Rechnung {
 	private Date datum;
 	private ArtikelVerwaltung warenkorb;
 	
-	public Rechnung(String kunde, Date datum, String artikel, int preis) {
-		kunde = new KundenVerwaltung().toString();
+	
+	public Rechnung(Date datum) {
+		kunde = new KundenVerwaltung();
 		this.datum = datum;
 		warenkorb = new ArtikelVerwaltung();
 	}

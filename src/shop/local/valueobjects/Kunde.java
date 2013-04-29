@@ -48,5 +48,10 @@ public class Kunde extends Person {
 	public String toString() {
 		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort;
 	}
+	
+	/*public boolean equals(Object obj) {
+		if (this.id == k.getId())
+			return true;
+	}*/
 
 }

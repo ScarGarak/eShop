@@ -80,7 +80,7 @@ public class ShopVerwaltung {
 	// Kunden METHODEN
 	
 	/**
-	* Diese Methode ermšglicht es einen Kunden nach seiner ID
+	* Diese Methode ermoeglicht es einen Kunden nach seiner ID
 	* zu suchen.
 	* @param id der Kunden Instanz, die man suchen moechte
 	* @return Die Kunden Instanz mit der gegebenen ID.

@@ -40,9 +40,9 @@ public class ShopClientCUI {
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
 		System.out.print("         \n                                  ");
-		System.out.print("         \n  Kunden einfuegen:       'ke'");
-		System.out.print("         \n  Kunden suche nach ID:   'kf'");
-		System.out.print("         \n  Kunden loeschen nach ID: 'kl'");
+		System.out.print("         \n  Kunden einfuegen:       	'ke'");
+		System.out.print("         \n  Kunden suche nach ID:   	'kf'");
+		System.out.print("         \n  Kunden loeschen nach ID:	'kl'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
