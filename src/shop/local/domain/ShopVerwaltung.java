@@ -79,58 +79,55 @@ public class ShopVerwaltung {
 	
 	// Kunden METHODEN
 	
-/**
- * Diese Methode ermšglicht es einen Kunden nach seiner ID
- * zu suchen.
- * @param id der Kunden Instanz, die man suchen moechte
- * @return Die Kunden Instanz mit der gegebenen ID.
- */
-public Kunde sucheKunde(int id){
-	return meineKunden.sucheKunde(id);
-}
+	/**
+	* Diese Methode ermšglicht es einen Kunden nach seiner ID
+	* zu suchen.
+	* @param id der Kunden Instanz, die man suchen moechte
+	* @return Die Kunden Instanz mit der gegebenen ID.
+	*/
+	public Kunde sucheKunde(int id){
+		return meineKunden.sucheKunde(id);
+	}
 
-/**
- * Diese Methode ermoeglicht es um die Kundenliste einzusehen.
- * @return Vector mit alle aktuellen Kunden Instanzen.
- */
-public Vector<Kunde> gibAlleKunden(){
-	return meineKunden.getKundenListe();
-}
+	/**
+	* Diese Methode ermoeglicht es um die Kundenliste einzusehen.
+	* @return Vector mit alle aktuellen Kunden Instanzen.
+	*/
+	public Vector<Kunde> gibAlleKunden(){
+		return meineKunden.getKundenListe();
+	}
 
-/**
- * Diese Methode ermöglicht es eine Kunden Instanz zu loeschen.
- * @param k Kunde Instanz zum loeschen.
- */
-public void kundenLoeschen(Kunde k){
-	meineKunden.loeschen(k);
-}
+	/**
+	* Diese Methode ermöglicht es eine Kunden Instanz zu loeschen.
+	* @param k Kunde Instanz zum loeschen.
+	*/
+	public void kundenLoeschen(Kunde k){
+		meineKunden.loeschen(k);
+	}
 
-/**
- * Diese Methode bidet eine neue Kunden Instanz und fuegt sie
- * zur Kundenverwaltung hinzu.
- * Bevor diese Instanz gebildet wird, wird geprüft, ob die
- * angegebene id noch nicht existiert.
- * @param id Id des neuen Kunden
- * @param name Name des neuen Kunden
- * @throws KundeExistiertBereitsException 
- * @throws IDExistiertBereitsException Wird geworfen, wenn die angegebene ID schon existiert.
- */
-public void fuegeKundenHinzu(int id, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException{
-	Kunde k = new Kunde(name, id, strasse, plz, wohnort);
-	meineKunden.einfuegen(k);
-}
+	/**
+	* Diese Methode bidet eine neue Kunden Instanz und fuegt sie
+	* zur Kundenverwaltung hinzu.
+	* Bevor diese Instanz gebildet wird, wird geprüft, ob die
+	* angegebene id noch nicht existiert.
+	* @param id Id des neuen Kunden
+	* @param name Name des neuen Kunden
+	* @throws KundeExistiertBereitsException 
+	* @throws IDExistiertBereitsException Wird geworfen, wenn die angegebene ID schon existiert.
+	*/
+	public void fuegeKundenHinzu(int id, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException{
+		Kunde k = new Kunde(name, id, strasse, plz, wohnort);
+		meineKunden.einfuegen(k);
+	}
 
-/**
- * Diese Methode ermšglicht es den "schreibe" befehl der KundenVerwaltung zu triggern.
- * @throws IOException
- */
-public void schreibeKunden() throws IOException{
-	meineKunden.schreibeDaten("test");
-}
-
-///////////////////////////////////////////////////////
-	
-	
+	/**
+ 	* Diese Methode ermoeglicht es den "schreibe" befehl der KundenVerwaltung zu triggern.
+ 	* @throws IOException
+ 	*/
+	public void schreibeKunden() throws IOException{
+		meineKunden.schreibeDaten("test");
+	}
+		
 	
 	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, int bestand) throws ArtikelExistiertBereitsException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, bestand);
