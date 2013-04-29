@@ -51,9 +51,10 @@ public class Kunde extends ABCs {
 	
 	// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)
 	
-	@Override
 	public boolean equals(Object o) {
-		// TODO Auto-generated method stub
+		if (o instanceof Kunde) {
+			return true;
+		}
 		return false;
 	}
 

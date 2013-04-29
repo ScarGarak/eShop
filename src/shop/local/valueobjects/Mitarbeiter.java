@@ -79,6 +79,13 @@ public class Mitarbeiter extends Person{
 		return output;
 	}
 	
+	/*// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)	
 	
+	public boolean equals(Object o) {
+		if (o instanceof Mitarbeiter) {
+			return true;
+		}
+		return false;
+	}*/
 	
 }
