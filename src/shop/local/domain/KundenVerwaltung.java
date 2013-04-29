@@ -24,11 +24,11 @@ public class KundenVerwaltung {
 	
 	
 	public void liesDaten(String dateiName) throws IOException{
-		//	TODO	Wenn wir uns um die Persistence kümmern
+		//	TODO	Wenn wir uns um die Persistence kuemmern
 	}
 	
 	public void schreibeDaten(String dateiName) throws IOException{
-		//	TODO	Wenn wir uns um die Persistence kümmern
+		//	TODO	Wenn wir uns um die Persistence kuemmern
 	}
 	
 	
