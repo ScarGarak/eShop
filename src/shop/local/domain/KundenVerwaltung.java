@@ -1,8 +1,10 @@
 package shop.local.domain;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
 
+import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.valueobjects.Kunde;
 
 
@@ -20,20 +22,25 @@ public class KundenVerwaltung {
 	
 	private Vector<Kunde> kundenListe = new Vector<Kunde>();
 	
-	/**
-	 * lesen und schreiben in Datei
-	 * Platzhalter
-	 */
+	
+	public void liesDaten(String dateiName) throws IOException{
+		//	TODO	Wenn wir uns um die Persistence kümmern
+	}
+	
+	public void schreibeDaten(String dateiName) throws IOException{
+		//	TODO	Wenn wir uns um die Persistence kümmern
+	}
+	
 	
 	/**
 	 * Method to insert a new costumer
 	 */
 	
-	public void einfuegen(Kunde k) /*throws MitarbeiterExistiertBereitsException*/ {
+	public void einfuegen(Kunde k) throws KundeExistiertBereitsException {
 		if(!kundenListe.contains(k)){
 			kundenListe.add(k);
 		}else{
-			//throw new KundeExistiertBereitsException(k, "Fehler beim einfuegen!");
+			throw new KundeExistiertBereitsException(k, "Fehler beim einfuegen!");
 		}
 	}
 	

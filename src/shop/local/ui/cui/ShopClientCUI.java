@@ -8,12 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import shop.local.domain.ShopVerwaltung;
-import shop.local.valueobjects.Artikel;
-import shop.local.valueobjects.Mitarbeiter;
-
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
+import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
+import shop.local.valueobjects.Artikel;
+import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Mitarbeiter;
 
 public class ShopClientCUI {
 
@@ -35,9 +36,13 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
 		System.out.print("         \n  Artikel lšschen nach Bez.:   'l'");
 		System.out.print("         \n                                  ");
-		System.out.print("         \n  Mitarbeiter einguegen:       'me'");
+		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
+		System.out.print("         \n                                  ");
+		System.out.print("         \n  Kunden einfuegen:       'ke'");
+		System.out.print("         \n  Kunden suche nach ID:   'kf'");
+		System.out.print("         \n  Kunden loeschen nach ID: 'kl'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
@@ -148,9 +153,50 @@ public class ShopClientCUI {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
+		}else/*{
+			System.out.println("Dieser Befehl existiert nicht!");
+		}*/
+		
+		//////////////////////////////////////////////////////////////////
+		
+		if(line.equals("ke")){
+			System.out.print("Kunden ID >");
+			String strId = liesEingabe();
+			int id = Integer.parseInt(strId);
+			System.out.print("Name >");
+			String name = liesEingabe();
+			System.out.println("Strasse >");
+			String strasse = liesEingabe();
+			System.out.println("Postleitzahl >");
+			String strPlz = liesEingabe();
+			int plz = Integer.parseInt(strPlz);
+			System.out.println("Wohnort >");
+			String wohnort = liesEingabe();
+			try{
+				shop.fuegeKundenHinzu(id, name, strasse, plz, wohnort);
+			}catch(KundeExistiertBereitsException e){
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+			}
+		}else if(line.equals("kf")){
+			System.out.print("Kunden ID >");
+			int id = Integer.parseInt(liesEingabe());
+			Kunde k = shop.sucheKunde(id);
+			if(k != null){
+				System.out.println(k.toString());
+			}else{
+				System.out.println("Ein Kunde mit dieser ID existiert nicht!");
+			}
+		}else if(line.equals("kl")){
+			System.out.print("Kunden ID >");
+			int id = Integer.parseInt(liesEingabe());
+			shop.kundenLoeschen(shop.sucheKunde(id));
 		}else{
 			System.out.println("Dieser Befehl existiert nicht!");
 		}
+		
+		//////////////////////////////////////////////////////////////////
+		
 	}
 	
 	private void gibArtikellisteAus(Collection<Artikel> artikel) {

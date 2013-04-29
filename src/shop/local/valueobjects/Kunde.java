@@ -10,7 +10,7 @@ public class Kunde extends Person {
 	private ArtikelVerwaltung warenkorb;
 	
 	public Kunde(String name, int id, String strasse, int plz, String wohnort) {
-		super(id, name, strasse);
+		super(id, name);
 		this.strasse = strasse;
 		this.plz = plz;
 		this.wohnort = wohnort;
@@ -46,7 +46,7 @@ public class Kunde extends Person {
 	}
 	
 	public String toString() {
-		return "Kundennummer: " + getId() + "\n" + getVorname() + "\n" + strasse + "\n" + plz + " " + wohnort;
+		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort;
 	}
 
 }
