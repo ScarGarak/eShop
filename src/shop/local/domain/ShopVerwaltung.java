@@ -125,8 +125,8 @@ public class ShopVerwaltung {
 	//Artikel Methoden
 		
 	
-	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, int bestand) throws ArtikelExistiertBereitsException {
-		Artikel artikel = new Artikel(artikelnummer, bezeichnung, bestand);
+	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
+		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
 		meineArtikel.einfuegen(artikel);
 	}
 	
