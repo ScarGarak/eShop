@@ -1,5 +1,7 @@
 package shop.local.valueobjects;
 
+import java.util.Currency;
+import java.util.Locale;
 
 /**
  * Klasse zur Repräsentation einzelner Artikel.
@@ -11,11 +13,13 @@ public class Artikel {
 	// Attribute zur Beschreibung eines Artikels:
 	private int artikelnummer;
 	private String bezeichnung;
+	private double preis;
 	private int bestand;
 	
-	public Artikel(int artikelnummer, String bezeichnung, int bestand) {
+	public Artikel(int artikelnummer, String bezeichnung, double preis, int bestand) {
 		this.artikelnummer = artikelnummer;
 		this.bezeichnung = bezeichnung;
+		this.preis = preis;
 		this.bestand = bestand;
 	}
 	
@@ -35,6 +39,14 @@ public class Artikel {
 		return bezeichnung;
 	}
 	
+	public void setPreis(double preis) {
+		this.preis = preis;
+	}
+	
+	public double getPreis() {
+		return preis;
+	}
+	
 	public void setBestand(int bestand) {
 		this.bestand = bestand;
 	}
@@ -44,13 +56,12 @@ public class Artikel {
 	}
 	
 	public String toString() {
-		return ("Nr: " + artikelnummer + "\t Bezeichnung: " + bezeichnung + "\t Bestand: " + bestand + "\t");
+		return ("Nr: " + artikelnummer + "\t Bezeichnung: " + bezeichnung + "\t Preis: " + String.format("%.2f ", preis) + Currency.getInstance(Locale.GERMANY) + "\t Bestand: " + bestand + "\t");
 	}
 	
 	public boolean equals(Object andererArtikel) {
 		if (andererArtikel instanceof Artikel) {
-			return ((this.artikelnummer == ((Artikel) andererArtikel).artikelnummer) 
-					&& (this.bezeichnung.equals(((Artikel) andererArtikel).bezeichnung)));
+			return (this.artikelnummer == ((Artikel) andererArtikel).artikelnummer);
 		} else {
 			return false;
 		}
