@@ -32,6 +32,11 @@ abstract class ABCs {
 		this.name = name;
 	}
 	
+	// => Das ist gar nicht nötig, denn equals() wird schon von der "Root"-Klasse 'Object' 
+	//	  geerbt und ist schon implementiert.
+	//    Wir müssen diese Methode nur in unseren Unterklassen überschreiben und unseren 
+	//	  Bedürfnissen anpassen.
+	
 	//@Override
 	public abstract boolean equals(Object o);/*{
 		if(o instanceof Person){

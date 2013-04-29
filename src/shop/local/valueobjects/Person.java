@@ -32,14 +32,6 @@ public class Person {
 		this.name = name;
 	}
 	
-	/*@Override
-	public boolean equals(Object o){
-		if(o instanceof Person){
-			return (this.id == ((Person)o).getId());
-		}else{
-			return false;
-		}
-	}*/
 	
 		/*----------------------------
 		 * 			GETTERS			 |

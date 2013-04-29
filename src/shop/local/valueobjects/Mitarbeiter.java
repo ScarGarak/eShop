@@ -79,13 +79,17 @@ public class Mitarbeiter extends Person{
 		return output;
 	}
 	
-	/*// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)	
+	// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)	
 	
+	// => Das ist gar nicht nötig, denn diese wird schon von 'Object' geerbt und ist schon implementiert.
+	//    Wir müssen diese Methode nur überschreiben und unseren Bedürfnissen anpassen.
+	
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Mitarbeiter) {
 			return true;
 		}
 		return false;
-	}*/
+	}
 	
 }
