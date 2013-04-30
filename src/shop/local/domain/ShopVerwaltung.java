@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
+import shop.local.domain.exceptions.ArtikelBestandException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
@@ -11,6 +12,7 @@ import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.WarenkorbArtikel;
 
 public class ShopVerwaltung {
 
@@ -121,6 +123,9 @@ public class ShopVerwaltung {
 		meineKunden.schreibeDaten("test");
 	}
 	
+	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandException, ArtikelExistiertNichtException {
+		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
+	}
 	
 	//Artikel Methoden
 		

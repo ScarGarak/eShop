@@ -19,27 +19,6 @@ public class Mitarbeiter extends Person{
 	
 	
 	/**
-	 * Eine leere Konstruktor Funktion, die es ermöglicht eine Instanz dieses Objektes zu erstellen,
-	 * und im nachhinein die Attribute zu initialisieren.
-	 * @see Person
-	 */
-	public Mitarbeiter(){
-		super();
-		gehalt = 0;
-	}
-	
-	/**
-	 * Eine Konstruktor Funktion, die es ermöglicht das ID Attribut gleich zu Anfang zu initialisieren,
-	 * und später die Andern.
-	 * @param id Die ID Nummer des Mitarbeiters.
-	 * @see Person
-	 */
-	public Mitarbeiter(int id){
-		super(id);
-		gehalt = 0;
-	}
-	
-	/**
 	 * Eine Konstruktor Funktion, die es ermöglicht gleich zu Anfang alle Attribute zu initialisieren.
 	 * @param id ID Nummer des Mitarbeiters.
 	 * @param vorname Vorname des Mitarbeiters.
@@ -47,7 +26,7 @@ public class Mitarbeiter extends Person{
 	 * @see Person
 	 */
 	public Mitarbeiter(int id, String name){
-		super(id, name);
+		super(id, name, PersonTyp.Mitarbeiter);
 		gehalt = 0;
 	}
 	
@@ -87,9 +66,9 @@ public class Mitarbeiter extends Person{
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Mitarbeiter) {
-			return true;
-		}
-		return false;
+				return ((Mitarbeiter) o).getId() == this.getId();
+		}else
+			return false;
 	}
 	
 }

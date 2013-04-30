@@ -17,18 +17,16 @@ import shop.local.domain.WarenkorbVerwaltung;
 public class Rechnung {
 	
 	
-	private KundenVerwaltung kunde;
+	private Kunde kunde;
 	private Date datum;
-	private WarenkorbVerwaltung warenkorb;
 	
 	
-	public Rechnung(Date datum) {
-		kunde = new KundenVerwaltung();
+	public Rechnung(Kunde kunde, Date datum) {
+		this.kunde = kunde;
 		this.datum = datum;
-		warenkorb = new WarenkorbVerwaltung();
 	}
 	
-	public KundenVerwaltung getKunden() {
+	public Kunde getKunden() {
 		return kunde;
 	}
 	
@@ -40,8 +38,4 @@ public class Rechnung {
 		return datum;
 	}
 	
-	public WarenkorbVerwaltung getWarenkorb() {
-		return warenkorb;
-	}
-		
 }

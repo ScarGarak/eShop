@@ -18,7 +18,7 @@ import shop.local.valueobjects.Kunde;
  	* @see shop.local.persistence.PersistenceManager
  	*/
 
-public class FilePersistenceManager {
+public class FilePersistenceManager implements PersistenceManager {
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;

@@ -1,24 +1,11 @@
 package shop.local.valueobjects;
 
-public class Person {
+public abstract class Person {
 
 	private int id;
 	private String name;
 	private String passwort;
-
-	
-	public Person(){
-		
-	}
-	
-	
-	/**
-	 * Konstruktor
-	 * @param id Die ID Nummer der Person.
-	 */
-	public Person(int id){
-		this.id = id;
-	}
+	private PersonTyp typ;
 	
 	
 	/**
@@ -27,9 +14,10 @@ public class Person {
 	 * @param vorname Vorname der Person.
 	 * @param nachname Nachname der Person.
 	 */
-	public Person(int id, String name){
+	public Person(int id, String name, PersonTyp typ){
 		this.id = id;
 		this.name = name;
+		this.typ = typ;
 	}
 	
 	
