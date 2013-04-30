@@ -14,7 +14,7 @@ import shop.local.valueobjects.Kunde;
  	* @author Oliver Thummerer
  	* 
  	* Schnittstelle zur persistenten Speicherung von
- 	* DAten in .JSON DAteien
+ 	* Daten in .JSON DAteien
  	* @see shop.local.persistence.PersistenceManager
  	*/
 

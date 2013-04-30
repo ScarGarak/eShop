@@ -1,5 +1,7 @@
 package shop.local.domain.exceptions;
 
+import shop.local.valueobjects.Artikel;
+
 
 /**
  * Exception zur Signalisierung, dass ein Artikel nicht existiert (z.B. bei einem Löschvorgang).
@@ -9,6 +11,17 @@ package shop.local.domain.exceptions;
 @SuppressWarnings("serial")
 public class ArtikelExistiertNichtException extends Exception {
 
+	/**
+	 * Konstruktor
+	 * 
+	 * @param artikel Der nicht existierende Artikel
+	 * @param zusatzMsg zusätzlicher Text für die Fehlermeldung
+	 */
+	public ArtikelExistiertNichtException(Artikel artikel, String zusatzMsg) {
+		super("Der Artikel mit der Artikelnummer " + artikel.getArtikelnummer() + " und der Bezeichnung " + 
+				artikel.getBezeichnung() + " existiert nicht" + zusatzMsg);
+	}
+	
 	/**
 	 * Konstruktor
 	 * 

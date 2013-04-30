@@ -27,7 +27,6 @@ public class ShopClientCUI {
 	}
 
 	private void gibMenueAus() {
-		System.out.print("Hallo Welt");
 		System.out.print("Befehle: \n  Artikel einfuegen:           'e'");
 		System.out.print("         \n  Artikel ausgeben nach Nr:    'a'");
 		System.out.print("         \n  Artikel ausgeben nach Bez.:  'b'");
@@ -40,9 +39,9 @@ public class ShopClientCUI {
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
 		System.out.print("         \n                                  ");
-		System.out.print("         \n  Kunden einfuegen:       	'ke'");
-		System.out.print("         \n  Kunden suche nach ID:   	'kf'");
-		System.out.print("         \n  Kunden loeschen nach ID:	'kl'");
+		System.out.print("         \n  Kunden einfuegen:         	'ke'");
+		System.out.print("         \n  Kunden suche nach ID:   	    'kf'");
+		System.out.print("         \n  Kunden loeschen nach ID:	    'kl'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
@@ -59,12 +58,15 @@ public class ShopClientCUI {
 			int aNr = Integer.parseInt(nummer);
 			System.out.print("Bezeichnung  > ");
 			String bezeichnung = liesEingabe();
+			System.out.print("Preis  > ");
+			String preis = liesEingabe();
+			double aPr = Double.parseDouble(preis);
 			System.out.print("Bestand > ");
 			String bestand = liesEingabe();
 			int aBtd = Integer.parseInt(bestand);
 			boolean ok = false;
 			try {
-				shop.fuegeArtikelEin(aNr, bezeichnung, aBtd);
+				shop.fuegeArtikelEin(aNr, bezeichnung, aPr, aBtd);
 				ok = true;
 			} catch (ArtikelExistiertBereitsException e) {
 				System.err.println(e.getMessage());

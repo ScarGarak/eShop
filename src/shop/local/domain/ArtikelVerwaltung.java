@@ -88,39 +88,21 @@ public class ArtikelVerwaltung {
 	
 	public List<Artikel> getArtikelBestand() {
 		List<Artikel> ergebnis = new Vector<Artikel>();
-		
-		Iterator<Artikel> iter = artikelBestand.iterator();
-		while (iter.hasNext()) {
-			Artikel artikel = iter.next();
-			ergebnis.add(artikel);
-		}
-		
+		ergebnis.addAll(artikelBestand);
 		return ergebnis;
 	}
 	
 	public List<Artikel> getArtikelBestandSortiertNachArtikelnummer() {
 		List<Artikel> ergebnis = new Vector<Artikel>();
-		
-		Iterator<Artikel> iter = artikelBestand.iterator();
-		while (iter.hasNext()) {
-			Artikel artikel = iter.next();
-			ergebnis.add(artikel);
-		}
+		ergebnis.addAll(artikelBestand);
 		Collections.sort(ergebnis, new SortierungNachArtikelnummer());
-		
 		return ergebnis;
 	}
 	
 	public List<Artikel> getArtikelBestandSortiertNachBezeichnung() {
 		List<Artikel> ergebnis = new Vector<Artikel>();
-		
-		Iterator<Artikel> iter = artikelBestand.iterator();
-		while (iter.hasNext()) {
-			Artikel artikel = iter.next();
-			ergebnis.add(artikel);
-		}
+		ergebnis.addAll(artikelBestand);
 		Collections.sort(ergebnis, new SortierungNachBezeichnung());
-		
 		return ergebnis;
 	}
 	
