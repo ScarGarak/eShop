@@ -19,11 +19,13 @@ public class Rechnung {
 	
 	private Kunde kunde;
 	private Date datum;
+	private WarenkorbVerwaltung warenkorb;
 	
 	
 	public Rechnung(Kunde kunde, Date datum) {
 		this.kunde = kunde;
 		this.datum = datum;
+		warenkorb = new WarenkorbVerwaltung();
 	}
 	
 	public Kunde getKunden() {
@@ -38,4 +40,7 @@ public class Rechnung {
 		return datum;
 	}
 	
+	public WarenkorbVerwaltung getWarenkorb() {
+		return warenkorb;
+	}
 }
