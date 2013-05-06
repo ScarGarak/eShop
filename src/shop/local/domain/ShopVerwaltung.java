@@ -20,21 +20,70 @@ public class ShopVerwaltung {
 	private MitarbeiterVerwaltung meineMitarbeiter;
 	private KundenVerwaltung meineKunden;
 	
-	private String datei;
-	
-	public ShopVerwaltung(String datei) throws IOException{
-		this.datei = datei;
-		
+	/**
+	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
+	 * (Initialisierung des Shops).
+	 * 
+	 * Namensmuster für Dateien:
+	 *   "SHOP_A.ser" ist die Datei der Artikel
+	 *   "SHOP_M.ser" ist die Datei der Mitarbeiter
+	 *   "SHOP_K.ser" ist die Datei der Kunden
+	 *   
+	 * @throws IOException, z.B. wenn eine der Dateien nicht existiert.
+	 * @throws ArtikelExistiertBereitsException 
+	 * @throws ClassNotFoundException 
+	 */
+	public ShopVerwaltung() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException{
 		meineArtikel = new ArtikelVerwaltung();
+		meineArtikel.liesDaten("SHOP_A.ser");
 		
 		meineMitarbeiter = new MitarbeiterVerwaltung();
-		meineMitarbeiter.liesDaten(datei+"_M.txt");
+		meineMitarbeiter.liesDaten("SHOP_M.ser");
 		
 		meineKunden = new KundenVerwaltung();
 	}
 	
+	// Artikel Methoden
 	
-		// MITARBEITER METHODEN
+	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
+		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
+		meineArtikel.einfuegen(artikel);
+	}
+	
+	public List<Artikel> gibAlleArtikelSortiertNachArtikelnummer() {
+		return meineArtikel.getArtikelBestandSortiertNachArtikelnummer();
+	}
+	
+	public List<Artikel> gibAlleArtikelSortiertNachBezeichnung() {
+		return meineArtikel.getArtikelBestandSortiertNachBezeichnung();
+	}
+	
+	public List<Artikel> sucheArtikel(int artikelnummer) {
+		return meineArtikel.sucheArtikel(artikelnummer); 
+	}
+	
+	public List<Artikel> sucheArtikel(String bezeichnung) {
+		return meineArtikel.sucheArtikel(bezeichnung); 
+	}
+	
+	public void EntferneArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
+		meineArtikel.entfernen(artikelnummer);
+	}
+	
+	public void EntferneArtikel(String bezeichnung) throws ArtikelExistiertNichtException {
+		meineArtikel.entfernen(bezeichnung);
+	}
+	
+	/**
+	 * Methode zum Speichern des Artikelbestands in einer Datei.
+	 * 
+	 * @throws IOException
+	 */
+	public void schreibeArtikel() throws IOException {
+		meineArtikel.schreibeDaten("SHOP_A.ser");
+	}
+	
+	// Mitarbeiter Methoden
 	
 	/**
 	 * Diese Methode ermšglicht es einen Mitarbeiter nach seiner ID
@@ -79,10 +128,10 @@ public class ShopVerwaltung {
 	 * @throws IOException
 	 */
 	public void schreibeMitarbeiter() throws IOException{
-		meineMitarbeiter.schreibeDaten(datei+"_M.txt");
+		meineMitarbeiter.schreibeDaten("SHOP_M.ser");
 	}
 	
-	// Kunden METHODEN
+	// Kunden Methoden
 	
 	/**
 	* Diese Methode ermoeglicht es einen Kunden nach seiner ID
@@ -132,38 +181,6 @@ public class ShopVerwaltung {
 	
 	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
-	}
-	
-	//Artikel Methoden
-		
-	
-	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
-		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
-		meineArtikel.einfuegen(artikel);
-	}
-	
-	public List<Artikel> gibAlleArtikelSortiertNachArtikelnummer() {
-		return meineArtikel.getArtikelBestandSortiertNachArtikelnummer();
-	}
-	
-	public List<Artikel> gibAlleArtikelSortiertNachBezeichnung() {
-		return meineArtikel.getArtikelBestandSortiertNachBezeichnung();
-	}
-	
-	public List<Artikel> sucheArtikel(int artikelnummer) {
-		return meineArtikel.sucheArtikel(artikelnummer); 
-	}
-	
-	public List<Artikel> sucheArtikel(String bezeichnung) {
-		return meineArtikel.sucheArtikel(bezeichnung); 
-	}
-	
-	public void EntferneArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
-		meineArtikel.entfernen(artikelnummer);
-	}
-	
-	public void EntferneArtikel(String bezeichnung) throws ArtikelExistiertNichtException {
-		meineArtikel.entfernen(bezeichnung);
 	}
 	
 }

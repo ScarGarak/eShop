@@ -1,4 +1,3 @@
-
 package shop.local.ui.cui;
 
 import java.io.BufferedReader;
@@ -22,8 +21,8 @@ public class ShopClientCUI {
 	private ShopVerwaltung shop;
 	private BufferedReader in;
 	
-	public ShopClientCUI(String datei) throws IOException {
-		shop = new ShopVerwaltung(datei);
+	public ShopClientCUI() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
+		shop = new ShopVerwaltung();
 		in = new BufferedReader(new InputStreamReader(System.in));
 	}
 
@@ -41,9 +40,9 @@ public class ShopClientCUI {
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
 		System.out.print("         \n  Mitarbeiterdaten sichern     'ms'");
 		System.out.print("         \n                                  ");
-		System.out.print("         \n  Kunden einfuegen:         	'ke'");
-		System.out.print("         \n  Kunden suche nach ID:   	    'kf'");
-		System.out.print("         \n  Kunden loeschen nach ID:	    'kl'");
+		System.out.print("         \n  Kunden einfuegen:            'ke'");
+		System.out.print("         \n  Kunden suche nach ID:        'kf'");
+		System.out.print("         \n  Kunden loeschen nach ID:     'kl'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
@@ -132,7 +131,8 @@ public class ShopClientCUI {
 				System.out.println("Lšschen ok");
 			else
 				System.out.println("Fehler beim Lšschen");
-		}else if(line.equals("me")){
+		}
+		else if (line.equals("me")) {
 			System.out.print("Mitarbeiter ID >");
 			String strId = liesEingabe();
 			int id = Integer.parseInt(strId);
@@ -144,7 +144,8 @@ public class ShopClientCUI {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
-		}else if(line.equals("mf")){
+		}
+		else if (line.equals("mf")) {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
 			Mitarbeiter m = shop.sucheMitarbeiter(id);
@@ -153,7 +154,8 @@ public class ShopClientCUI {
 			}else{
 				System.out.println("Ein Mitarbeiter mit dieser ID existiert nicht!");
 			}
-		}else if(line.equals("ml")){
+		}
+		else if (line.equals("ml")) {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
@@ -174,11 +176,12 @@ public class ShopClientCUI {
 			String wohnort = liesEingabe();
 			try{
 				shop.fuegeKundenHinzu(id, name, strasse, plz, wohnort);
-			}catch(KundeExistiertBereitsException e){
+			} catch (KundeExistiertBereitsException e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
-		}else if(line.equals("kf")){
+		}
+		else if (line.equals("kf")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			Kunde k = shop.sucheKunde(id);
@@ -187,15 +190,18 @@ public class ShopClientCUI {
 			}else{
 				System.out.println("Ein Kunde mit dieser ID existiert nicht!");
 			}
-		}else if(line.equals("kl")){
+		}
+		else if (line.equals("kl")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.kundenLoeschen(shop.sucheKunde(id));
-		}else{
+		}
+		else if (line.equals("q")) {
+			
+		}
+		else {
 			System.out.println("Dieser Befehl existiert nicht!");
 		}
-		
-		
 	}
 	
 	private void gibArtikellisteAus(Collection<Artikel> artikel) {
@@ -210,7 +216,7 @@ public class ShopClientCUI {
 		}
 	}
 
-	public void run() {
+	public void run() throws IOException {
 		String input = ""; 
 		do {
 			gibMenueAus();
@@ -221,15 +227,20 @@ public class ShopClientCUI {
 				e.printStackTrace();
 			}
 		} while (!input.equals("q"));
+		shop.schreibeArtikel();
 	}
 	
 	public static void main(String[] args) {
 		ShopClientCUI cui;
 		try {
-			cui = new ShopClientCUI("SHOP");
+			cui = new ShopClientCUI();
 			cui.run();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException IOe) {
+			IOe.printStackTrace();
+		} catch (ArtikelExistiertBereitsException AEBe) {
+			AEBe.printStackTrace();
+		} catch (ClassNotFoundException CNFe) {
+			CNFe.printStackTrace();
 		}
 	}
 	

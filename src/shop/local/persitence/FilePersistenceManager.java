@@ -1,11 +1,13 @@
 package shop.local.persitence;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
 
@@ -23,7 +25,7 @@ public class FilePersistenceManager implements PersistenceManager {
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
 	
-	public void openForReading(String datei) throws IOException {
+	public void openForReading(String datei) throws FileNotFoundException {
 		reader = new BufferedReader(new FileReader(datei));
 	}
 	
@@ -81,14 +83,13 @@ public class FilePersistenceManager implements PersistenceManager {
 	 * @throws IOException
 	 */
 	
-	public boolean speichereKunden(Kunde k) throws IOException {
+	public void speichereKunden(Kunde k) throws IOException {
 		// Name, Id, Strasse, Plz, Wohnort schreiben
 		schreibeZeile(k.getName());
 		schreibeZeile(Integer.valueOf(k.getId()).toString());
 		schreibeZeile(k.getStrasse());
 		schreibeZeile(Integer.valueOf(k.getPlz()).toString());
 		schreibeZeile(k.getWohnort());
-		return true;
 	}
 	
 	/*
@@ -105,6 +106,18 @@ public class FilePersistenceManager implements PersistenceManager {
 	private void schreibeZeile(String daten) {
 		if (writer != null)
 			writer.println(daten);
+	}
+	
+	@Override
+	public Artikel ladeArtikel() throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void speichereArtikel(Artikel a) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

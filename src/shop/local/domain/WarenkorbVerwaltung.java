@@ -18,6 +18,11 @@ public class WarenkorbVerwaltung {
 	// Verwaltung des Warenkorbes in einem Vector
 	private List<WarenkorbArtikel> warenkorb = new Vector<WarenkorbArtikel>();
 	
+	/**
+	 * Synchronisierte methode zum hinzufügen eines Warenkorb Artikels in den Warenkorb.
+	 * 
+	 * @param warenkorbArtikel Der Artikel der in den Warenkorb hinzugefügt werden soll.
+	 */
 	public synchronized void hinzufuegen(WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		if (warenkorb.contains(warenkorbArtikel)) {
 			this.stueckzahlAendern(warenkorbArtikel, warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getStueckzahl() + warenkorbArtikel.getStueckzahl());
@@ -32,6 +37,12 @@ public class WarenkorbVerwaltung {
 		}
 	}
 	
+	/**
+	 * Synchronisierte methode zum ändern der Stückzahl eines Artikels im Warenkorb.
+	 * 
+	 * @param warenkorbArtikel Der Warenkorb Artikel dessen Stückzahl verändert werden soll.
+	 * @param neueStueckzahl Die neue Stückzahl des Warenkorb Artikels.
+	 */
 	public synchronized void stueckzahlAendern(WarenkorbArtikel warenkorbArtikel, int neueStueckzahl) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		if (warenkorb.contains(warenkorbArtikel)) {
 			int alterBestand = warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getArtikel().getBestand();
@@ -50,6 +61,13 @@ public class WarenkorbVerwaltung {
 		} else {
 			throw new ArtikelExistiertNichtException(warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getArtikel(), " - in 'stueckzahlAendern()'");
 		}
+	}
+	
+	public synchronized List<WarenkorbArtikel> kaufen() {
+		List<WarenkorbArtikel> ergebnis = new Vector<WarenkorbArtikel>();
+		ergebnis.addAll(warenkorb);
+		warenkorb.clear();
+		return ergebnis;
 	}
 	
 	public synchronized void leeren() {
