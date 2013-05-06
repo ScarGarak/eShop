@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Mitarbeiter;
 
 /**
  * @author Christof Ferreira Torres
@@ -92,6 +93,25 @@ public class ObjectPersistenceManager implements PersistenceManager {
 	 */
 	public void speichereKunden(Kunde k) throws IOException {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Mitarbeiter ladeMitarbeiter() throws IOException {
+		Mitarbeiter m = null;
+		try {
+			m = (Mitarbeiter) ois.readObject();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (EOFException e2){
+			//Keine weiteren Daten mehr in der Datei
+		}
+		return m;
+	}
+
+	@Override
+	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
+		oos.writeObject(m);
+		return true;
 	}
 
 }

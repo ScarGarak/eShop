@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Mitarbeiter;
 
 
 	/**
@@ -117,6 +118,18 @@ public class FilePersistenceManager implements PersistenceManager {
 	public void speichereArtikel(Artikel a) throws IOException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Mitarbeiter ladeMitarbeiter() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

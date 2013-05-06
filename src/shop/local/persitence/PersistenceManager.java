@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Mitarbeiter;
 
 /**
  * 
@@ -63,4 +64,19 @@ public interface PersistenceManager {
 	 */
 	public void speichereKunden(Kunde k) throws IOException;
 	
+	
+	/**
+	 * Methode zum laden Mitarbeiter Daten aus einer Datei
+	 * @return Ein Mitarbeiter-Objekt
+	 * @throws IOException
+	 */
+	public Mitarbeiter ladeMitarbeiter() throws IOException;
+	
+	/**
+	 * Methode zum schreiben der Mitarbeiterdaten in eine externe Datei
+	 * @param m Ein Mitarbeiter-Objekt zu speichern
+	 * @return true wenn der Schreibvorgang erfolgreich war
+	 * @throws IOException
+	 */
+	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException;
 }
