@@ -1,13 +1,13 @@
 package shop.local.persitence;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Mitarbeiter;
 
 
 	/**
@@ -23,7 +23,7 @@ public class FilePersistenceManager implements PersistenceManager {
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
 	
-	public void openForReading(String datei) throws FileNotFoundException {
+	public void openForReading(String datei) throws IOException {
 		reader = new BufferedReader(new FileReader(datei));
 	}
 	
@@ -105,6 +105,18 @@ public class FilePersistenceManager implements PersistenceManager {
 	private void schreibeZeile(String daten) {
 		if (writer != null)
 			writer.println(daten);
+	}
+
+	@Override
+	public Mitarbeiter ladeMitarbeiter() throws IOException {
+		//TODO 
+		return null;
+	}
+
+	@Override
+	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
+		//TODO
+		return false;
 	}
 	
 }

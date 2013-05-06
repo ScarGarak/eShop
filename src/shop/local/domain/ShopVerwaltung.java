@@ -20,9 +20,16 @@ public class ShopVerwaltung {
 	private MitarbeiterVerwaltung meineMitarbeiter;
 	private KundenVerwaltung meineKunden;
 	
-	public ShopVerwaltung() {
+	private String datei;
+	
+	public ShopVerwaltung(String datei) throws IOException{
+		this.datei = datei;
+		
 		meineArtikel = new ArtikelVerwaltung();
+		
 		meineMitarbeiter = new MitarbeiterVerwaltung();
+		meineMitarbeiter.liesDaten(datei+"_M.txt");
+		
 		meineKunden = new KundenVerwaltung();
 	}
 	
@@ -72,7 +79,7 @@ public class ShopVerwaltung {
 	 * @throws IOException
 	 */
 	public void schreibeMitarbeiter() throws IOException{
-		meineMitarbeiter.schreibeDaten("test");
+		meineMitarbeiter.schreibeDaten(datei+"_M.txt");
 	}
 	
 	// Kunden METHODEN

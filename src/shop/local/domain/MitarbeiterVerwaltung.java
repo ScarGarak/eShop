@@ -6,6 +6,8 @@ import java.util.Vector;
 
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 
+import shop.local.persitence.ObjectStreamPersistenceManager;
+import shop.local.persitence.PersistenceManager;
 import shop.local.valueobjects.Mitarbeiter;
 
 /**
@@ -22,13 +24,49 @@ public class MitarbeiterVerwaltung {
 	
 	private Vector<Mitarbeiter> mitarbeiterListe = new Vector<Mitarbeiter>();
 	
+	private PersistenceManager pm = new ObjectStreamPersistenceManager();
 	
+	/**
+	 * Methode zum lesen der Mitarbeiterdaten aus einer externen Datenquelle
+	 * @param dateiName Dateiname der externen Datenquelle
+	 * @throws IOException
+	 */
 	public void liesDaten(String dateiName) throws IOException{
-		//	TODO	Wenn wir uns um die Persistence kümmern
+		pm.openForReading(dateiName);
+		
+		Mitarbeiter m;
+		
+		do{
+			m = pm.ladeMitarbeiter();
+			if(m != null){
+				try{
+					einfuegen(m);
+				}catch(MitarbeiterExistiertBereitsException e){
+					System.err.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}while(m != null);
+		
+		pm.close();
 	}
 	
+	/**
+	 * Methode zum schreiben der Mitarbeiterdaten in einer externe Datenquelle
+	 * @param dateiName	Dateiname der externen Datenquelle
+	 * @throws IOException
+	 */
 	public void schreibeDaten(String dateiName) throws IOException{
-		//	TODO	Wenn wir uns um die Persistence kümmern
+		pm.openForWriting(dateiName);
+		
+		if(mitarbeiterListe != null){
+			Iterator<Mitarbeiter> it = mitarbeiterListe.iterator();
+
+			while(it.hasNext()){
+				pm.speichereMitarbeiter(it.next());
+			}
+		}
+		pm.close();
 	}
 	
 	
