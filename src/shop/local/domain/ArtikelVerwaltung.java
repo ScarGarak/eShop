@@ -1,5 +1,6 @@
 package shop.local.domain;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Vector;
 
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
+import shop.local.persitence.ObjectPersistenceManager;
+import shop.local.persitence.PersistenceManager;
 import shop.local.valueobjects.Artikel;
 
 /**
@@ -18,6 +21,55 @@ public class ArtikelVerwaltung {
 
 	// Verwaltung des Artikelbestands in einem Vector
 	private List<Artikel> artikelBestand = new Vector<Artikel>();
+	// Persistenz-Schnittstelle, die f¸r die Details des Dateizugriffs verantwortlich ist
+	private PersistenceManager pm = new ObjectPersistenceManager();
+	
+	/**
+	 * Methode zum Einlesen von Artikeldaten aus einer Datei.
+	 * 
+	 * @param datei Datei die den einzulesenden Artikelbestand enthält.
+	 * @throws IOException
+	 * @throws ArtikelExistiertBereitsException 
+	 * @throws ClassNotFoundException 
+	 */
+	public void liesDaten(String datei) throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
+		// PersistenzManager für Lesevorgänge öffnen
+		pm.openForReading(datei);
+
+		Artikel einArtikel;
+		do {
+			// Artikel-Objekt einlesen
+			einArtikel = pm.ladeArtikel();
+			if (einArtikel != null) {
+				// Artikel in die Liste einfügen
+				einfuegen(einArtikel);
+			}
+		} while (einArtikel != null);
+
+		// Persistenz-Schnittstelle wieder schlieﬂen
+		pm.close();
+	}
+	
+	/**
+	 * Methode zum Schreiben der Artikeldaten in eine Datei.
+	 * 
+	 * @param datei Datei, in die der Artikelbestand geschrieben werden soll
+	 * @throws IOException
+	 */
+	public void schreibeDaten(String datei) throws IOException  {
+		// PersistenzManager für Schreibvorgänge öffnen
+		pm.openForWriting(datei);
+
+		if (!artikelBestand.isEmpty()) {
+			Iterator<Artikel> iter = artikelBestand.iterator();
+			while (iter.hasNext()) {
+				pm.speichereArtikel(iter.next());				
+			}
+		}			
+		
+		// Persistenz-Schnittstelle wieder schlieﬂen
+		pm.close();
+	}
 	
 	public void einfuegen(Artikel artikel) throws ArtikelExistiertBereitsException {
 		if (!artikelBestand.contains(artikel))

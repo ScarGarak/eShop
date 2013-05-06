@@ -1,5 +1,6 @@
 package shop.local.valueobjects;
 
+import java.io.Serializable;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -8,7 +9,9 @@ import java.util.Locale;
  * 
  * @author Christof Ferreira Torres
  */
-public class Artikel {
+public class Artikel implements Serializable {
+	
+	private static final long serialVersionUID = -1025371623530827772L;
 	
 	// Attribute zur Beschreibung eines Artikels:
 	private int artikelnummer;

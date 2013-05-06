@@ -1,20 +1,20 @@
 package shop.local.valueobjects;
 
-import shop.local.domain.ArtikelVerwaltung;
+import shop.local.domain.WarenkorbVerwaltung;
 
-public class Kunde extends ABCs {
+public class Kunde extends Person {
 
 	private String strasse;
 	private int plz;
 	private String wohnort;
-	private ArtikelVerwaltung warenkorb;
+	private WarenkorbVerwaltung warenkorb;
 	
 	public Kunde(String name, int id, String strasse, int plz, String wohnort) {
-		super(id, name);
+		super(id, name, PersonTyp.Kunde);
 		this.strasse = strasse;
 		this.plz = plz;
 		this.wohnort = wohnort;
-		warenkorb = new ArtikelVerwaltung();
+		warenkorb = new WarenkorbVerwaltung();
 	}
 	
 	public void setStrasse(String strasse) {
@@ -41,7 +41,7 @@ public class Kunde extends ABCs {
 		return wohnort;
 	}
 	
-	public ArtikelVerwaltung getWarenkorb() {
+	public WarenkorbVerwaltung getWarenkorb() {
 		return warenkorb;
 	}
 	

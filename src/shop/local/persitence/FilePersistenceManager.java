@@ -7,7 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Mitarbeiter;
 
 
 	/**
@@ -18,7 +20,7 @@ import shop.local.valueobjects.Kunde;
  	* @see shop.local.persistence.PersistenceManager
  	*/
 
-public class FilePersistenceManager {
+public class FilePersistenceManager implements PersistenceManager {
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
@@ -81,14 +83,13 @@ public class FilePersistenceManager {
 	 * @throws IOException
 	 */
 	
-	public boolean speichereKunden(Kunde k) throws IOException {
+	public void speichereKunden(Kunde k) throws IOException {
 		// Name, Id, Strasse, Plz, Wohnort schreiben
 		schreibeZeile(k.getName());
 		schreibeZeile(Integer.valueOf(k.getId()).toString());
 		schreibeZeile(k.getStrasse());
 		schreibeZeile(Integer.valueOf(k.getPlz()).toString());
 		schreibeZeile(k.getWohnort());
-		return true;
 	}
 	
 	/*
@@ -105,6 +106,30 @@ public class FilePersistenceManager {
 	private void schreibeZeile(String daten) {
 		if (writer != null)
 			writer.println(daten);
+	}
+	
+	@Override
+	public Artikel ladeArtikel() throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void speichereArtikel(Artikel a) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Mitarbeiter ladeMitarbeiter() throws IOException {
+		//TODO 
+		return null;
+	}
+
+	@Override
+	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
+		//TODO
+		return false;
 	}
 	
 }

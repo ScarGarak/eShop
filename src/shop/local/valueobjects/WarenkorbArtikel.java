@@ -11,7 +11,7 @@ public class WarenkorbArtikel {
 	private Artikel artikel;
 	private int stueckzahl;
 	
-	WarenkorbArtikel(Artikel artikel, int stueckzahl) {
+	public WarenkorbArtikel(Artikel artikel, int stueckzahl) {
 		this.artikel = artikel;
 		this.stueckzahl = stueckzahl;
 	}
