@@ -1,6 +1,9 @@
 package shop.local.valueobjects;
 
-public abstract class Person {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public abstract class Person implements Serializable{
 
 	private int id;
 	private String name;

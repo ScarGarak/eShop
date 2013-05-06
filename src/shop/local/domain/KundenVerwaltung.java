@@ -100,5 +100,5 @@ public class KundenVerwaltung {
 	public void inDenWarenkorbLegen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		kunde.getWarenkorb().hinzufuegen(warenkorbArtikel);
 	}
-
+	
 }

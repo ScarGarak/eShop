@@ -13,6 +13,7 @@ package shop.local.valueobjects;
 
 
 
+@SuppressWarnings("serial")
 public class Mitarbeiter extends Person{
 	
 	private int gehalt;

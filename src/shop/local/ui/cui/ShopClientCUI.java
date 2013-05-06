@@ -15,6 +15,7 @@ import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.WarenkorbArtikel;
 
 public class ShopClientCUI {
 
@@ -34,6 +35,8 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
 		System.out.print("         \n  Artikel lšschen nach Bez.:   'l'");
+		System.out.print("         \n                                  ");
+		System.out.print("         \n  Warenkorb ausgeben:          'w'");
 		System.out.print("         \n                                  ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
