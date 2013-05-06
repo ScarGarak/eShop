@@ -2,7 +2,6 @@ package shop.local.valueobjects;
 
 import java.util.Date;
 
-import shop.local.domain.ArtikelVerwaltung;
 import shop.local.domain.KundenVerwaltung;
 import shop.local.domain.WarenkorbVerwaltung;
 
