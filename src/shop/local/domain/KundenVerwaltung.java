@@ -7,7 +7,6 @@ import java.util.Vector;
 import shop.local.domain.exceptions.ArtikelBestandException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
-import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.WarenkorbArtikel;
 

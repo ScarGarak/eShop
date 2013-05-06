@@ -4,6 +4,10 @@ import shop.local.domain.WarenkorbVerwaltung;
 
 public class Kunde extends Person {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String strasse;
 	private int plz;
 	private String wohnort;
