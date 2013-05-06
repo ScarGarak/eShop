@@ -36,7 +36,10 @@ public class ShopVerwaltung {
 	public ShopVerwaltung() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
 		meineArtikel = new ArtikelVerwaltung();
 		meineArtikel.liesDaten("SHOP_A.ser");
+
 		meineMitarbeiter = new MitarbeiterVerwaltung();
+		meineMitarbeiter.liesDaten("SHOP_M.ser");
+		
 		meineKunden = new KundenVerwaltung();
 	}
 	
@@ -125,7 +128,7 @@ public class ShopVerwaltung {
 	 * @throws IOException
 	 */
 	public void schreibeMitarbeiter() throws IOException{
-		meineMitarbeiter.schreibeDaten("test");
+		meineMitarbeiter.schreibeDaten("SHOP_M.ser");
 	}
 	
 	// Kunden Methoden
