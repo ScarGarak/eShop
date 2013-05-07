@@ -38,7 +38,6 @@ public class ShopClientCUI {
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
-		System.out.print("         \n  Mitarbeiterdaten sichern     'ms'");
 		System.out.print("         \n                                  ");
 		System.out.print("         \n  Kunden einfuegen:            'ke'");
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
@@ -159,9 +158,7 @@ public class ShopClientCUI {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
-		}else if(line.equals("ms")){
-			shop.schreibeMitarbeiter();
-		}else if(line.equals("ke")){
+		}else  if(line.equals("ke")){
 			System.out.print("Kunden ID >");
 			String strId = liesEingabe();
 			int id = Integer.parseInt(strId);
@@ -196,9 +193,6 @@ public class ShopClientCUI {
 			int id = Integer.parseInt(liesEingabe());
 			shop.kundenLoeschen(shop.sucheKunde(id));
 		}
-		else if (line.equals("q")) {
-			
-		}
 		else {
 			System.out.println("Dieser Befehl existiert nicht!");
 		}
@@ -228,6 +222,7 @@ public class ShopClientCUI {
 			}
 		} while (!input.equals("q"));
 		shop.schreibeArtikel();
+		shop.schreibeMitarbeiter();
 	}
 	
 	public static void main(String[] args) {
