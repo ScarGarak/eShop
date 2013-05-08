@@ -8,6 +8,7 @@ import shop.local.domain.exceptions.ArtikelBestandException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 
@@ -33,7 +34,6 @@ public class KundenVerwaltung {
 	public void schreibeDaten(String dateiName) throws IOException{
 		//	TODO	Wenn wir uns um die Persistence kuemmern
 	}
-	
 	
 	/**
 	 * Method to insert a new costumer
@@ -99,5 +99,6 @@ public class KundenVerwaltung {
 	public void inDenWarenkorbLegen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		kunde.getWarenkorb().hinzufuegen(warenkorbArtikel);
 	}
+	
 
 }

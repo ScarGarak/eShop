@@ -53,6 +53,22 @@ public abstract class Person implements Serializable{
 		return this.passwort;
 	}
 	
+	/**
+	 * Getter fŸr "passwort".
+	 * @param passwort Das Passwort der Person.
+	 */
+	public void getPasswort(String passwort){
+		this.passwort = passwort;
+	}
+	
+	/**
+	 * Getter fuer typ.
+	 * @param typ
+	 */
+	public void getPersonTyp(PersonTyp typ){
+		this.typ= typ;
+	}	
+	
 	
 		/*----------------------------
 		 * 			SETTERS			 |
@@ -78,8 +94,16 @@ public abstract class Person implements Serializable{
 	 * Setter fŸr "passwort".
 	 * @param passwort Das Passwort der Person.
 	 */
-	public void getPasswort(String passwort){
+	public void setPasswort(String passwort){
 		this.passwort = passwort;
+	}
+	
+	/**
+	 * Setter für den "typ"
+	 * @param typ Der Typ der Person.
+	 */
+	public void setPersonTyp(PersonTyp typ){
+		this.typ= typ;
 	}
 	
 }

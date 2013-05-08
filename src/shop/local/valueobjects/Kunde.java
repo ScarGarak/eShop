@@ -4,10 +4,10 @@ import shop.local.domain.WarenkorbVerwaltung;
 
 public class Kunde extends Person {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
+	// Attribute zur Beschreibung des Kunden
+	
 	private String strasse;
 	private int plz;
 	private String wohnort;
@@ -51,15 +51,6 @@ public class Kunde extends Person {
 	
 	public String toString() {
 		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort;
-	}
-	
-	// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)
-	
-	public boolean equals(Object o) {
-		if (o instanceof Kunde) {
-			return true;
-		}
-		return false;
 	}
 
 }
