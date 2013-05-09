@@ -1,11 +1,7 @@
 package shop.local.valueobjects;
 
 import java.util.Date;
-
-import shop.local.domain.ArtikelVerwaltung;
-import shop.local.domain.KundenVerwaltung;
-import shop.local.domain.WarenkorbVerwaltung;
-
+import java.util.List;
 
 /**
  *  Klasse zur erstellung eines Rechnungsobjektes
@@ -16,16 +12,14 @@ import shop.local.domain.WarenkorbVerwaltung;
 
 public class Rechnung {
 	
-	
 	private Kunde kunde;
 	private Date datum;
-	private WarenkorbVerwaltung warenkorb;
+	private List<WarenkorbArtikel> warenkorb;
 	
-	
-	public Rechnung(Kunde kunde, Date datum) {
+	public Rechnung(Kunde kunde, Date datum, List<WarenkorbArtikel> warenkorb) {
 		this.kunde = kunde;
 		this.datum = datum;
-		warenkorb = new WarenkorbVerwaltung();
+		this.warenkorb = warenkorb;
 	}
 	
 	public Kunde getKunden() {
@@ -40,7 +34,10 @@ public class Rechnung {
 		return datum;
 	}
 	
-	public WarenkorbVerwaltung getWarenkorb() {
+	public List<WarenkorbArtikel> getWarenkorb() {
 		return warenkorb;
 	}
+	
+	
+	
 }
