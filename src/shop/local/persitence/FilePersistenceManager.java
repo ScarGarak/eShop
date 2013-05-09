@@ -16,7 +16,7 @@ import shop.local.valueobjects.Mitarbeiter;
  	* @author Oliver Thummerer
  	* 
  	* Schnittstelle zur persistenten Speicherung von
- 	* Daten in .JSON DAteien
+ 	* Daten in .txt Dateien
  	* @see shop.local.persistence.PersistenceManager
  	*/
 

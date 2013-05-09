@@ -103,7 +103,7 @@ public abstract class Person implements Serializable{
 	 * @param typ Der Typ der Person.
 	 */
 	public void setPersonTyp(PersonTyp typ){
-		this.typ= typ;
+		this.typ = typ;
 	}
 	
 }
