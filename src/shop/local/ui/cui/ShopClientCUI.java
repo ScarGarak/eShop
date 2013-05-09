@@ -229,6 +229,8 @@ public class ShopClientCUI {
 			}
 		} while (!input.equals("q"));
 		shop.schreibeArtikel();
+		shop.schreibeMitarbeiter();
+		shop.schreibeKunden();
 	}
 	
 	public static void main(String[] args) {

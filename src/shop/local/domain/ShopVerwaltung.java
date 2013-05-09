@@ -41,6 +41,7 @@ public class ShopVerwaltung {
 		meineMitarbeiter.liesDaten("SHOP_M.ser");
 		
 		meineKunden = new KundenVerwaltung();
+		meineKunden.liesDaten("SHOP_K.ser");
 	}
 	
 	// Artikel Methoden
@@ -176,7 +177,7 @@ public class ShopVerwaltung {
  	* @throws IOException
  	*/
 	public void schreibeKunden() throws IOException{
-		meineKunden.schreibeDaten("test");
+		meineKunden.schreibeDaten("SHOP_K.ser");
 	}
 	
 	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandException, ArtikelExistiertNichtException {
