@@ -12,9 +12,11 @@ import java.util.List;
  */
 public class Rechnung {
 	
+	// Attribute zur Beschreibung einer Rechnung:
 	private Kunde kunde;
 	private Date datum;
 	private List<WarenkorbArtikel> warenkorb;
+	
 	
 	public Rechnung(Kunde kunde, Date datum, List<WarenkorbArtikel> warenkorb) {
 		this.kunde = kunde;
