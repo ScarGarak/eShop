@@ -99,5 +99,4 @@ public class KundenVerwaltung {
 		kunde.getWarenkorb().hinzufuegen(warenkorbArtikel);
 	}
 	
-
 }
