@@ -81,8 +81,15 @@ public class ObjectPersistenceManager implements PersistenceManager {
 	 * @return Kunde-Objekt, wenn einlesen erfolgreich, false null
 	 */
 	public Kunde ladeKunden() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		Kunde k = null;
+		try {
+			k = (Kunde) ois.readObject();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (EOFException e2){
+			//Keine weiteren Daten mehr in der Datei
+		}
+		return k;
 	}
 
 	/**
@@ -92,7 +99,7 @@ public class ObjectPersistenceManager implements PersistenceManager {
 	 * @throws IOException
 	 */
 	public void speichereKunden(Kunde k) throws IOException {
-		// TODO Auto-generated method stub
+		oos.writeObject(k);
 	}
 
 	@Override
