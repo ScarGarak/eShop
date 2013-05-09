@@ -3,21 +3,19 @@ package shop.local.valueobjects;
 
 /**
  * Diese Klasse beinhaltet alle Informationen die nur auf Mitarbeiter zutreffen 
- * und erbt von der Super-Klasse Person.
+ * sind und erbt von der Super-Klasse Person.
  * 
- * @author Angelo
+ * @author Migliosi Angelo
  * @version 1
  * 
- * Zuletzt editiert: 10.04.2013
+ * Zuletzt editiert: 09.05.2013
  */
-
-
-
-@SuppressWarnings("serial")
 public class Mitarbeiter extends Person{
 	
-	private int gehalt;
+	private static final long serialVersionUID = -3584470750142428422L;
 	
+	// Attribute zur Beschreibung eines Mitarbeiters:
+	private int gehalt;
 	
 	/**
 	 * Eine Konstruktor Funktion, die es ermöglicht gleich zu Anfang alle Attribute zu initialisieren.
@@ -30,7 +28,6 @@ public class Mitarbeiter extends Person{
 		super(id, name, PersonTyp.Mitarbeiter);
 		gehalt = 0;
 	}
-	
 	
 	/**
 	 * Getter Funktion für das Attribut "gehalt".

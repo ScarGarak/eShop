@@ -24,7 +24,7 @@ public class ShopVerwaltung {
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
 	 * (Initialisierung des Shops).
 	 * 
-	 * Namensmuster für Dateien:
+	 * Namensmuster fŸr Dateien:
 	 *   "SHOP_A.ser" ist die Datei der Artikel
 	 *   "SHOP_M.ser" ist die Datei der Mitarbeiter
 	 *   "SHOP_K.ser" ist die Datei der Kunden
@@ -49,6 +49,10 @@ public class ShopVerwaltung {
 	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
 		meineArtikel.einfuegen(artikel);
+	}
+	
+	public void artikelBestandErhoehen(int artikelnummer, int anzahl) throws ArtikelExistiertNichtException {
+		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
 	}
 	
 	public List<Artikel> gibAlleArtikelSortiertNachArtikelnummer() {

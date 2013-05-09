@@ -1,5 +1,8 @@
 package shop.local.valueobjects;
 
+import java.util.Currency;
+import java.util.Locale;
+
 /**
  * Klasse zur Repräsentation einzelner Warenkorb Artikel.
  * 
@@ -33,7 +36,7 @@ public class WarenkorbArtikel {
 	}
 	
 	public String toString() {
-		return ("Nr: " + artikel.getArtikelnummer() + "\t Bezeichnung: " + artikel.getBezeichnung() + "\t Stückzahl: " + stueckzahl);
+		return ("\t " + stueckzahl + "x" + artikel.getBezeichnung() + "\t " + String.format("%.2f ", artikel.getPreis()) + Currency.getInstance(Locale.GERMANY));
 	}
 	
 	public boolean equals(Object andererWarenkorbArtikel) {
