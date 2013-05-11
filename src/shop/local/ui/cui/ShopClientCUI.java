@@ -175,8 +175,7 @@ public class ShopClientCUI {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
-		}
-		else if(line.equals("ke")) {
+		}else  if(line.equals("ke")){
 			System.out.print("Kunden ID >");
 			String strId = liesEingabe();
 			int id = Integer.parseInt(strId);
@@ -210,9 +209,6 @@ public class ShopClientCUI {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.kundenLoeschen(shop.sucheKunde(id));
-		}
-		else if (line.equals("q")) {
-			
 		}
 		else {
 			System.out.println("Dieser Befehl existiert nicht!");

@@ -17,7 +17,6 @@ public class Rechnung {
 	private Date datum;
 	private List<WarenkorbArtikel> warenkorb;
 	
-	
 	public Rechnung(Kunde kunde, Date datum, List<WarenkorbArtikel> warenkorb) {
 		this.kunde = kunde;
 		this.datum = datum;

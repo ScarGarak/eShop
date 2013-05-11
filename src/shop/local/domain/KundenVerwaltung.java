@@ -133,5 +133,4 @@ public class KundenVerwaltung {
 		return new Rechnung(kunde, new Date(), kunde.getWarenkorb().kaufen());
 	}
 	
-	
 }

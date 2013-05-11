@@ -57,7 +57,6 @@ public interface PersistenceManager {
 	/**
 	 * Methode zum schreiben der Mitarbeiterdaten in eine externe Datei
 	 * @param m Ein Mitarbeiter-Objekt zu speichern
-	 * @return true wenn der Schreibvorgang erfolgreich war
 	 * @throws IOException
 	 */
 	public void speichereMitarbeiter(Mitarbeiter m) throws IOException;

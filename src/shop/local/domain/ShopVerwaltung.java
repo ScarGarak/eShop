@@ -33,10 +33,10 @@ public class ShopVerwaltung {
 	 * @throws ArtikelExistiertBereitsException 
 	 * @throws ClassNotFoundException 
 	 */
-	public ShopVerwaltung() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
+	public ShopVerwaltung() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException{
 		meineArtikel = new ArtikelVerwaltung();
 		meineArtikel.liesDaten("SHOP_A.ser");
-
+		
 		meineMitarbeiter = new MitarbeiterVerwaltung();
 		meineMitarbeiter.liesDaten("SHOP_M.ser");
 		

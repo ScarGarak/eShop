@@ -107,7 +107,7 @@ public class FilePersistenceManager implements PersistenceManager {
 		if (writer != null)
 			writer.println(daten);
 	}
-
+	
 	@Override
 	public Artikel ladeArtikel() throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
@@ -127,9 +127,10 @@ public class FilePersistenceManager implements PersistenceManager {
 	}
 
 	@Override
-	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
+	public void speichereMitarbeiter(Mitarbeiter m) throws IOException {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
+
 	
 }
