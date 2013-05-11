@@ -35,8 +35,6 @@ public abstract class Person implements Serializable{
 		return this.name;
 	}
 	
-	
-	
 	/**
 	 * Getter für "id".
 	 * @return Die ID Nummer der Person.
@@ -54,20 +52,12 @@ public abstract class Person implements Serializable{
 	}
 	
 	/**
-	 * Getter für "passwort".
-	 * @param passwort Das Passwort der Person.
-	 */
-	public void getPasswort(String passwort){
-		this.passwort = passwort;
-	}
-	
-	/**
 	 * Getter fuer typ.
 	 * @param typ
 	 */
-	public void getPersonTyp(PersonTyp typ){
-		this.typ= typ;
-	}	
+	public PersonTyp getPersonTyp(PersonTyp typ){
+		return this.typ;
+	}
 	
 	
 		/*----------------------------
@@ -103,7 +93,7 @@ public abstract class Person implements Serializable{
 	 * @param typ Der Typ der Person.
 	 */
 	public void setPersonTyp(PersonTyp typ){
-		this.typ= typ;
+		this.typ = typ;
 	}
 	
 }

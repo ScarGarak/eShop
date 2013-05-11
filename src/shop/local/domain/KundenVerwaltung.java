@@ -1,13 +1,17 @@
 package shop.local.domain;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
 
 import shop.local.domain.exceptions.ArtikelBestandException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
+import shop.local.persitence.ObjectPersistenceManager;
+import shop.local.persitence.PersistenceManager;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 
@@ -25,13 +29,39 @@ public class KundenVerwaltung {
 	
 	private Vector<Kunde> kundenListe = new Vector<Kunde>();
 	
+	private PersistenceManager pm = new ObjectPersistenceManager();
 	
 	public void liesDaten(String dateiName) throws IOException{
-		//	TODO	Wenn wir uns um die Persistence kuemmern
+		pm.openForReading(dateiName);
+		
+		Kunde k;
+		
+		do{
+			k = pm.ladeKunden();
+			if(k != null){
+				try{
+					einfuegen(k);
+				}catch(KundeExistiertBereitsException e){
+					System.err.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}while(k != null);
+		
+		pm.close();
 	}
 	
 	public void schreibeDaten(String dateiName) throws IOException{
-		//	TODO	Wenn wir uns um die Persistence kuemmern
+		pm.openForWriting(dateiName);
+		
+		if(kundenListe != null){
+			Iterator<Kunde> it = kundenListe.iterator();
+
+			while(it.hasNext()){
+				pm.speichereKunden(it.next());
+			}
+		}
+		pm.close();
 	}
 	
 	/**
@@ -97,6 +127,11 @@ public class KundenVerwaltung {
 	
 	public void inDenWarenkorbLegen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		kunde.getWarenkorb().hinzufuegen(warenkorbArtikel);
+	}
+	
+	public Rechnung kaufen (Kunde kunde) {
+		return new Rechnung(kunde, new Date(), kunde.getWarenkorb().kaufen());
+		//return rechnung;
 	}
 	
 }
