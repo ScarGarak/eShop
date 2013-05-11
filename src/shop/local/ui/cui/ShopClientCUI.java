@@ -210,6 +210,9 @@ public class ShopClientCUI {
 			int id = Integer.parseInt(liesEingabe());
 			shop.kundenLoeschen(shop.sucheKunde(id));
 		}
+		else if (line.equals("q")) {
+			
+		}
 		else {
 			System.out.println("Dieser Befehl existiert nicht!");
 		}
