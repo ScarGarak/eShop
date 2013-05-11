@@ -35,6 +35,11 @@ public class Rechnung {
 		return warenkorb;
 	}
 	
+	/**
+	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artiekl.
+	 * 
+	 * @return Den Gesamtpreis aller Warenkorb Artikel.
+	 */
 	public double getGesamtpreis() {
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
 		double summe = 0.0;
