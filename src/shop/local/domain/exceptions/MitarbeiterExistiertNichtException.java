@@ -1,7 +1,5 @@
 package shop.local.domain.exceptions;
 
-import shop.local.valueobjects.Mitarbeiter;
-
 @SuppressWarnings("serial")
 public class MitarbeiterExistiertNichtException extends Exception{
 
