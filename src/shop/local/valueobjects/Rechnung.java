@@ -23,7 +23,7 @@ public class Rechnung {
 		this.warenkorb = warenkorb;
 	}
 	
-	public Kunde getKunden() {
+	public Kunde getKunde() {
 		return kunde;
 	}
 	

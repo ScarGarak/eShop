@@ -70,7 +70,6 @@ public class MitarbeiterVerwaltung {
 		pm.close();
 	}
 	
-	
 	/**
 	 * Diese Methode dient zum einfuegen von Mitarbeitern in die Mitarbeiter-Liste.
 	 * @param m Die Mitarbeiter-Instanz die zur Liste hinzugefŸgt werden soll.

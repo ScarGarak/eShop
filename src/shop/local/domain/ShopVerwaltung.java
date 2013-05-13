@@ -10,6 +10,8 @@ import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
+import shop.local.persitence.FilePersistenceManager;
+import shop.local.persitence.LogPersistenceManager;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -20,6 +22,9 @@ public class ShopVerwaltung {
 	private ArtikelVerwaltung meineArtikel;
 	private MitarbeiterVerwaltung meineMitarbeiter;
 	private KundenVerwaltung meineKunden;
+	
+	// Persistenz-Schnittstelle, die für die Details des Dateizugriffs verantwortlich ist
+	private LogPersistenceManager lpm = new FilePersistenceManager();
 	
 	/**
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
@@ -47,13 +52,19 @@ public class ShopVerwaltung {
 	
 	// Artikel Methoden
 	
-	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
+	public void fuegeArtikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException, IOException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
 		meineArtikel.einfuegen(artikel);
+		lpm.openForWriting("EinAuslagerung.log");
+		lpm.speichereEinlagerung(mitarbeiter, bestand, artikelnummer);
+		lpm.close();
 	}
 	
-	public void artikelBestandErhoehen(int artikelnummer, int anzahl) throws ArtikelExistiertNichtException {
+	public void artikelBestandErhoehen(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, IOException {
 		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
+		lpm.openForWriting("EinAuslagerung.log");
+		lpm.speichereEinlagerung(mitarbeiter, anzahl, artikelnummer);
+		lpm.close();
 	}
 	
 	public List<Artikel> gibAlleArtikelSortiertNachArtikelnummer() {

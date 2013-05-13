@@ -94,6 +94,17 @@ public class ArtikelVerwaltung {
 			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");
 	}
 	
+	public Artikel getArtikel(int artikelnummer) {
+		Iterator<Artikel> iter = artikelBestand.iterator();
+		while (iter.hasNext()) {
+			Artikel artikel = iter.next();
+			if (artikel.getArtikelnummer() == artikelnummer) {
+				return artikel;
+			}
+		}
+		return null;
+	}
+	
 	public List<Artikel> sucheArtikel(int artikelnummer) {
 		List<Artikel> ergebnis = new Vector<Artikel>();
 		
