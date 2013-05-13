@@ -21,6 +21,8 @@ public class Rechnung {
 		this.kunde = kunde;
 		this.datum = datum;
 		this.warenkorb = warenkorb;
+
+
 	}
 	
 	public Kunde getKunde() {
