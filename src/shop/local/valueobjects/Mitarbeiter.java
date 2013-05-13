@@ -10,14 +10,12 @@ package shop.local.valueobjects;
  * 
  * Zuletzt editiert: 11.05.2013
  */
-
-
-
-@SuppressWarnings("serial")
 public class Mitarbeiter extends Person{
 	
-	private int gehalt;
+	private static final long serialVersionUID = -3584470750142428422L;
 	
+	// Attribute zur Beschreibung eines Mitarbeiters:
+	private int gehalt;
 	
 	/**
 	 * Konstruktor
@@ -29,7 +27,6 @@ public class Mitarbeiter extends Person{
 		super(id, name, PersonTyp.Mitarbeiter);
 		gehalt = 0;
 	}
-	
 	
 	/**
 	 * Getter Funktion für das Attribut "gehalt".
