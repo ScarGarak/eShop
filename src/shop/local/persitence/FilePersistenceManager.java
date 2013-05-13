@@ -122,14 +122,15 @@ public class FilePersistenceManager implements PersistenceManager {
 
 	@Override
 	public Mitarbeiter ladeMitarbeiter() throws IOException {
-		//TODO 
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
-		//TODO
-		return false;
+	public void speichereMitarbeiter(Mitarbeiter m) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
+
 	
 }

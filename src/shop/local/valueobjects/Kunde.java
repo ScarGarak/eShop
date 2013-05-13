@@ -4,10 +4,9 @@ import shop.local.domain.WarenkorbVerwaltung;
 
 public class Kunde extends Person {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4664724545004822767L;
 	
-	// Attribute zur Beschreibung des Kunden
-	
+	// Attribute zur Beschreibung des Kunden	
 	private String strasse;
 	private int plz;
 	private String wohnort;
@@ -52,5 +51,5 @@ public class Kunde extends Person {
 	public String toString() {
 		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort;
 	}
-
+	
 }

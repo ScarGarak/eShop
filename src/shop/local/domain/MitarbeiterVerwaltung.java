@@ -17,7 +17,7 @@ import shop.local.valueobjects.Mitarbeiter;
  * @author Angelo
  * @version 1
  * 
- * Zuletzt editiert: 10.04.2013
+ * Zuletzt editiert: 11.05.2013
  */
 
 public class MitarbeiterVerwaltung {
@@ -52,7 +52,7 @@ public class MitarbeiterVerwaltung {
 	}
 	
 	/**
-	 * Methode zum schreiben der Mitarbeiterdaten in einer externe Datenquelle
+	 * Methode zum schreiben der Mitarbeiterdaten in eine externe Datenquelle
 	 * @param dateiName	Dateiname der externen Datenquelle
 	 * @throws IOException
 	 */
@@ -72,8 +72,6 @@ public class MitarbeiterVerwaltung {
 	
 	/**
 	 * Diese Methode dient zum einfuegen von Mitarbeitern in die Mitarbeiter-Liste.
-	 * Wenn ein Mitarbeiter eingefuegt wird, dessen ID schon ein anderer Mitarbeiter
-	 * besitzt, wird eine Exception geworfen!
 	 * @param m Die Mitarbeiter-Instanz die zur Liste hinzugefügt werden soll.
 	 * @throws MitarbeiterExistiertBereitsException	Wenn die ID der hinzuzufügenden Mitarbeiter-Instanz schon einmal in der Liste existiert. 
 	 */
@@ -86,7 +84,7 @@ public class MitarbeiterVerwaltung {
 	}
 	
 	/**
-	 * Diese Methode löscht die angegebene Mitarbeiter Instanz.
+	 * Diese Methode löscht die angegebene Mitarbeiter Instanz aus der Liste.
 	 * @param m Mitarbeiter Instanz zum löschen
 	 */
 	public void loeschen(Mitarbeiter m){
@@ -95,8 +93,6 @@ public class MitarbeiterVerwaltung {
 	
 	/**
 	 * Diese Methode sucht ein Mitarbeiter mittels einer angegebenen ID Nummer.
-	 * Es sei zu bemerken, dass, nach der ersten erfolgreichen Suche, die Instanz
-	 * zurückgegeben wird, und die Suche abgebrochen wird.
 	 * @param id ID Nummer des zu suchenden Mitarbeiters.
 	 * @return Die Mitarbeiter-Instanz mit der angegebenen ID Nummer, oder "null" wenn keine Instanz gefunden wurde.
 	 */
@@ -124,12 +120,7 @@ public class MitarbeiterVerwaltung {
 		
 		//Erschaffen einer kopie
 		Vector<Mitarbeiter> kopie = new Vector<Mitarbeiter>();
-		
-		Iterator<Mitarbeiter> it = mitarbeiterListe.iterator();
-		
-		while(it.hasNext()){
-			kopie.add(it.next());
-		}
+		kopie.addAll(mitarbeiterListe);
 		
 		return kopie;
 		

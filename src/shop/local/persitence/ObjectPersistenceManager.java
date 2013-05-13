@@ -39,6 +39,7 @@ public class ObjectPersistenceManager implements PersistenceManager {
 				oos.close();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return false;
 			}
 		if (ois != null) {
 			try {
@@ -116,9 +117,8 @@ public class ObjectPersistenceManager implements PersistenceManager {
 	}
 
 	@Override
-	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException {
+	public void speichereMitarbeiter(Mitarbeiter m) throws IOException {
 		oos.writeObject(m);
-		return true;
 	}
 
 }

@@ -21,7 +21,7 @@ public class ArtikelVerwaltung {
 
 	// Verwaltung des Artikelbestands in einem Vector
 	private List<Artikel> artikelBestand = new Vector<Artikel>();
-	// Persistenz-Schnittstelle, die für die Details des Dateizugriffs verantwortlich ist
+	// Persistenz-Schnittstelle, die fŸr die Details des Dateizugriffs verantwortlich ist
 	private PersistenceManager pm = new ObjectPersistenceManager();
 	
 	/**
@@ -76,6 +76,22 @@ public class ArtikelVerwaltung {
 			artikelBestand.add(artikel);
 		else
 			throw new ArtikelExistiertBereitsException(artikel, " - in 'einfuegen()'");
+	}
+	
+	public void bestandErhoehen(int artikelnummer, int anzahl) throws ArtikelExistiertNichtException {
+		int index = -1;
+
+		Iterator<Artikel> iter = artikelBestand.iterator();
+		while (iter.hasNext()) {
+			Artikel artikel = iter.next();
+			if (artikel.getArtikelnummer() == artikelnummer)
+				index = artikelBestand.indexOf(artikel);
+		}
+		
+		if (index != -1)
+			artikelBestand.get(index).setBestand(artikelBestand.get(index).getBestand() + anzahl);
+		else
+			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");
 	}
 	
 	public List<Artikel> sucheArtikel(int artikelnummer) {

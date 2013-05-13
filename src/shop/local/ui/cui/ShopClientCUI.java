@@ -30,6 +30,7 @@ public class ShopClientCUI {
 		System.out.print("Befehle: \n  Artikel einfuegen:           'e'");
 		System.out.print("         \n  Artikel ausgeben nach Nr:    'a'");
 		System.out.print("         \n  Artikel ausgeben nach Bez.:  'b'");
+		System.out.print("         \n  Artikel Bestand erhöhen:     'c'");
 		System.out.print("         \n  Artikel suche nach Nr:       'f'");
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel löschen nach Nr:     'k'");
@@ -69,8 +70,7 @@ public class ShopClientCUI {
 				shop.fuegeArtikelEin(aNr, bezeichnung, aPr, aBtd);
 				ok = true;
 			} catch (ArtikelExistiertBereitsException e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
+				System.err.println("Artikel existiert bereits!");
 			}
 			if (ok)
 				System.out.println("Einfügen ok");
@@ -84,6 +84,25 @@ public class ShopClientCUI {
 		else if (line.equals("b")) {
 			Collection<Artikel> liste = shop.gibAlleArtikelSortiertNachBezeichnung();
 			gibArtikellisteAus(liste);
+		}
+		else if (line.equals("c")) {
+			System.out.print("Artikelnummer  > ");
+			String nummer = liesEingabe();
+			int aNr = Integer.parseInt(nummer);
+			System.out.print("Artikelanzahl  > ");
+			String anzahl = liesEingabe();
+			int aAn = Integer.parseInt(anzahl);
+			boolean ok = false;
+			try {
+				shop.artikelBestandErhoehen(aNr, aAn);
+				ok = true;
+			} catch (ArtikelExistiertNichtException e) {
+				System.err.println("Artikel existiert nicht!");
+			}
+			if (ok)
+				System.out.println("Bestand erhöhen ok");
+			else
+				System.out.println("Fehler beim Bestand erhöhen");
 		}
 		else if (line.equals("f")) {
 			System.out.print("Artikelnummer  > ");
@@ -107,8 +126,7 @@ public class ShopClientCUI {
 				shop.EntferneArtikel(aNr);
 				ok = true;
 			} catch (ArtikelExistiertNichtException e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
+				System.err.println("Artikel existiert nicht!");
 			}
 			if (ok)
 				System.out.println("Löschen ok");
@@ -123,8 +141,7 @@ public class ShopClientCUI {
 				shop.EntferneArtikel(bezeichnung);
 				ok = true;
 			} catch (ArtikelExistiertNichtException e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
+				System.err.println("Artikel existiert nicht!");
 			}
 			if (ok)
 				System.out.println("Löschen ok");
@@ -192,6 +209,9 @@ public class ShopClientCUI {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			shop.kundenLoeschen(shop.sucheKunde(id));
+		}
+		else if (line.equals("q")) {
+			
 		}
 		else {
 			System.out.println("Dieser Befehl existiert nicht!");

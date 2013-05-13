@@ -24,7 +24,7 @@ public class ShopVerwaltung {
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
 	 * (Initialisierung des Shops).
 	 * 
-	 * Namensmuster f¸r Dateien:
+	 * Namensmuster für Dateien:
 	 *   "SHOP_A.ser" ist die Datei der Artikel
 	 *   "SHOP_M.ser" ist die Datei der Mitarbeiter
 	 *   "SHOP_K.ser" ist die Datei der Kunden
@@ -49,6 +49,10 @@ public class ShopVerwaltung {
 	public void fuegeArtikelEin(int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
 		meineArtikel.einfuegen(artikel);
+	}
+	
+	public void artikelBestandErhoehen(int artikelnummer, int anzahl) throws ArtikelExistiertNichtException {
+		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
 	}
 	
 	public List<Artikel> gibAlleArtikelSortiertNachArtikelnummer() {
@@ -89,7 +93,7 @@ public class ShopVerwaltung {
 	/**
 	 * Diese Methode ermöglicht es einen Mitarbeiter nach seiner ID
 	 * zu suchen.
-	 * @param id der Mitarbeiter Instanz, die man suchen möchte
+	 * @param id ID der Mitarbeiter Instanz, die man suchen möchte
 	 * @return Die Mitarbeiter Instanz mit der gegebenen ID.
 	 */
 	public Mitarbeiter sucheMitarbeiter(int id){
@@ -98,7 +102,7 @@ public class ShopVerwaltung {
 
 	/**
 	 * Diese Methode ermöglicht es um die Mitarbeiterliste einzusehen.
-	 * @return Vector mit alle aktuellen Mitarbeiter Instanzen.
+	 * @return Vector mit allen aktuellen Mitarbeiter Instanzen.
 	 */
 	public Vector<Mitarbeiter> gibAlleMitarbeiter(){
 		return meineMitarbeiter.getMitarbeiterListe();
@@ -113,7 +117,7 @@ public class ShopVerwaltung {
 	}
 
 	/**
-	 * Diese Methode bidet eine neue Mitarbeiter Instanz und fügt sie
+	 * Diese Methode bildet eine neue Mitarbeiter Instanz und fügt sie
 	 * zur Mitarbeiterverwaltung hinzu.
 	 * @param id Id des neuen Mitarbeiters
 	 * @param name Name des neuen Mitarbeiters
@@ -125,7 +129,7 @@ public class ShopVerwaltung {
 	}
 
 	/**
-	 * Diese Methode ermöglicht es den "schreibe" befehl der Mitarbeiterverwaltung zu triggern.
+	 * Diese Methode schreibt alle Mitarbeiterdaten in die Datenquelle.
 	 * @throws IOException
 	 */
 	public void schreibeMitarbeiter() throws IOException{

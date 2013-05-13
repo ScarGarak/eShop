@@ -24,7 +24,6 @@ public interface PersistenceManager {
 	 * @param datenquelle
 	 * @throws IOException
 	 */
-	
 	public void openForReading(String datenquelle) throws IOException;
 	
 	public void openForWriting(String datenquelle) throws IOException;
@@ -49,6 +48,20 @@ public interface PersistenceManager {
 	public void speichereArtikel(Artikel a) throws IOException;
 	
 	/**
+	 * Methode zum laden Mitarbeiter Daten aus einer Datei
+	 * @return Ein Mitarbeiter-Objekt
+	 * @throws IOException
+	 */
+	public Mitarbeiter ladeMitarbeiter() throws IOException;
+	
+	/**
+	 * Methode zum schreiben der Mitarbeiterdaten in eine externe Datei
+	 * @param m Ein Mitarbeiter-Objekt zu speichern
+	 * @throws IOException
+	 */
+	public void speichereMitarbeiter(Mitarbeiter m) throws IOException;
+	
+	/**
 	 * Methode zum  Einlesen der Kundendaten aus einer externen Datenquelle.
 	 * 
 	 * @return Kunde-Objekt, wenn einlesen erfolgreich, false null
@@ -64,19 +77,4 @@ public interface PersistenceManager {
 	 */
 	public void speichereKunden(Kunde k) throws IOException;
 	
-	
-	/**
-	 * Methode zum laden Mitarbeiter Daten aus einer Datei
-	 * @return Ein Mitarbeiter-Objekt
-	 * @throws IOException
-	 */
-	public Mitarbeiter ladeMitarbeiter() throws IOException;
-	
-	/**
-	 * Methode zum schreiben der Mitarbeiterdaten in eine externe Datei
-	 * @param m Ein Mitarbeiter-Objekt zu speichern
-	 * @return true wenn der Schreibvorgang erfolgreich war
-	 * @throws IOException
-	 */
-	public boolean speichereMitarbeiter(Mitarbeiter m) throws IOException;
 }

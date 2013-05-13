@@ -8,7 +8,7 @@ package shop.local.valueobjects;
  * @author Angelo
  * @version 1
  * 
- * Zuletzt editiert: 10.04.2013
+ * Zuletzt editiert: 11.05.2013
  */
 
 
@@ -20,10 +20,9 @@ public class Mitarbeiter extends Person{
 	
 	
 	/**
-	 * Eine Konstruktor Funktion, die es ermöglicht gleich zu Anfang alle Attribute zu initialisieren.
+	 * Konstruktor
 	 * @param id ID Nummer des Mitarbeiters.
-	 * @param vorname Vorname des Mitarbeiters.
-	 * @param nachname Nachname des Mitarbeiters.
+	 * @param name Name des Mitarbeiters.
 	 * @see Person
 	 */
 	public Mitarbeiter(int id, String name){
@@ -50,7 +49,7 @@ public class Mitarbeiter extends Person{
 	
 	@Override
 	public String toString(){
-		String output = "Mitarbeiter ID = "+this.getId()+" \t Name = "+this.getName();
+		String output = "ID = "+this.getId()+" \t Name = "+this.getName();
 		
 		if(this.gehalt != 0){
 			output += "\tGehalt = "+this.gehalt;
@@ -58,11 +57,6 @@ public class Mitarbeiter extends Person{
 		
 		return output;
 	}
-	
-	// Implementiert die abstract method equals aus abstract class ABCs (Demoklasse)	
-	
-	// => Das ist gar nicht nötig, denn diese wird schon von 'Object' geerbt und ist schon implementiert.
-	//    Wir müssen diese Methode nur überschreiben und unseren Bedürfnissen anpassen.
 	
 	@Override
 	public boolean equals(Object o) {

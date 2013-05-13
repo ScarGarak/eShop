@@ -15,7 +15,7 @@ public abstract class Person implements Serializable{
 	 * Konstruktor
 	 * @param id ID Nummer der Person.
 	 * @param vorname Vorname der Person.
-	 * @param nachname Nachname der Person.
+	 * @param typ Der Typ der Person, d.h. Mitarbeiter oder Kunde.
 	 */
 	public Person(int id, String name, PersonTyp typ){
 		this.id = id;
@@ -52,7 +52,7 @@ public abstract class Person implements Serializable{
 	}
 	
 	/**
-	 * Getter fuer typ.
+	 * Getter fuer "typ".
 	 * @param typ
 	 */
 	public PersonTyp getPersonTyp(PersonTyp typ){
@@ -66,7 +66,7 @@ public abstract class Person implements Serializable{
 	
 	/**
 	 * Setter fŸr "Name".
-	 * @param vorname Den Vornamen der Person.
+	 * @param name Den Namen der Person.
 	 */
 	public void setName(String name){
 		this.name = name;
@@ -89,7 +89,7 @@ public abstract class Person implements Serializable{
 	}
 	
 	/**
-	 * Setter für den "typ"
+	 * Setter fuer den "typ".
 	 * @param typ Der Typ der Person.
 	 */
 	public void setPersonTyp(PersonTyp typ){
