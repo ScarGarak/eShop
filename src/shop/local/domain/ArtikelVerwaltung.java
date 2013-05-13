@@ -89,7 +89,7 @@ public class ArtikelVerwaltung {
 		}
 		
 		if (index != -1)
-			artikelBestand.get(index).setBestand(artikelBestand.get(index).getBestand() + anzahl);
+			artikelBestand.get(index).setBestand(artikelBestand.get(index).getBestand() + Math.abs(anzahl));
 		else
 			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");
 	}
