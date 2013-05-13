@@ -10,11 +10,10 @@ public abstract class Person implements Serializable{
 	private String passwort;
 	private PersonTyp typ;
 	
-	
 	/**
 	 * Konstruktor
 	 * @param id ID Nummer der Person.
-	 * @param vorname Vorname der Person.
+	 * @param name Name der Person.
 	 * @param typ Der Typ der Person, d.h. Mitarbeiter oder Kunde.
 	 */
 	public Person(int id, String name, PersonTyp typ){

@@ -5,7 +5,7 @@ package shop.local.valueobjects;
  * Diese Klasse beinhaltet alle Informationen die nur auf Mitarbeiter zutreffen 
  * und erbt von der Super-Klasse Person.
  * 
- * @author Angelo
+ * @author Migliosi Angelo
  * @version 1
  * 
  * Zuletzt editiert: 11.05.2013
