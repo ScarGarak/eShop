@@ -1,6 +1,7 @@
 package shop.local.domain;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -15,6 +16,7 @@ import shop.local.persitence.LogPersistenceManager;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 public class ShopVerwaltung {
@@ -198,6 +200,21 @@ public class ShopVerwaltung {
 	
 	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandException, ArtikelExistiertNichtException {
 		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
+	}
+	
+	public Rechnung kaufen(Kunde kunde) throws IOException {
+		Rechnung rechnung = meineKunden.kaufen(kunde);
+		lpm.openForWriting("EinAuslagerung.log");
+		Iterator<WarenkorbArtikel> iter = rechnung.getWarenkorb().iterator();
+		while(iter.hasNext()){
+			try {
+				lpm.speichereAuslagerung(kunde, (WarenkorbArtikel) iter.next());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		lpm.close();
+		return rechnung;
 	}
 	
 }
