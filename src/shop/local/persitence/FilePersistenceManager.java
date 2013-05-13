@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import shop.local.valueobjects.Kunde;
@@ -17,7 +18,7 @@ import shop.local.valueobjects.WarenkorbArtikel;
  * @author Christof Ferreira Torres
  * 
  * Schnittstelle zur persistenten Speicherung von
- * Ein- und AuslagerungsDaten in .txt Dateien
+ * Ein- und AuslagerungsDaten in .log Dateien
  * @see shop.local.persistence.LogPersistenceManager
  */
 public class FilePersistenceManager implements LogPersistenceManager {
@@ -30,7 +31,7 @@ public class FilePersistenceManager implements LogPersistenceManager {
 	}
 	
 	public void openForWriting(String datei) throws IOException {
-		writer = new PrintWriter(new BufferedWriter(new FileWriter(datei)));
+		writer = new PrintWriter(new BufferedWriter(new FileWriter(datei, true)));
 	}
 	
 	public boolean close() {
@@ -52,11 +53,11 @@ public class FilePersistenceManager implements LogPersistenceManager {
 	}
 
 	public void speichereEinlagerung(Mitarbeiter m, int anzahl, int artikelnummer) throws IOException {
-		schreibeZeile(new Date() + " Mitarbeiter " + m.getId() + " " + anzahl + " Stück Artikel " + artikelnummer + " eingelagert");
+		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " Mitarbeiter " + m.getId() + " " + anzahl + " Stueck Artikel " + artikelnummer + " eingelagert");
 	}
 	
 	public void speichereAuslagerung(Kunde k, WarenkorbArtikel wa) throws IOException {
-		schreibeZeile(new Date() + " Kunde " + k.getId() + " " + wa.getStueckzahl() + " Stück Artikel " + wa.getArtikel().getArtikelnummer() + " verkauft");
+		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " Kunde " + k.getId() + " " + wa.getStueckzahl() + " Stueck Artikel " + wa.getArtikel().getArtikelnummer() + " verkauft");
 	}
 	
 	/*

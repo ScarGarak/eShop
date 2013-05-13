@@ -36,12 +36,14 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
 		System.out.print("         \n  Artikel lšschen nach Bez.:   'l'");
-		System.out.print("         \n                                  ");
+		System.out.print("         \n                                   ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
+		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
-		System.out.print("         \n                                  ");
+		System.out.print("         \n                                   ");
 		System.out.print("         \n  Kunden einfuegen:            'ke'");
+		System.out.print("         \n  Kunden ausgeben:             'ka'");
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
 		System.out.print("         \n  Kunden loeschen nach ID:     'kl'");
 		System.out.println("         \n  Beenden:                     'q'");
@@ -55,6 +57,9 @@ public class ShopClientCUI {
 
 	private void verarbeiteEingabe(String line) throws IOException {
 		if (line.equals("e")) { 
+			System.out.print("Mitarbeiter ID > ");
+			String id = liesEingabe();
+			int aID = Integer.parseInt(id);
 			System.out.print("Artikelnummer > ");
 			String nummer = liesEingabe();
 			int aNr = Integer.parseInt(nummer);
@@ -68,10 +73,12 @@ public class ShopClientCUI {
 			int aBtd = Integer.parseInt(bestand);
 			boolean ok = false;
 			try {
-				shop.fuegeArtikelEin(aNr, bezeichnung, aPr, aBtd);
+				shop.fuegeArtikelEin(shop.sucheMitarbeiter(aID), aNr, bezeichnung, aPr, aBtd);
 				ok = true;
 			} catch (ArtikelExistiertBereitsException e) {
 				System.err.println("Artikel existiert bereits!");
+			} catch (MitarbeiterExistiertNichtException e) {
+				System.err.println("Mitarbeiter existiert nicht!");
 			}
 			if (ok)
 				System.out.println("EinfŸgen ok");
@@ -87,6 +94,9 @@ public class ShopClientCUI {
 			gibArtikellisteAus(liste);
 		}
 		else if (line.equals("c")) {
+			System.out.print("Mitarbeiter ID > ");
+			String id = liesEingabe();
+			int aID = Integer.parseInt(id);
 			System.out.print("Artikelnummer  > ");
 			String nummer = liesEingabe();
 			int aNr = Integer.parseInt(nummer);
@@ -95,10 +105,12 @@ public class ShopClientCUI {
 			int aAn = Integer.parseInt(anzahl);
 			boolean ok = false;
 			try {
-				shop.artikelBestandErhoehen(aNr, aAn);
+				shop.artikelBestandErhoehen(shop.sucheMitarbeiter(aID), aNr, aAn);
 				ok = true;
 			} catch (ArtikelExistiertNichtException e) {
 				System.err.println("Artikel existiert nicht!");
+			} catch (MitarbeiterExistiertNichtException e) {
+				System.err.println("Mitarbeiter existiert nicht!");
 			}
 			if (ok)
 				System.out.println("Bestand erhšhen ok");
@@ -162,6 +174,10 @@ public class ShopClientCUI {
 				e.printStackTrace();
 			}
 		}
+		else if (line.equals("ma")) {
+			Collection<Mitarbeiter> liste = shop.gibAlleMitarbeiter();
+			gibMitarbeiterlisteAus(liste);
+		}
 		else if (line.equals("mf")) {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
@@ -202,6 +218,10 @@ public class ShopClientCUI {
 				e.printStackTrace();
 			}
 		}
+		else if (line.equals("ka")) {
+			Collection<Kunde> liste = shop.gibAlleKunden();
+			gibKundenlisteAus(liste);
+		}
 		else if (line.equals("kf")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
@@ -233,6 +253,30 @@ public class ShopClientCUI {
 			while (it.hasNext()) {
 				Artikel a = it.next();
 				System.out.println(a.toString());
+			}
+		}
+	}
+	
+	private void gibMitarbeiterlisteAus(Collection<Mitarbeiter> mitarbeiter) {
+		if (mitarbeiter.isEmpty()) {
+			System.out.println("Liste ist leer.");
+		} else {
+			Iterator<Mitarbeiter> it = mitarbeiter.iterator();
+			while (it.hasNext()) {
+				Mitarbeiter m = it.next();
+				System.out.println(m.toString());
+			}
+		}
+	}
+	
+	private void gibKundenlisteAus(Collection<Kunde> kunden) {
+		if (kunden.isEmpty()) {
+			System.out.println("Liste ist leer.");
+		} else {
+			Iterator<Kunde> it = kunden.iterator();
+			while (it.hasNext()) {
+				Kunde k = it.next();
+				System.out.println(k.toString());
 			}
 		}
 	}
