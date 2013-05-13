@@ -12,6 +12,7 @@ import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
+import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -164,17 +165,23 @@ public class ShopClientCUI {
 		else if (line.equals("mf")) {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
-			Mitarbeiter m = shop.sucheMitarbeiter(id);
-			if(m != null){
+			try{
+				Mitarbeiter m = shop.sucheMitarbeiter(id);
 				System.out.println(m.toString());
-			}else{
-				System.out.println("Ein Mitarbeiter mit dieser ID existiert nicht!");
+			}catch (MitarbeiterExistiertNichtException e1){
+				System.out.println(e1.getMessage());
+				e1.printStackTrace();
 			}
 		}
 		else if (line.equals("ml")) {
 			System.out.print("Mitarbeiter ID >");
 			int id = Integer.parseInt(liesEingabe());
-			shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
+			try{
+				shop.mitarbeiterLoeschen(shop.sucheMitarbeiter(id));
+			}catch (MitarbeiterExistiertNichtException e1){
+				System.out.println(e1.getMessage());
+				e1.printStackTrace();
+			}
 		}else  if(line.equals("ke")){
 			System.out.print("Kunden ID >");
 			String strId = liesEingabe();

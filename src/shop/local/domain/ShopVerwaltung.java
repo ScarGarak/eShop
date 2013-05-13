@@ -9,6 +9,7 @@ import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
+import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -96,7 +97,7 @@ public class ShopVerwaltung {
 	 * @param id ID der Mitarbeiter Instanz, die man suchen mšchte
 	 * @return Die Mitarbeiter Instanz mit der gegebenen ID.
 	 */
-	public Mitarbeiter sucheMitarbeiter(int id){
+	public Mitarbeiter sucheMitarbeiter(int id) throws MitarbeiterExistiertNichtException{
 		return meineMitarbeiter.sucheMitarbeiter(id);
 	}
 

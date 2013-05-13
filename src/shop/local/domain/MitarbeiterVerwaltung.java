@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
+import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 
 import shop.local.persitence.ObjectPersistenceManager;
 import shop.local.persitence.PersistenceManager;
@@ -96,7 +97,7 @@ public class MitarbeiterVerwaltung {
 	 * @param id ID Nummer des zu suchenden Mitarbeiters.
 	 * @return Die Mitarbeiter-Instanz mit der angegebenen ID Nummer, oder "null" wenn keine Instanz gefunden wurde.
 	 */
-	public Mitarbeiter sucheMitarbeiter(int id){
+	public Mitarbeiter sucheMitarbeiter(int id) throws MitarbeiterExistiertNichtException{
 		Mitarbeiter m = null;
 		
 		Iterator<Mitarbeiter> it = mitarbeiterListe.iterator();
@@ -109,6 +110,9 @@ public class MitarbeiterVerwaltung {
 			}
 		}
 		
+		if(m == null){
+			throw new MitarbeiterExistiertNichtException(id, "");
+		}
 		return m;
 	}
 	
