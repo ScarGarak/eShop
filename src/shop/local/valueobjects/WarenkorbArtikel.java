@@ -8,7 +8,7 @@ import java.util.Locale;
  * 
  * @author Christof Ferreira Torres
  */
-public class WarenkorbArtikel {
+public class WarenkorbArtikel{
 
 	// Attribute zur Beschreibung eines Warenkorb Artikels:
 	private Artikel artikel;

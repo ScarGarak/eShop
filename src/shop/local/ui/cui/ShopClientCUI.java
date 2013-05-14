@@ -17,6 +17,7 @@ import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.WarenkorbArtikel;
 
 public class ShopClientCUI {
 
@@ -47,6 +48,11 @@ public class ShopClientCUI {
 		System.out.print("         \n  Kunden ausgeben:             'ka'");
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
 		System.out.print("         \n  Kunden loeschen nach ID:     'kl'");
+		System.out.print("         \n                                   ");
+		System.out.print("         \n  Warenkorb Artikel hinzufügen: 'ah'");
+		System.out.print("         \n  Warenkorb anzeigen:           'wa'");
+		System.out.print("         \n  Warenkorb leeren:             'wl'");
+		System.out.print("         \n  Warenkorb kaufen:             'wk'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
@@ -254,9 +260,9 @@ public class ShopClientCUI {
 			
 			try {
 				shop.inDenWarenkorbLegen(k, a, stZa);
-			} catch (ArtikelBestandException e) {
+			} catch (ArtikelBestandException e){
 				e.printStackTrace();
-			} catch (ArtikelExistiertNichtException e){
+			} catch (ArtikelExistiertNichtException e) {
 				e.printStackTrace();
 			}
 			
@@ -268,8 +274,30 @@ public class ShopClientCUI {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			Kunde k = shop.sucheKunde(id);
-			System.out.print(k.getWarenkorbVerwaltung() +"");
+			//System.out.print(k.getWarenkorb() +"");
+			Iterator<WarenkorbArtikel> iter = k.getWarenkorbVerwaltung().getWarenkorb().iterator();
+			while (iter.hasNext()) {
+			System.out.println(iter.next().toString());
+			}
 			
+		}
+		
+		// Warenkorb leeren
+		
+		else if (line.equals("wl")) {
+			System.out.print("Kunden ID >");
+			int id = Integer.parseInt(liesEingabe());
+			Kunde k = shop.sucheKunde(id);
+			shop.leeren(k);
+		}
+		
+		// Artikel im Warenkorb kaufen und Rechnungsobjekt erstellen
+		
+		else if (line.equals("wk")) {
+			System.out.print("Kunden ID >");
+			Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+			shop.kaufen(k);
+			System.out.println(shop.kaufen(k).toString());
 		}
 		
 		// Artikel aus dem Warenkorb entfernen
