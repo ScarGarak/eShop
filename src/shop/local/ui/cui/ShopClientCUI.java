@@ -276,28 +276,13 @@ public class ShopClientCUI {
 		else if (line.equals("wa")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
-<<<<<<< HEAD
-			Kunde k = shop.sucheKunde(id);
-			Collection<WarenkorbArtikel> liste = k.getWarenkorbVerwaltung().getWarenkorb();
-			gibWarenkorblisteAus(liste);
-=======
-			
-			Kunde k;
 			try {
-				k = shop.sucheKunde(id);
-				
-				//System.out.print(k.getWarenkorb() +"");
-				Iterator<WarenkorbArtikel> iter = k.getWarenkorbVerwaltung().getWarenkorb().iterator();
-				while (iter.hasNext()) {
-				System.out.println(iter.next().toString());
-				}
-				
+				Kunde k = shop.sucheKunde(id);
+				Collection<WarenkorbArtikel> liste = k.getWarenkorbVerwaltung().getWarenkorb();
+				gibWarenkorblisteAus(liste);
 			} catch (KundeExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Kunde existiert nicht!");
 			}
-			
->>>>>>> branch 'master' of https://github.com/ChristofTorres/eShop.git
 		}
 		
 		// Warenkorb leeren
@@ -305,14 +290,11 @@ public class ShopClientCUI {
 		else if (line.equals("wl")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
-			Kunde k;
 			try {
-				k = shop.sucheKunde(id);
+				Kunde k = shop.sucheKunde(id);
 				shop.leeren(k);
-				
 			} catch (KundeExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Kunde existiert nicht!");
 			}
 		}
 		
@@ -320,14 +302,11 @@ public class ShopClientCUI {
 		
 		else if (line.equals("wk")) {
 			System.out.print("Kunden ID >");
-			Kunde k;
 			try {
-				k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
-				shop.kaufen(k);
+				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
 				System.out.println(shop.kaufen(k).toString());
 			} catch (KundeExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Kunde existiert nicht!");
 			}
 		}
 		
