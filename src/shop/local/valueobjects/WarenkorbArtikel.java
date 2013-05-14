@@ -1,6 +1,5 @@
 package shop.local.valueobjects;
 
-import java.io.Serializable;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -9,9 +8,7 @@ import java.util.Locale;
  * 
  * @author Christof Ferreira Torres
  */
-public class WarenkorbArtikel implements Serializable {
-
-	private static final long serialVersionUID = 7104486632165797715L;
+public class WarenkorbArtikel {
 	
 	// Attribute zur Beschreibung eines Warenkorb Artikels:
 	private Artikel artikel;
@@ -39,7 +36,7 @@ public class WarenkorbArtikel implements Serializable {
 	}
 	
 	public String toString() {
-		return ("\t " + stueckzahl + "x" + artikel.getBezeichnung() + "\t " + String.format("%.2f ", artikel.getPreis()) + Currency.getInstance(Locale.GERMANY));
+		return ("\t " + stueckzahl + " x " + artikel.getBezeichnung() + "\t " + String.format("%.2f ", artikel.getPreis()) + Currency.getInstance(Locale.GERMANY));
 	}
 	
 	public boolean equals(Object andererWarenkorbArtikel) {
