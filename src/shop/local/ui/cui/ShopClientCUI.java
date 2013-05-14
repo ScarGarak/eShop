@@ -49,7 +49,10 @@ public class ShopClientCUI {
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
 		System.out.print("         \n  Kunden loeschen nach ID:     'kl'");
 		System.out.print("         \n                                   ");
-		System.out.print("         \n                                   ");
+		System.out.print("         \n  Warenkorb Artikel hinzufügen: 'ah'");
+		System.out.print("         \n  Warenkorb anzeigen:           'wa'");
+		System.out.print("         \n  Warenkorb leeren:             'wl'");
+		System.out.print("         \n  Warenkorb kaufen:             'wk'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
