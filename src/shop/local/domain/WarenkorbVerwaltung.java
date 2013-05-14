@@ -15,10 +15,6 @@ import shop.local.valueobjects.WarenkorbArtikel;
  */
 public class WarenkorbVerwaltung {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1653025132890168226L;
 	
 	// Verwaltung des Warenkorbes in einem Vector
 	private List<WarenkorbArtikel> warenkorb = new Vector<WarenkorbArtikel>();
