@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import shop.local.domain.WarenkorbVerwaltung;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -85,6 +86,7 @@ public class ObjectPersistenceManager implements PersistenceManager {
 		Kunde k = null;
 		try {
 			k = (Kunde) ois.readObject();
+			k.setWarenkorbVerwaltung(new WarenkorbVerwaltung());
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (EOFException e2){

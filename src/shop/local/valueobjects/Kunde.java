@@ -10,7 +10,7 @@ public class Kunde extends Person {
 	private String strasse;
 	private int plz;
 	private String wohnort;
-	private WarenkorbVerwaltung warenkorb;
+	private transient WarenkorbVerwaltung warenkorb;
 	
 	public Kunde(String name, int id, String strasse, int plz, String wohnort) {
 		super(id, name, PersonTyp.Kunde);
@@ -42,6 +42,10 @@ public class Kunde extends Person {
 	
 	public String getWohnort() {
 		return wohnort;
+	}
+	
+	public void setWarenkorbVerwaltung(WarenkorbVerwaltung warenkorb) {
+		this.warenkorb = warenkorb;
 	}
 	
 	public WarenkorbVerwaltung getWarenkorbVerwaltung() {
