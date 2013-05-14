@@ -252,17 +252,18 @@ public class ShopClientCUI {
 			Kunde k = shop.sucheKunde(id);
 			System.out.println("Artikel Nr. >");
 			int artNr = Integer.parseInt(liesEingabe());
-			Artikel a = shop.gibArtikel(artNr);
-			System.out.println("Stückzahl eingeben >");
-			int stZa = Integer.parseInt(liesEingabe());
-			
 			try {
-				shop.inDenWarenkorbLegen(k, a, stZa);
-			} catch (ArtikelBestandException | ArtikelExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Artikel a = shop.gibArtikel(artNr);
+				System.out.println("Stückzahl eingeben >");
+				int stZa = Integer.parseInt(liesEingabe());
+				try {
+					shop.inDenWarenkorbLegen(k, a, stZa);
+				} catch (ArtikelBestandException e) {
+					System.err.println("Der Bestand ist zu klein!");
+				} 
+			} catch (ArtikelExistiertNichtException e1) {
+				System.out.println("Artikel existiert nicht!");
 			}
-			
 		}
 		
 		// Inhalt des Warenkorbes anzeigen lassen
