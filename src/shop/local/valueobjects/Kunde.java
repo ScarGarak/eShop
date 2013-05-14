@@ -10,14 +10,14 @@ public class Kunde extends Person {
 	private String strasse;
 	private int plz;
 	private String wohnort;
-	private transient WarenkorbVerwaltung warenkorb;
+	private WarenkorbVerwaltung warenkorb;
 	
 	public Kunde(String name, int id, String strasse, int plz, String wohnort) {
 		super(id, name, PersonTyp.Kunde);
 		this.strasse = strasse;
 		this.plz = plz;
 		this.wohnort = wohnort;
-		warenkorb = new WarenkorbVerwaltung();
+		this.warenkorb = new WarenkorbVerwaltung();
 	}
 	
 	public void setStrasse(String strasse) {

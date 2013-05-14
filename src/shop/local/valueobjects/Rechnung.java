@@ -1,8 +1,11 @@
 package shop.local.valueobjects;
 
+import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *  Klasse zur erstellung eines Rechnungsobjektes
@@ -56,13 +59,13 @@ public class Rechnung {
 		ergebnis += (kunde.getName() + "\n");
 		ergebnis += (kunde.getStrasse() + "\n");
 		ergebnis += (kunde.getPlz() + " " + kunde.getWohnort() + "\n");
-		ergebnis += ("\n Datum: " + datum + "\n");
-		ergebnis += ("\n Artikel: \n");
+		ergebnis += ("\nDatum: " + new SimpleDateFormat("yyyy-MM-dd").format(datum) + "\n");
+		ergebnis += ("\nArtikel:\n");
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
 		while (iter.hasNext()) {
-			ergebnis += (iter.next().toString());
+			ergebnis += (iter.next().toString() + "\n");
 		}
-		ergebnis += ("Gesamtpreis: " + getGesamtpreis() + "\n");
+		ergebnis += ("Gesamtpreis: " + String.format("%.2f ", getGesamtpreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
 		return ergebnis;
 	}
 	

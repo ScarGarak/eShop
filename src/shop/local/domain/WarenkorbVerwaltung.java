@@ -1,5 +1,6 @@
 package shop.local.domain;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -13,7 +14,9 @@ import shop.local.valueobjects.WarenkorbArtikel;
  * 
  * @author Christof Ferreira Torres
  */
-public class WarenkorbVerwaltung {
+public class WarenkorbVerwaltung implements Serializable {
+	
+	private static final long serialVersionUID = -1653025132890168226L;
 	
 	// Verwaltung des Warenkorbes in einem Vector
 	private List<WarenkorbArtikel> warenkorb = new Vector<WarenkorbArtikel>();
