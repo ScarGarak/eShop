@@ -15,8 +15,6 @@ import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
-
-
 /** This class manages a costumer list and provides the methods to add,
  *  delete and search for costumers
  * @author Thummerer, Oliver
@@ -25,7 +23,6 @@ import shop.local.valueobjects.WarenkorbArtikel;
  *  
  *  last edited 23.04.12
  */
-
 public class KundenVerwaltung {
 	
 	private Vector<Kunde> kundenListe = new Vector<Kunde>();

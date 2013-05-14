@@ -48,12 +48,12 @@ public class ShopClientCUI {
 		System.out.print("         \n  Kunden einfuegen:            'ke'");
 		System.out.print("         \n  Kunden ausgeben:             'ka'");
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
-		System.out.print("         \n  Kunden loeschen nach ID:     'kl'");
+		System.out.print("         \n  Kunden lšschen nach ID:      'kl'");
 		System.out.print("         \n                                   ");
-		System.out.print("         \n  Warenkorb Artikel hinzufügen: 'ah'");
-		System.out.print("         \n  Warenkorb anzeigen:           'wa'");
-		System.out.print("         \n  Warenkorb leeren:             'wl'");
-		System.out.print("         \n  Warenkorb kaufen:             'wk'");
+		System.out.print("         \n  Warenkorb Artikel hinzufŸgen:'ah'");
+		System.out.print("         \n  Warenkorb anzeigen:          'wa'");
+		System.out.print("         \n  Warenkorb leeren:            'wl'");
+		System.out.print("         \n  Warenkorb kaufen:            'wk'");
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
 		System.out.flush();
@@ -249,7 +249,7 @@ public class ShopClientCUI {
 				System.err.println("Der Kunde existiert nicht!");
 			}
 		}
-		
+
 		// Artikel zum Warenkorb hinzugen
 		
 		else if (line.equals("ah")) {
@@ -259,7 +259,7 @@ public class ShopClientCUI {
 			int artNr = Integer.parseInt(liesEingabe());
 			try {
 				Artikel a = shop.gibArtikel(artNr);
-				System.out.println("Stückzahl eingeben >");
+				System.out.println("StŸckzahl eingeben >");
 				int stZa = Integer.parseInt(liesEingabe());
 				shop.inDenWarenkorbLegen(shop.sucheKunde(id), a, stZa);
 			} catch (ArtikelBestandException e) {
@@ -276,22 +276,13 @@ public class ShopClientCUI {
 		else if (line.equals("wa")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
-			
-			Kunde k;
 			try {
-				k = shop.sucheKunde(id);
-				
-				//System.out.print(k.getWarenkorb() +"");
-				Iterator<WarenkorbArtikel> iter = k.getWarenkorbVerwaltung().getWarenkorb().iterator();
-				while (iter.hasNext()) {
-				System.out.println(iter.next().toString());
-				}
-				
+				Kunde k = shop.sucheKunde(id);
+				Collection<WarenkorbArtikel> liste = k.getWarenkorbVerwaltung().getWarenkorb();
+				gibWarenkorblisteAus(liste);
 			} catch (KundeExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Kunde existiert nicht!");
 			}
-			
 		}
 		
 		// Warenkorb leeren
@@ -299,14 +290,11 @@ public class ShopClientCUI {
 		else if (line.equals("wl")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
-			Kunde k;
 			try {
-				k = shop.sucheKunde(id);
+				Kunde k = shop.sucheKunde(id);
 				shop.leeren(k);
-				
 			} catch (KundeExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Kunde existiert nicht!");
 			}
 		}
 		
@@ -314,14 +302,11 @@ public class ShopClientCUI {
 		
 		else if (line.equals("wk")) {
 			System.out.print("Kunden ID >");
-			Kunde k;
 			try {
-				k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
-				shop.kaufen(k);
+				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
 				System.out.println(shop.kaufen(k).toString());
 			} catch (KundeExistiertNichtException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Kunde existiert nicht!");
 			}
 		}
 		
@@ -380,6 +365,18 @@ public class ShopClientCUI {
 			while (it.hasNext()) {
 				Kunde k = it.next();
 				System.out.println(k.toString());
+			}
+		}
+	}
+	
+	private void gibWarenkorblisteAus(Collection<WarenkorbArtikel> warenkorb) {
+		if (warenkorb.isEmpty()) {
+			System.out.println("Warenkorb ist leer.");
+		} else {
+			Iterator<WarenkorbArtikel> it = warenkorb.iterator();
+			while (it.hasNext()) {
+				WarenkorbArtikel wa = it.next();
+				System.out.println(wa.toString());
 			}
 		}
 	}
