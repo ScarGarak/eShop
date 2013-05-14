@@ -267,7 +267,6 @@ public class ShopClientCUI {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			Kunde k = shop.sucheKunde(id);
-			//k.getWarenkorb().toString();
 			System.out.print(k.getWarenkorb() +"");
 			
 		}
