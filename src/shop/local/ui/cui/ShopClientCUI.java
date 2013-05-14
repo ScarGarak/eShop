@@ -241,11 +241,9 @@ public class ShopClientCUI {
 		}
 		else if (line.equals("kl")) {
 			System.out.print("Kunden ID >");
-			int id = Integer.parseInt(liesEingabe());
-			shop.kundenLoeschen(shop.sucheKunde(id));
+			shop.kundenLoeschen(shop.sucheKunde(Integer.parseInt(liesEingabe())));
 		}
 		
-		/////////////////////////////////////////////////////////////////
 		// Artikel zum Warenkorb hinzugen
 		
 		else if (line.equals("ah")) {
