@@ -16,9 +16,6 @@ import shop.local.valueobjects.WarenkorbArtikel;
  */
 public class WarenkorbVerwaltung implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1653025132890168226L;
 	
 	// Verwaltung des Warenkorbes in einem Vector
@@ -86,7 +83,7 @@ public class WarenkorbVerwaltung implements Serializable {
 	}
 	
 	public List<WarenkorbArtikel> getWarenkorb() {
-		  return warenkorb;
+		return warenkorb;
 	}
 	
 }
