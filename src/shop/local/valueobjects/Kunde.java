@@ -44,7 +44,7 @@ public class Kunde extends Person {
 		return wohnort;
 	}
 	
-	public WarenkorbVerwaltung getWarenkorb() {
+	public WarenkorbVerwaltung getWarenkorbVerwaltung() {
 		return warenkorb;
 	}
 	
