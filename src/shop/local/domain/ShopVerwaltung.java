@@ -62,6 +62,10 @@ public class ShopVerwaltung {
 		lpm.close();
 	}
 	
+	public Artikel gibArtikel(int artikelnummer) {
+		return meineArtikel.getArtikel(artikelnummer);
+	}
+	
 	public void artikelBestandErhoehen(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, IOException {
 		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
 		lpm.openForWriting("EinAuslagerung.log");
