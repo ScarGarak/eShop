@@ -8,6 +8,7 @@ import java.util.Vector;
 import shop.local.domain.exceptions.ArtikelBestandException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
+import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.persitence.ObjectPersistenceManager;
 import shop.local.persitence.PersistenceManager;
 import shop.local.valueobjects.Kunde;
@@ -90,7 +91,7 @@ public class KundenVerwaltung {
 	 * @param id search for the costumer ID number.
 	 * @return the costumer instance with specified ID number, or "null" if no instance Number was found.
 	 */
-	public Kunde sucheKunde(int id){
+	public Kunde sucheKunde(int id) throws KundeExistiertNichtException{
 		Kunde k = null;
 		
 		Iterator<Kunde> it = kundenListe.iterator();
@@ -101,6 +102,10 @@ public class KundenVerwaltung {
 				k = tmp;
 				break;
 			}
+		}
+		
+		if(k == null){
+			throw new KundeExistiertNichtException(id, "");
 		}
 		
 		return k;
