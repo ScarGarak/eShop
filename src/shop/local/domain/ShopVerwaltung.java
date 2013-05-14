@@ -221,4 +221,8 @@ public class ShopVerwaltung {
 		return rechnung;
 	}
 	
+	public void leeren(Kunde k) {
+		meineKunden.leeren(k);
+	}
+	
 }

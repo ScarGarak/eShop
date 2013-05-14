@@ -66,7 +66,7 @@ public class WarenkorbVerwaltung {
 	public synchronized List<WarenkorbArtikel> kaufen() {
 		List<WarenkorbArtikel> ergebnis = new Vector<WarenkorbArtikel>();
 		ergebnis.addAll(warenkorb);
-		warenkorb.clear();
+		//warenkorb.clear();
 		return ergebnis;
 	}
 	
@@ -77,6 +77,10 @@ public class WarenkorbVerwaltung {
 			warenkorbArtikel.getArtikel().setBestand(warenkorbArtikel.getArtikel().getBestand() + warenkorbArtikel.getStueckzahl());
 		}
 		warenkorb.clear();
+	}
+	
+	public List<WarenkorbArtikel> getWarenkorb() {
+		  return warenkorb;
 	}
 	
 }

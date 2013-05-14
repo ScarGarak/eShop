@@ -126,11 +126,15 @@ public class KundenVerwaltung {
 	}	
 	
 	public void inDenWarenkorbLegen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandException, ArtikelExistiertNichtException {
-		kunde.getWarenkorb().hinzufuegen(warenkorbArtikel);
+		kunde.getWarenkorbVerwaltung().hinzufuegen(warenkorbArtikel);
 	}
 	
 	public Rechnung kaufen(Kunde kunde) {
-		return new Rechnung(kunde, new Date(), kunde.getWarenkorb().kaufen());
+		return new Rechnung(kunde, new Date(), kunde.getWarenkorbVerwaltung().kaufen());
+	}
+	
+	public void leeren(Kunde kunde) {
+		kunde.getWarenkorbVerwaltung().leeren();
 	}
 	
 }
