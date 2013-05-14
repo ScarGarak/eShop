@@ -9,6 +9,7 @@ import shop.local.domain.exceptions.ArtikelBestandException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
+import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.persitence.FilePersistenceManager;
@@ -60,6 +61,10 @@ public class ShopVerwaltung {
 		lpm.openForWriting("EinAuslagerung.log");
 		lpm.speichereEinlagerung(mitarbeiter, bestand, artikelnummer);
 		lpm.close();
+	}
+	
+	public Artikel gibArtikel(int artikelnummer) {
+		return meineArtikel.getArtikel(artikelnummer);
 	}
 	
 	public Artikel gibArtikel(int artikelnummer) {
@@ -162,7 +167,7 @@ public class ShopVerwaltung {
 	* @param id der Kunden Instanz, die man suchen moechte
 	* @return Die Kunden Instanz mit der gegebenen ID.
 	*/
-	public Kunde sucheKunde(int id){
+	public Kunde sucheKunde(int id) throws KundeExistiertNichtException{
 		return meineKunden.sucheKunde(id);
 	}
 

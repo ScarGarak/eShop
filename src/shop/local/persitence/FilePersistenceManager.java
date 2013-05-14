@@ -7,13 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
 import shop.local.valueobjects.WarenkorbArtikel;
-
 /**
  * @author Christof Ferreira Torres
  * 
@@ -48,6 +47,7 @@ public class FilePersistenceManager implements LogPersistenceManager {
 		return true;
 	}
 	
+
 	public String ladeEinAuslagerung() throws IOException {
 		return liesZeile();
 	}
