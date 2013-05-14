@@ -1,6 +1,5 @@
 package shop.local.domain;
 
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -14,8 +13,8 @@ import shop.local.valueobjects.WarenkorbArtikel;
  * 
  * @author Christof Ferreira Torres
  */
-public class WarenkorbVerwaltung implements Serializable {
-
+public class WarenkorbVerwaltung {
+	
 	/**
 	 * 
 	 */
@@ -86,7 +85,7 @@ public class WarenkorbVerwaltung implements Serializable {
 	}
 	
 	public List<WarenkorbArtikel> getWarenkorb() {
-		  return warenkorb;
+		return warenkorb;
 	}
 	
 }

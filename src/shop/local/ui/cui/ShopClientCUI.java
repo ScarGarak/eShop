@@ -240,7 +240,6 @@ public class ShopClientCUI {
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Der Kunde existiert nicht!");
 			}
-			
 		}
 		else if (line.equals("kl")) {
 			System.out.print("Kunden ID >");
