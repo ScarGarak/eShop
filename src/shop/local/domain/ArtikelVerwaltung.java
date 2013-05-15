@@ -94,7 +94,7 @@ public class ArtikelVerwaltung {
 			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");
 	}
 	
-	public Artikel getArtikel(int artikelnummer) {
+	public Artikel getArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
 		Iterator<Artikel> iter = artikelBestand.iterator();
 		while (iter.hasNext()) {
 			Artikel artikel = iter.next();
@@ -102,7 +102,7 @@ public class ArtikelVerwaltung {
 				return artikel;
 			}
 		}
-		return null;
+		throw new ArtikelExistiertNichtException(artikelnummer, " - in 'getArtikel()'");
 	}
 	
 	public List<Artikel> sucheArtikel(int artikelnummer) {

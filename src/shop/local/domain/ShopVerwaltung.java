@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import shop.local.domain.exceptions.ArtikelBestandException;
+import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
@@ -63,7 +63,7 @@ public class ShopVerwaltung {
 		lpm.close();
 	}
 	
-	public Artikel gibArtikel(int artikelnummer) {
+	public Artikel gibArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
 		return meineArtikel.getArtikel(artikelnummer);
 	}
 	
@@ -203,8 +203,12 @@ public class ShopVerwaltung {
 		meineKunden.schreibeDaten("SHOP_K.ser");
 	}
 	
-	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandException, ArtikelExistiertNichtException {
+	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException {
 		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
+	}
+	
+	public void ausDemWarenkorbHerausnehmen(Kunde kunde, Artikel artikel) throws ArtikelExistiertNichtException {
+		meineKunden.ausDemWarenkorbHerausnehmen(kunde, kunde.getWarenkorbVerwaltung().getWarenkorbArtikel(artikel));
 	}
 	
 	public Rechnung kaufen(Kunde kunde) throws IOException {

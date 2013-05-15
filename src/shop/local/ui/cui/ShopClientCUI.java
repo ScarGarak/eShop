@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import shop.local.domain.ShopVerwaltung;
-import shop.local.domain.exceptions.ArtikelBestandException;
+import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
@@ -50,7 +50,8 @@ public class ShopClientCUI {
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
 		System.out.print("         \n  Kunden lšschen nach ID:      'kl'");
 		System.out.print("         \n                                   ");
-		System.out.print("         \n  Warenkorb Artikel hinzufŸgen:'ah'");
+		System.out.print("         \n  Warenkorb Artikel hinzufŸgen:'wh'");
+		System.out.print("         \n  Warenkorb Artikel entfernen: 'we'");
 		System.out.print("         \n  Warenkorb anzeigen:          'wa'");
 		System.out.print("         \n  Warenkorb leeren:            'wl'");
 		System.out.print("         \n  Warenkorb kaufen:            'wk'");
@@ -252,7 +253,7 @@ public class ShopClientCUI {
 
 		// Artikel zum Warenkorb hinzugen
 		
-		else if (line.equals("ah")) {
+		else if (line.equals("wh")) {
 			System.out.print("Kunden ID >");
 			int id = Integer.parseInt(liesEingabe());
 			System.out.println("Artikel Nr. >");
@@ -262,13 +263,35 @@ public class ShopClientCUI {
 				System.out.println("StŸckzahl eingeben >");
 				int stZa = Integer.parseInt(liesEingabe());
 				shop.inDenWarenkorbLegen(shop.sucheKunde(id), a, stZa);
-			} catch (ArtikelBestandException e) {
-				System.err.println("Der Bestand ist zu klein!");
+			} catch (ArtikelBestandIstZuKleinException e) {
+				System.err.println("Der Bestand ist zu klein oder leer!");
 			} catch (KundeExistiertNichtException e){
 				System.err.println("Der Kunde existiert nicht!");
 			} catch (ArtikelExistiertNichtException e1) {
 				System.out.println("Artikel existiert nicht!");
 			}
+		}
+		
+		// Artikel aus dem Warenkorb entfernen
+		
+		else if (line.equals("we")) {
+			System.out.print("Kunden ID >");
+			int id = Integer.parseInt(liesEingabe());
+			System.out.println("Artikel Nr. >");
+			int artNr = Integer.parseInt(liesEingabe());
+			boolean ok = false;
+			try {
+				shop.ausDemWarenkorbHerausnehmen(shop.sucheKunde(id), shop.gibArtikel(artNr));
+				ok = true;
+			} catch (KundeExistiertNichtException e){
+				System.err.println("Der Kunde existiert nicht!");
+			} catch (ArtikelExistiertNichtException e) {
+				System.out.println("Artikel existiert nicht!");
+			}
+			if (ok)
+				System.out.println("Entfernen ok");
+			else
+				System.out.println("Fehler beim Entfernen");
 		}
 		
 		// Inhalt des Warenkorbes anzeigen lassen
@@ -309,22 +332,6 @@ public class ShopClientCUI {
 				System.err.println("Kunde existiert nicht!");
 			}
 		}
-		
-		// Artikel aus dem Warenkorb entfernen
-		
-		/*else if (line.equals("ae")) {
-			System.out.print("Kunden ID >");
-			int id = Integer.parseInt(liesEingabe());
-			System.out.println("Artikel Nr. >");
-			int artNr = Integer.parseInt(liesEingabe());
-			System.out.println("Stückzahl eingeben >");
-			int stZa = Integer.parseInt(liesEingabe());
-			
-		}*/
-		
-		////////////////////////////////////////////////////////////////
-		
-		
 		else if (line.equals("q")) {
 			
 		}
