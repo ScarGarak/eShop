@@ -1,4 +1,4 @@
-package shop.local.persitence;
+package shop.local.persitence.log;
 
 import java.io.IOException;
 

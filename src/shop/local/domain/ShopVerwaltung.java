@@ -12,8 +12,8 @@ import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
-import shop.local.persitence.FilePersistenceManager;
-import shop.local.persitence.LogPersistenceManager;
+import shop.local.persitence.log.FileLogPersistenceManager;
+import shop.local.persitence.log.LogPersistenceManager;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -27,7 +27,7 @@ public class ShopVerwaltung {
 	private KundenVerwaltung meineKunden;
 	
 	// Persistenz-Schnittstelle, die für die Details des Dateizugriffs verantwortlich ist
-	private LogPersistenceManager lpm = new FilePersistenceManager();
+	private LogPersistenceManager lpm = new FileLogPersistenceManager();
 	
 	/**
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest

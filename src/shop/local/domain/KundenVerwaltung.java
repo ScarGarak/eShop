@@ -9,8 +9,8 @@ import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
-import shop.local.persitence.ObjectPersistenceManager;
-import shop.local.persitence.PersistenceManager;
+import shop.local.persitence.data.DataPersistenceManager;
+import shop.local.persitence.data.ObjectDataPersistenceManager;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
@@ -27,7 +27,7 @@ public class KundenVerwaltung {
 	
 	private Vector<Kunde> kundenListe = new Vector<Kunde>();
 	
-	private PersistenceManager pm = new ObjectPersistenceManager();
+	private DataPersistenceManager pm = new ObjectDataPersistenceManager();
 	
 	public void liesDaten(String dateiName) throws IOException{
 		pm.openForReading(dateiName);

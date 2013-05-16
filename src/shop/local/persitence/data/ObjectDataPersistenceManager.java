@@ -1,4 +1,4 @@
-package shop.local.persitence;
+package shop.local.persitence.data;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,9 +19,9 @@ import shop.local.valueobjects.Mitarbeiter;
  * 
  * Schnittstelle zur persistenten Speicherung von
  * Daten in serialisierte Dateien
- * @see shop.local.persistence.PersistenceManager
+ * @see shop.local.persitence.data.DataPersistenceManager.PersistenceManager
  */
-public class ObjectPersistenceManager implements PersistenceManager {
+public class ObjectDataPersistenceManager implements DataPersistenceManager {
 	
 	private ObjectInputStream ois = null;
 	private ObjectOutputStream oos = null;

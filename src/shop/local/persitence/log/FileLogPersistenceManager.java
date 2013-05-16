@@ -1,4 +1,4 @@
-package shop.local.persitence;
+package shop.local.persitence.log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,9 +18,9 @@ import shop.local.valueobjects.WarenkorbArtikel;
  * 
  * Schnittstelle zur persistenten Speicherung von
  * Ein- und AuslagerungsDaten in .log Dateien
- * @see shop.local.persistence.LogPersistenceManager
+ * @see shop.local.persitence.log.persistence.LogPersistenceManager
  */
-public class FilePersistenceManager implements LogPersistenceManager {
+public class FileLogPersistenceManager implements LogPersistenceManager {
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;

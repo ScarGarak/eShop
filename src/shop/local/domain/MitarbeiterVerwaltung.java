@@ -7,8 +7,8 @@ import java.util.Vector;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 
-import shop.local.persitence.ObjectPersistenceManager;
-import shop.local.persitence.PersistenceManager;
+import shop.local.persitence.data.DataPersistenceManager;
+import shop.local.persitence.data.ObjectDataPersistenceManager;
 import shop.local.valueobjects.Mitarbeiter;
 
 /**
@@ -25,7 +25,7 @@ public class MitarbeiterVerwaltung {
 	
 	private Vector<Mitarbeiter> mitarbeiterListe = new Vector<Mitarbeiter>();
 	
-	private PersistenceManager pm = new ObjectPersistenceManager();
+	private DataPersistenceManager pm = new ObjectDataPersistenceManager();
 	
 	/**
 	 * Methode zum lesen der Mitarbeiterdaten aus einer externen Datenquelle
