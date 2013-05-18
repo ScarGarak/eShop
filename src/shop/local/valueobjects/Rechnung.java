@@ -2,6 +2,7 @@ package shop.local.valueobjects;
 
 import java.text.SimpleDateFormat;
 import java.util.Currency;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Locale;
  * @author Oliver Thummerer & Christof Ferreira Torres
  *
  */
+
 public class Rechnung {
 	
 	// Attribute zur Beschreibung einer Rechnung:

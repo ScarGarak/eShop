@@ -15,6 +15,7 @@ import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
+
 /** This class manages a costumer list and provides the methods to add,
  *  delete and search for costumers
  * @author Thummerer, Oliver
@@ -82,6 +83,7 @@ public class KundenVerwaltung {
 		this.kundenListe.remove(k);
 	}
 	
+	
 	/**
 	 * searching for costumer by ID number
 	 * the search stops if the instance was given back
@@ -130,7 +132,7 @@ public class KundenVerwaltung {
 	public void inDenWarenkorbLegen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException {
 		kunde.getWarenkorbVerwaltung().hinzufuegen(warenkorbArtikel);
 	}
-	
+
 	public void ausDemWarenkorbHerausnehmen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelExistiertNichtException {
 		kunde.getWarenkorbVerwaltung().entfernen(warenkorbArtikel);
 	}
