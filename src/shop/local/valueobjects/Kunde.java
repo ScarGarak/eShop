@@ -44,6 +44,10 @@ public class Kunde extends Person {
 		return wohnort;
 	}
 	
+	public void setWarenkorbVerwaltung(WarenkorbVerwaltung warenkorb) {
+		this.warenkorb = warenkorb;
+	}
+	
 	public WarenkorbVerwaltung getWarenkorbVerwaltung() {
 		return warenkorb;
 	}
