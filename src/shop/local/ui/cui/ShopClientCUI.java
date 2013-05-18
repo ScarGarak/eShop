@@ -15,6 +15,7 @@ import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
+import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -173,14 +174,22 @@ public class ShopClientCUI {
 		else if (line.equals("me")) {
 			System.out.print("Mitarbeiter ID >");
 			String strId = liesEingabe();
-			int id = Integer.parseInt(strId);
+			System.out.print("Username >");
+			String username = liesEingabe();
+			System.out.print("Passwort >");
+			String passwort = liesEingabe();
 			System.out.print("Name >");
 			String name = liesEingabe();
 			try{
-				shop.fuegeMitarbeiterHinzu(id, name);
-			}catch(MitarbeiterExistiertBereitsException e){
+				int id = Integer.parseInt(strId);
+				
+				shop.fuegeMitarbeiterHinzu(id, username, passwort, name);
+			} catch (MitarbeiterExistiertBereitsException e){
 				System.err.println(e.getMessage());
-				e.printStackTrace();
+			} catch (UsernameExistiertBereitsException e){
+				System.err.println(e.getMessage());
+			} catch (NumberFormatException e){
+				System.err.println("Die id ist keine Zahl! Bitte versuchen Sie es erneut.");
 			}
 		}
 		else if (line.equals("ma")) {

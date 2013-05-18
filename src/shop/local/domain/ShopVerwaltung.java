@@ -12,6 +12,7 @@ import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
+import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.persitence.log.FileLogPersistenceManager;
 import shop.local.persitence.log.LogPersistenceManager;
 import shop.local.valueobjects.Artikel;
@@ -141,9 +142,12 @@ public class ShopVerwaltung {
 	 * @param id Id des neuen Mitarbeiters
 	 * @param name Name des neuen Mitarbeiters
 	 * @throws MitarbeiterExistiertBereitsException
+	 * @throws UsernameExistiertBereitsException 
 	 */
-	public void fuegeMitarbeiterHinzu(int id, String name) throws MitarbeiterExistiertBereitsException{
-		Mitarbeiter m = new Mitarbeiter(id, name);
+	public void fuegeMitarbeiterHinzu(int id, String username, String passwort, String name) throws MitarbeiterExistiertBereitsException, UsernameExistiertBereitsException{
+		this.existiertUsernameSchon(username, " - in fuegeMitarbeiterHinzu() !");
+		
+		Mitarbeiter m = new Mitarbeiter(id, username, passwort, name);
 		meineMitarbeiter.einfuegen(m);
 	}
 
@@ -153,6 +157,31 @@ public class ShopVerwaltung {
 	 */
 	public void schreibeMitarbeiter() throws IOException{
 		meineMitarbeiter.schreibeDaten("SHOP_M.ser");
+	}
+	
+	/**
+	 * Diese Methode iteriert zuerst durch die Mitarbeiterliste und dann durch die Kundenliste und 
+	 * vergleicht die Usernamen.
+	 * Beim ersten Treffer wird eine UsernameExistiertBereitsException geworfen.
+	 * @param username Username für die neue Person.
+	 * @param zusatzMsg Zusätliche Informationen.
+	 * @throws UsernameExistiertBereitsException
+	 */
+	private void existiertUsernameSchon(String username, String zusatzMsg) throws UsernameExistiertBereitsException{
+		
+		Iterator<Mitarbeiter> itM = meineMitarbeiter.getMitarbeiterListe().iterator();
+		while(itM.hasNext()){
+			if(itM.next().getUsername().equals(username)){
+				throw new UsernameExistiertBereitsException(username, zusatzMsg);
+			}
+		}
+		
+		Iterator<Kunde> itK = meineKunden.getKundenListe().iterator();
+		while(itK.hasNext()){
+			if(itK.next().getUsername().equals(username)){
+				throw new UsernameExistiertBereitsException(username, zusatzMsg);
+			}
+		}
 	}
 	
 	// Kunden Methoden
