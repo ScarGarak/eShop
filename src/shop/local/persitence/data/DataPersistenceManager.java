@@ -1,4 +1,4 @@
-package shop.local.persitence;
+package shop.local.persitence.data;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import shop.local.valueobjects.Mitarbeiter;
  * Das Interface muss von Klassen implementiert werden wenn eine
  * Persistez-Schnittstelle realisiert werden soll 
  */
-public interface PersistenceManager {
+public interface DataPersistenceManager {
 	
 	/**
 	 * Methoden zum šffnen und schlie§en einer externen Datenquelle
