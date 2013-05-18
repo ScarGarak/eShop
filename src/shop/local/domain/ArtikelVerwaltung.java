@@ -8,8 +8,8 @@ import java.util.Vector;
 
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
-import shop.local.persitence.ObjectPersistenceManager;
-import shop.local.persitence.PersistenceManager;
+import shop.local.persitence.data.DataPersistenceManager;
+import shop.local.persitence.data.ObjectDataPersistenceManager;
 import shop.local.valueobjects.Artikel;
 
 /**
@@ -22,7 +22,7 @@ public class ArtikelVerwaltung {
 	// Verwaltung des Artikelbestands in einem Vector
 	private List<Artikel> artikelBestand = new Vector<Artikel>();
 	// Persistenz-Schnittstelle, die für die Details des Dateizugriffs verantwortlich ist
-	private PersistenceManager pm = new ObjectPersistenceManager();
+	private DataPersistenceManager pm = new ObjectDataPersistenceManager();
 	
 	/**
 	 * Methode zum Einlesen von Artikeldaten aus einer Datei.
@@ -94,7 +94,7 @@ public class ArtikelVerwaltung {
 			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");
 	}
 	
-	public Artikel getArtikel(int artikelnummer) {
+	public Artikel getArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
 		Iterator<Artikel> iter = artikelBestand.iterator();
 		while (iter.hasNext()) {
 			Artikel artikel = iter.next();
@@ -102,7 +102,7 @@ public class ArtikelVerwaltung {
 				return artikel;
 			}
 		}
-		return null;
+		throw new ArtikelExistiertNichtException(artikelnummer, " - in 'getArtikel()'");
 	}
 	
 	public List<Artikel> sucheArtikel(int artikelnummer) {

@@ -29,7 +29,7 @@ public class ArtikelExistiertNichtException extends Exception {
 	 * @param zusatzMsg zusätzlicher Text für die Fehlermeldung
 	 */
 	public ArtikelExistiertNichtException(int artikelnummer, String zusatzMsg) {
-		super("Artikelnummer " + artikelnummer + " existiert nicht" + zusatzMsg);
+		super("Der Artikel mit der Artikelnummer " + artikelnummer + " existiert nicht" + zusatzMsg);
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class ArtikelExistiertNichtException extends Exception {
 	 * @param zusatzMsg zusätzlicher Text für die Fehlermeldung
 	 */
 	public ArtikelExistiertNichtException(String bezeichnung, String zusatzMsg) {
-		super("Artikel mit der Bezeichnung " + bezeichnung + " existiert nicht" + zusatzMsg);
+		super("Der Artikel mit der Bezeichnung " + bezeichnung + " existiert nicht" + zusatzMsg);
 	}
 	
 }

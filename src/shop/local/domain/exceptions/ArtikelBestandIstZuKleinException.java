@@ -9,7 +9,7 @@ import shop.local.valueobjects.Artikel;
  * @author Christof Ferreira Torres
  */
 @SuppressWarnings("serial")
-public class ArtikelBestandException extends Exception {
+public class ArtikelBestandIstZuKleinException extends Exception {
 
 	/**
 	 * Konstruktor
@@ -17,8 +17,8 @@ public class ArtikelBestandException extends Exception {
 	 * @param artikel Der Artikel mit dem zu kleinen oder leeren Bestand
 	 * @param zusatzMsg zusätzlicher Text für die Fehlermeldung
 	 */
-	public ArtikelBestandException(Artikel artikel, String zusatzMsg) {
-		super("Der Bestand des Artikels mit der Bezeichnung " + artikel.getBezeichnung() + " und Artikelnummer " + artikel.getArtikelnummer() 
+	public ArtikelBestandIstZuKleinException(Artikel artikel, String zusatzMsg) {
+		super("Der Bestand des Artikels mit der Bezeichnung " + artikel.getBezeichnung() + " und der Artikelnummer " + artikel.getArtikelnummer() 
 				+ " ist zu klein oder leer" + zusatzMsg);
 	}
 	
