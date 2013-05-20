@@ -2,7 +2,6 @@ package shop.local.valueobjects;
 
 import java.text.SimpleDateFormat;
 import java.util.Currency;
-
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +11,7 @@ import java.util.Locale;
  *  Klasse zur erstellung eines Rechnungsobjektes
  * 
  * @author Oliver Thummerer & Christof Ferreira Torres
- *
  */
-
 public class Rechnung {
 	
 	// Attribute zur Beschreibung einer Rechnung:
@@ -43,7 +40,7 @@ public class Rechnung {
 	/**
 	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artiekl.
 	 * 
-	 * @return Den Gesamtpreis aller Warenkorb Artikel.
+	 * @return double Den Gesamtpreis aller Warenkorb Artikel.
 	 */
 	public double getGesamtpreis() {
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
@@ -55,6 +52,11 @@ public class Rechnung {
 		return summe;
 	}
 	
+	/**
+	 * Methode zum ausgeben des Rechnungsobjekts. 
+	 * 
+	 * @return String Die Ausgabe, wie z.B. den Kunden, die gekauften Artikel, etc.
+	 */
 	public String toString() {
 		String ergebnis = ""; 
 		ergebnis += ("Kundennummer: " + kunde.getId() + "\n");

@@ -66,7 +66,6 @@ public class KundenVerwaltung {
 	/**
 	 * Method to insert a new costumer
 	 */
-	
 	public void einfuegen(Kunde k) throws KundeExistiertBereitsException {
 		if(!kundenListe.contains(k)){
 			kundenListe.add(k);
@@ -82,7 +81,6 @@ public class KundenVerwaltung {
 	public void loeschen(Kunde k){
 		this.kundenListe.remove(k);
 	}
-	
 	
 	/**
 	 * searching for costumer by ID number
