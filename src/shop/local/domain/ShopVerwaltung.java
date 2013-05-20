@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
@@ -17,6 +18,7 @@ import shop.local.persitence.log.FileLogPersistenceManager;
 import shop.local.persitence.log.LogPersistenceManager;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
+import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.Mitarbeiter;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
@@ -58,6 +60,14 @@ public class ShopVerwaltung {
 	
 	public void fuegeArtikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException, IOException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
+		meineArtikel.einfuegen(artikel);
+		lpm.openForWriting("EinAuslagerung.log");
+		lpm.speichereEinlagerung(mitarbeiter, bestand, artikelnummer);
+		lpm.close();
+	}
+	
+	public void fuegeMassengutartikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int packungsgroesse, int bestand) throws ArtikelExistiertBereitsException, IOException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
+		Massengutartikel artikel = new Massengutartikel(artikelnummer, bezeichnung, preis, packungsgroesse, bestand);
 		meineArtikel.einfuegen(artikel);
 		lpm.openForWriting("EinAuslagerung.log");
 		lpm.speichereEinlagerung(mitarbeiter, bestand, artikelnummer);

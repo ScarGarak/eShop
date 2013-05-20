@@ -29,7 +29,7 @@ public class Massengutartikel extends Artikel {
 	}
 	
 	public String toString() {
-		return ("Nr: " + getArtikelnummer() + "\t Bezeichnung: " + getBezeichnung() + "\t Preis: " + String.format("%.2f ", getPreis()) + Currency.getInstance(Locale.GERMANY) + "\t Packungsgrš§e: " + packungsgroesse + "\t Bestand: " + getBestand() + "\t");
+		return ("Nr: " + getArtikelnummer() + "\t Bezeichnung: " + getBezeichnung() + "\t Preis: " + String.format("%.2f ", getPreis()) + Currency.getInstance(Locale.GERMANY) + "\t Bestand: " + getBestand() + "\t Packungsgrš§e: " + packungsgroesse);
 	}
 	
 	public boolean equals(Object andererArtikel) {
