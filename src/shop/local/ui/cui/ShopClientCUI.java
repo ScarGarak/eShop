@@ -220,6 +220,10 @@ public class ShopClientCUI {
 			System.out.print("Kunden ID >");
 			String strId = liesEingabe();
 			int id = Integer.parseInt(strId);
+			System.out.print("Username >");
+			String username = liesEingabe();
+			System.out.print("Passwort >");
+			String passwort = liesEingabe();
 			System.out.print("Name >");
 			String name = liesEingabe();
 			System.out.println("Strasse >");
@@ -229,11 +233,12 @@ public class ShopClientCUI {
 			int plz = Integer.parseInt(strPlz);
 			System.out.println("Wohnort >");
 			String wohnort = liesEingabe();
-			try{
-				shop.fuegeKundenHinzu(id, name, strasse, plz, wohnort);
+			try {
+				shop.fuegeKundenHinzu(id, username, passwort, name, strasse, plz, wohnort);
 			} catch (KundeExistiertBereitsException e) {
 				System.err.println(e.getMessage());
-				e.printStackTrace();
+			} catch (UsernameExistiertBereitsException e) {
+				System.err.println(e.getMessage());
 			}
 		}
 		else if (line.equals("ka")) {

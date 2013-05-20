@@ -213,14 +213,17 @@ public class ShopVerwaltung {
 	}
 
 	/**
-	* Diese Methode bidet eine neue Kunden Instanz und fuegt sie
-	* zur Kundenverwaltung hinzu.
-	* @param id Id des neuen Kunden
-	* @param name Name des neuen Kunden
-	* @throws KundeExistiertBereitsException
-	*/
-	public void fuegeKundenHinzu(int id, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException{
-		Kunde k = new Kunde(name, id, strasse, plz, wohnort);
+	 * Diese Methode bidet eine neue Kunden Instanz und fuegt sie
+	 * zur Kundenverwaltung hinzu.
+	 * @param id Id des neuen Kunden
+	 * @param name Name des neuen Kunden
+	 * @throws KundeExistiertBereitsException
+	 * @throws UsernameExistiertBereitsException 
+	 */
+	public void fuegeKundenHinzu(int id, String username, String passwort, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException, UsernameExistiertBereitsException{
+		this.existiertUsernameSchon(username, " - in fuegekundenHinzu() !");
+		
+		Kunde k = new Kunde(id, username, passwort, name, strasse, plz, wohnort);
 		meineKunden.einfuegen(k);
 	}
 
@@ -242,6 +245,7 @@ public class ShopVerwaltung {
 	
 	public Rechnung kaufen(Kunde kunde) throws IOException {
 		Rechnung rechnung = meineKunden.kaufen(kunde);
+		schreibeArtikel();
 		lpm.openForWriting("EinAuslagerung.log");
 		Iterator<WarenkorbArtikel> iter = rechnung.getWarenkorb().iterator();
 		while(iter.hasNext()){

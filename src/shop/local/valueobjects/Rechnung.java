@@ -59,10 +59,7 @@ public class Rechnung {
 	 */
 	public String toString() {
 		String ergebnis = ""; 
-		ergebnis += ("Kundennummer: " + kunde.getId() + "\n");
-		ergebnis += (kunde.getName() + "\n");
-		ergebnis += (kunde.getStrasse() + "\n");
-		ergebnis += (kunde.getPlz() + " " + kunde.getWohnort() + "\n");
+		ergebnis += (kunde.toString());
 		ergebnis += ("\nDatum: " + new SimpleDateFormat("yyyy-MM-dd").format(datum) + "\n");
 		ergebnis += ("\nArtikel:\n");
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
