@@ -11,7 +11,6 @@ import java.util.Locale;
  *  Klasse zur erstellung eines Rechnungsobjektes
  * 
  * @author Oliver Thummerer & Christof Ferreira Torres
- *
  */
 public class Rechnung {
 	

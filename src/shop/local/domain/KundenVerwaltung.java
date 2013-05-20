@@ -15,6 +15,7 @@ import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
+
 /** This class manages a costumer list and provides the methods to add,
  *  delete and search for costumers
  * @author Thummerer, Oliver
