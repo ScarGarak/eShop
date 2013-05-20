@@ -65,7 +65,6 @@ public class KundenVerwaltung {
 	/**
 	 * Method to insert a new costumer
 	 */
-	
 	public void einfuegen(Kunde k) throws KundeExistiertBereitsException {
 		if(!kundenListe.contains(k)){
 			kundenListe.add(k);
@@ -130,7 +129,7 @@ public class KundenVerwaltung {
 	public void inDenWarenkorbLegen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException {
 		kunde.getWarenkorbVerwaltung().hinzufuegen(warenkorbArtikel);
 	}
-	
+
 	public void ausDemWarenkorbHerausnehmen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelExistiertNichtException {
 		kunde.getWarenkorbVerwaltung().entfernen(warenkorbArtikel);
 	}

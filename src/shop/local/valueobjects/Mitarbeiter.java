@@ -8,7 +8,7 @@ package shop.local.valueobjects;
  * @author Migliosi Angelo
  * @version 1
  * 
- * Zuletzt editiert: 11.05.2013
+ * Zuletzt editiert: 18.05.2013
  */
 public class Mitarbeiter extends Person{
 	
@@ -19,13 +19,23 @@ public class Mitarbeiter extends Person{
 	
 	/**
 	 * Konstruktor
-	 * @param id ID Nummer des Mitarbeiters.
-	 * @param name Name des Mitarbeiters.
-	 * @see Person
+	 * @param id Id des Mitarbeiters
+	 * @param username Username des Mitarbeiters
+	 * @param passwort Passwort des Mitarbeiters
+	 * @param name Name des Mitarbeiters
 	 */
-	public Mitarbeiter(int id, String name){
-		super(id, name, PersonTyp.Mitarbeiter);
+	public Mitarbeiter(int id, String username, String passwort, String name){
+		super(id, username, passwort, name, PersonTyp.Mitarbeiter);
 		gehalt = 0;
+	}
+	
+	
+	/**
+	 * Setter Funktion für das Attribut "gehalt".
+	 * @param gehalt Der Gehalt des Mitarbeiters.
+	 */
+	public void setGehalt(int gehalt){
+		this.gehalt = gehalt;
 	}
 	
 	/**
@@ -36,21 +46,17 @@ public class Mitarbeiter extends Person{
 		return this.gehalt;
 	}
 	
-	/**
-	 * Setter Funktion für das Attribut "gehalt".
-	 * @param gehalt Der Gehalt des Mitarbeiters.
-	 */
-	public void setGehalt(int gehalt){
-		this.gehalt = gehalt;
-	}
 	
 	@Override
 	public String toString(){
-		String output = "ID = "+this.getId()+" \t Name = "+this.getName();
+		String output = "\nMitarbeiternummer: \t "+this.getId()+"\n"
+					  + "Name:  \t\t"+this.getName()+"\n"
+					  + "Username:\t\t" +this.getUsername()+"\n";
 		
 		if(this.gehalt != 0){
-			output += "\tGehalt = "+this.gehalt;
+			output += "Gehalt: \t\t "+this.gehalt+"\n";
 		}
+		output += "\n";
 		
 		return output;
 	}

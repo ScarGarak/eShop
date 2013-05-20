@@ -6,70 +6,29 @@ import java.io.Serializable;
 public abstract class Person implements Serializable{
 
 	private int id;
-	private String name;
+	private String username;
 	private String passwort;
+	private String name;
 	private PersonTyp typ;
 	
 	/**
 	 * Konstruktor
-	 * @param id ID Nummer der Person.
+	 * @param id Id der Person.
+	 * @param username Username der Person.
+	 * @param passwort Passwort der Person.
 	 * @param name Name der Person.
 	 * @param typ Der Typ der Person, d.h. Mitarbeiter oder Kunde.
 	 */
-	public Person(int id, String name, PersonTyp typ){
+	public Person(int id, String username, String passwort, String name, PersonTyp typ){
 		this.id = id;
+		this.username = username;
+		this.passwort = passwort;
 		this.name = name;
 		this.typ = typ;
 	}
 	
 	
-		/*----------------------------
-		 * 			GETTERS			 |
-		 *----------------------------*/
-	/**
-	 * Getter für "name".
-	 * @return Den Namen der Person.
-	 */
-	public String getName(){
-		return this.name;
-	}
-	
-	/**
-	 * Getter für "id".
-	 * @return Die ID Nummer der Person.
-	 */
-	public int getId(){
-		return this.id;
-	}
-	
-	/**
-	 * Getter für "passwort".
-	 * @return Das Passwort der Person.
-	 */
-	public String getPasswort(){
-		return this.passwort;
-	}
-	
-	/**
-	 * Getter fuer "typ".
-	 * @param typ
-	 */
-	public PersonTyp getPersonTyp(PersonTyp typ){
-		return this.typ;
-	}
-	
-	
-		/*----------------------------
-		 * 			SETTERS			 |
-		 *----------------------------*/
-	
-	/**
-	 * Setter für "Name".
-	 * @param name Den Namen der Person.
-	 */
-	public void setName(String name){
-		this.name = name;
-	}
+	////////// id //////////
 	
 	/**
 	 * Setter für "id".
@@ -80,12 +39,68 @@ public abstract class Person implements Serializable{
 	}
 	
 	/**
+	 * Getter für "id".
+	 * @return Die ID Nummer der Person.
+	 */
+	public int getId(){
+		return this.id;
+	}
+	
+	////////// username //////////
+	
+	/**
+	 * Setter für "username".
+	 * @param username Der username der Person.
+	 */
+	public void setUsername(String username){
+		this.username = username;
+	}
+	
+	/**
+	 * Getter für "username".
+	 * @return Der username der Person.
+	 */
+	public String getUsername(){
+		return this.username;
+	}
+	
+	////////// passwort //////////
+	
+	/**
 	 * Setter für "passwort".
 	 * @param passwort Das Passwort der Person.
 	 */
 	public void setPasswort(String passwort){
 		this.passwort = passwort;
 	}
+	
+	/**
+	 * Getter für "passwort".
+	 * @return Das Passwort der Person.
+	 */
+	public String getPasswort(){
+		return this.passwort;
+	}
+	
+	////////// name //////////
+	
+	/**
+	 * Setter für "Name".
+	 * @param name Den Namen der Person.
+	 */
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	/**
+	 * Getter für "name".
+	 * @return Den Namen der Person.
+	 */
+	public String getName(){
+		return this.name;
+	}
+	
+	////////// PersonTyp //////////
 	
 	/**
 	 * Setter fuer den "typ".
@@ -95,4 +110,11 @@ public abstract class Person implements Serializable{
 		this.typ = typ;
 	}
 	
+	/**
+	 * Getter fuer "typ".
+	 * @param typ
+	 */
+	public PersonTyp getPersonTyp(PersonTyp typ){
+		return this.typ;
+	}
 }

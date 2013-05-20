@@ -41,7 +41,7 @@ public class Rechnung {
 	/**
 	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artiekl.
 	 * 
-	 * @return Den Gesamtpreis aller Warenkorb Artikel.
+	 * @return double Den Gesamtpreis aller Warenkorb Artikel.
 	 */
 	public double getGesamtpreis() {
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
@@ -53,6 +53,11 @@ public class Rechnung {
 		return summe;
 	}
 	
+	/**
+	 * Methode zum ausgeben des Rechnungsobjekts. 
+	 * 
+	 * @return String Die Ausgabe, wie z.B. den Kunden, die gekauften Artikel, etc.
+	 */
 	public String toString() {
 		String ergebnis = ""; 
 		ergebnis += ("Kundennummer: " + kunde.getId() + "\n");
