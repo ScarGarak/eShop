@@ -4,15 +4,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.valueobjects.Artikel;
+import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 /**
  * Klasse zur Verwaltung vom Warenkorb.
  * 
  * @author Christof Ferreira Torres
+ * @version 1.0.0
  */
 public class WarenkorbVerwaltung {
 	
@@ -25,11 +28,15 @@ public class WarenkorbVerwaltung {
 	 * @param warenkorbArtikel Der Warenkorb Artikel der in den Warenkorb hinzugefügt werden soll.
 	 * @throws ArtikelBestandIstZuKleinException 
 	 * @throws ArtikelExistiertNichtException 
+	 * @throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException 
 	 */
-	public synchronized void hinzufuegen(WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException {
+	public synchronized void hinzufuegen(WarenkorbArtikel warenkorbArtikel) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {	
 		if (warenkorb.contains(warenkorbArtikel)) {
 			this.stueckzahlAendern(warenkorbArtikel, warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getStueckzahl() + warenkorbArtikel.getStueckzahl());
 		} else {
+			if (((Massengutartikel) warenkorbArtikel.getArtikel()) instanceof Massengutartikel)
+				if (warenkorbArtikel.getStueckzahl() % ((Massengutartikel) warenkorbArtikel.getArtikel()).getPackungsgroesse() != 0)
+					throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(((Massengutartikel) warenkorbArtikel.getArtikel()), " - in hinzufuegen()'");
 			int alterBestand = warenkorbArtikel.getArtikel().getBestand();
 			if (alterBestand - warenkorbArtikel.getStueckzahl() >= 0) {
 				warenkorbArtikel.getArtikel().setBestand(alterBestand - warenkorbArtikel.getStueckzahl());
@@ -47,9 +54,13 @@ public class WarenkorbVerwaltung {
 	 * @param neueStueckzahl Die neue Stückzahl des Warenkorb Artikels.
 	 * @throws ArtikelBestandIstZuKleinException 
 	 * @throws ArtikelExistiertNichtException 
+	 * @throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException 
 	 */
-	public synchronized void stueckzahlAendern(WarenkorbArtikel warenkorbArtikel, int neueStueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException {
+	public synchronized void stueckzahlAendern(WarenkorbArtikel warenkorbArtikel, int neueStueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		if (warenkorb.contains(warenkorbArtikel)) {
+			if (((Massengutartikel) warenkorbArtikel.getArtikel()) instanceof Massengutartikel)
+				if (warenkorbArtikel.getStueckzahl() % ((Massengutartikel) warenkorbArtikel.getArtikel()).getPackungsgroesse() != 0)
+					throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(((Massengutartikel) warenkorbArtikel.getArtikel()), " - in hinzufuegen()'");
 			int alterBestand = warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getArtikel().getBestand();
 			int alteStueckzahl = warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getStueckzahl();
 			if (alteStueckzahl < neueStueckzahl) {
