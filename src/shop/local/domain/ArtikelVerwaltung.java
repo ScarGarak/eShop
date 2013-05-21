@@ -18,6 +18,7 @@ import shop.local.valueobjects.Massengutartikel;
  * Klasse zur Verwaltung von Artikeln.
  * 
  * @author Christof Ferreira Torres
+ * @version 1.0.0
  */
 public class ArtikelVerwaltung {
 

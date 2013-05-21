@@ -17,13 +17,14 @@ import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 
-/** This class manages a costumer list and provides the methods to add,
- *  delete and search for costumers
+/** 
+ * This class manages a costumer list and provides the methods to add,
+ * delete and search for costumers
+ * 
  * @author Thummerer, Oliver
+ * @version 1.0.0
  *  
- *  version 1.0.0
- *  
- *  last edited 23.04.12
+ * last edited 23.04.12
  */
 public class KundenVerwaltung {
 	

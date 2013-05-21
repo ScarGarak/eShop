@@ -23,6 +23,12 @@ import shop.local.valueobjects.Mitarbeiter;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
+/**
+ * Klasse zur Verwaltung vom eShop.
+ * 
+ * @author Christof Ferreira Torres, Angelo Migliosi & Oliver Thummerer
+ * @version 1.0.0
+ */
 public class ShopVerwaltung {
 
 	private ArtikelVerwaltung meineArtikel;

@@ -22,6 +22,12 @@ import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
 import shop.local.valueobjects.WarenkorbArtikel;
 
+/**
+ * Klasse zur Ausgabe des eShops in der Konsole.
+ * 
+ * @author Christof Ferreira Torres, Angelo Migliosi & Oliver Thummerer
+ * @version 1.0.0
+ */
 public class ShopClientCUI {
 
 	private ShopVerwaltung shop;

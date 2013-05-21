@@ -15,6 +15,7 @@ import shop.local.valueobjects.WarenkorbArtikel;
  * Klasse zur Verwaltung vom Warenkorb.
  * 
  * @author Christof Ferreira Torres
+ * @version 1.0.0
  */
 public class WarenkorbVerwaltung {
 	
