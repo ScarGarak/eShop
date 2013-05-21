@@ -6,11 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.persitence.data.DataPersistenceManager;
 import shop.local.persitence.data.ObjectDataPersistenceManager;
 import shop.local.valueobjects.Artikel;
+import shop.local.valueobjects.Massengutartikel;
 
 /**
  * Klasse zur Verwaltung von Artikeln.
@@ -75,7 +77,13 @@ public class ArtikelVerwaltung {
 		if (!artikelBestand.contains(artikel))
 			artikelBestand.add(artikel);
 		else
-			throw new ArtikelExistiertBereitsException(artikel, " - in 'einfuegen()'");
+			throw new ArtikelExistiertBereitsException(artikel, " - in 'einfuegen(Artikel artikel)'");
+	}
+	
+	public void einfuegen(Massengutartikel artikel) throws ArtikelExistiertBereitsException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
+		if (artikel.getBestand() % artikel.getPackungsgroesse() != 0)
+			throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(artikel, " - in einfuegen(Massengutartikel artikel)'");
+		einfuegen((Artikel) artikel);
 	}
 	
 	public void bestandErhoehen(int artikelnummer, int anzahl) throws ArtikelExistiertNichtException {
@@ -91,7 +99,7 @@ public class ArtikelVerwaltung {
 		if (index != -1)
 			artikelBestand.get(index).setBestand(artikelBestand.get(index).getBestand() + Math.abs(anzahl));
 		else
-			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");
+			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen(int artikelnummer, int anzahl)'");
 	}
 	
 	public Artikel getArtikel(int artikelnummer) throws ArtikelExistiertNichtException {

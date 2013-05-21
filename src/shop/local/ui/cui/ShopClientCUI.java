@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import shop.local.domain.ShopVerwaltung;
+import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
@@ -69,27 +70,45 @@ public class ShopClientCUI {
 		if (line.equals("e")) { 
 			System.out.print("Mitarbeiter ID > ");
 			String id = liesEingabe();
-			int aID = Integer.parseInt(id);
 			System.out.print("Artikelnummer > ");
 			String nummer = liesEingabe();
-			int aNr = Integer.parseInt(nummer);
-			System.out.print("Bezeichnung  > ");
+			System.out.print("Bezeichnung > ");
 			String bezeichnung = liesEingabe();
 			System.out.print("Preis  > ");
 			String preis = liesEingabe();
-			double aPr = Double.parseDouble(preis);
+			System.out.print("Massengutartikel oder Einzelartikel? (m/e) > ");
+			String groesse = "";
+			if (liesEingabe().toLowerCase().equals("m")) {
+				System.out.print("Packungsgrš§e > ");
+				groesse = liesEingabe();
+			} 
 			System.out.print("Bestand > ");
 			String bestand = liesEingabe();
-			int aBtd = Integer.parseInt(bestand);
 			boolean ok = false;
-			try {
-				shop.fuegeArtikelEin(shop.sucheMitarbeiter(aID), aNr, bezeichnung, aPr, aBtd);
-				ok = true;
-			} catch (ArtikelExistiertBereitsException e) {
-				System.err.println("Artikel existiert bereits!");
-			} catch (MitarbeiterExistiertNichtException e) {
-				System.err.println("Mitarbeiter existiert nicht!");
-			}
+			if (groesse.isEmpty()) 
+				try {
+					shop.fuegeArtikelEin(shop.sucheMitarbeiter(Integer.parseInt(id)), Integer.parseInt(nummer), bezeichnung, Double.parseDouble(preis), Integer.parseInt(bestand));
+					ok = true;
+				} catch (ArtikelExistiertBereitsException e) {
+					System.err.println("Artikel existiert bereits!");
+				} catch (MitarbeiterExistiertNichtException e) {
+					System.err.println("Mitarbeiter existiert bereits!");
+				} catch(NumberFormatException e) { 
+					System.err.println("Sie haben eine ungŸltige Zahl eingegeben!");
+				}
+			else 
+				try {
+					shop.fuegeMassengutartikelEin(shop.sucheMitarbeiter(Integer.parseInt(id)), Integer.parseInt(nummer), bezeichnung, Double.parseDouble(preis), Integer.parseInt(groesse), Integer.parseInt(bestand));
+					ok = true;
+				} catch (ArtikelExistiertBereitsException e) {
+					System.err.println("Massengutartikel existiert bereits!");
+				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+					System.err.println("Bestand ist keine Vielfache der Packungsgroesse!");
+				} catch (MitarbeiterExistiertNichtException e) {
+					System.err.println("Mitarbeiter existiert bereits!");
+				} catch(NumberFormatException e) { 
+					System.err.println("Sie haben eine ungŸltige Zahl eingegeben!");
+				}
 			if (ok)
 				System.out.println("EinfŸgen ok");
 			else
@@ -220,6 +239,10 @@ public class ShopClientCUI {
 			System.out.print("Kunden ID >");
 			String strId = liesEingabe();
 			int id = Integer.parseInt(strId);
+			System.out.print("Username >");
+			String username = liesEingabe();
+			System.out.print("Passwort >");
+			String passwort = liesEingabe();
 			System.out.print("Name >");
 			String name = liesEingabe();
 			System.out.println("Strasse >");
@@ -229,11 +252,12 @@ public class ShopClientCUI {
 			int plz = Integer.parseInt(strPlz);
 			System.out.println("Wohnort >");
 			String wohnort = liesEingabe();
-			try{
-				shop.fuegeKundenHinzu(id, name, strasse, plz, wohnort);
+			try {
+				shop.fuegeKundenHinzu(id, username, passwort, name, strasse, plz, wohnort);
 			} catch (KundeExistiertBereitsException e) {
 				System.err.println(e.getMessage());
-				e.printStackTrace();
+			} catch (UsernameExistiertBereitsException e) {
+				System.err.println(e.getMessage());
 			}
 		}
 		else if (line.equals("ka")) {

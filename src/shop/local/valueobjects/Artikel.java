@@ -59,7 +59,7 @@ public class Artikel implements Serializable {
 	}
 	
 	public String toString() {
-		return ("Nr: " + artikelnummer + "\t Bezeichnung: " + bezeichnung + "\t Preis: " + String.format("%.2f ", preis) + Currency.getInstance(Locale.GERMANY) + "\t Bestand: " + bestand + "\t");
+		return ("Nr: " + artikelnummer + "\t Bezeichnung: " + bezeichnung + "\t Preis: " + String.format("%.2f ", preis) + Currency.getInstance(Locale.GERMANY) + "\t Bestand: " + bestand);
 	}
 	
 	public boolean equals(Object andererArtikel) {

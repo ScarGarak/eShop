@@ -12,8 +12,8 @@ public class Kunde extends Person {
 	private String wohnort;
 	private transient WarenkorbVerwaltung warenkorb;
 	
-	public Kunde(String name, int id, String strasse, int plz, String wohnort) {
-		super(id, name, PersonTyp.Kunde);
+	public Kunde(int id, String username, String passwort, String name, String strasse, int plz, String wohnort) {
+		super(id, username, passwort, name, PersonTyp.Kunde);
 		this.strasse = strasse;
 		this.plz = plz;
 		this.wohnort = wohnort;
@@ -53,7 +53,7 @@ public class Kunde extends Person {
 	}
 	
 	public String toString() {
-		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort;
+		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort + "\n";
 	}
 	
 }
