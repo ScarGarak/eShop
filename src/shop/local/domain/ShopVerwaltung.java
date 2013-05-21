@@ -78,7 +78,7 @@ public class ShopVerwaltung {
 		return meineArtikel.getArtikel(artikelnummer);
 	}
 	
-	public void artikelBestandErhoehen(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, IOException {
+	public void artikelBestandErhoehen(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, IOException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
 		lpm.openForWriting("EinAuslagerung.log");
 		lpm.speichereEinlagerung(mitarbeiter, anzahl, artikelnummer);
@@ -101,11 +101,11 @@ public class ShopVerwaltung {
 		return meineArtikel.sucheArtikel(bezeichnung); 
 	}
 	
-	public void EntferneArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
+	public void entferneArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
 		meineArtikel.entfernen(artikelnummer);
 	}
 	
-	public void EntferneArtikel(String bezeichnung) throws ArtikelExistiertNichtException {
+	public void entferneArtikel(String bezeichnung) throws ArtikelExistiertNichtException {
 		meineArtikel.entfernen(bezeichnung);
 	}
 	
@@ -231,7 +231,7 @@ public class ShopVerwaltung {
 	 * @throws UsernameExistiertBereitsException 
 	 */
 	public void fuegeKundenHinzu(int id, String username, String passwort, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException, UsernameExistiertBereitsException{
-		this.existiertUsernameSchon(username, " - in fuegekundenHinzu() !");
+		this.existiertUsernameSchon(username, " - in fuegeKundenHinzu() !");
 		
 		Kunde k = new Kunde(id, username, passwort, name, strasse, plz, wohnort);
 		meineKunden.einfuegen(k);
@@ -245,7 +245,7 @@ public class ShopVerwaltung {
 		meineKunden.schreibeDaten("SHOP_K.ser");
 	}
 	
-	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException {
+	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
 	}
 	

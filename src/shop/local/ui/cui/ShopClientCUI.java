@@ -68,51 +68,42 @@ public class ShopClientCUI {
 
 	private void verarbeiteEingabe(String line) throws IOException {
 		if (line.equals("e")) { 
-			System.out.print("Mitarbeiter ID > ");
-			String id = liesEingabe();
-			System.out.print("Artikelnummer > ");
-			String nummer = liesEingabe();
-			System.out.print("Bezeichnung > ");
-			String bezeichnung = liesEingabe();
-			System.out.print("Preis  > ");
-			String preis = liesEingabe();
-			System.out.print("Massengutartikel oder Einzelartikel? (m/e) > ");
-			String groesse = "";
-			if (liesEingabe().toLowerCase().equals("m")) {
-				System.out.print("Packungsgröße > ");
-				groesse = liesEingabe();
-			} 
-			System.out.print("Bestand > ");
-			String bestand = liesEingabe();
-			boolean ok = false;
-			if (groesse.isEmpty()) 
-				try {
-					shop.fuegeArtikelEin(shop.sucheMitarbeiter(Integer.parseInt(id)), Integer.parseInt(nummer), bezeichnung, Double.parseDouble(preis), Integer.parseInt(bestand));
-					ok = true;
-				} catch (ArtikelExistiertBereitsException e) {
-					System.err.println("Artikel existiert bereits!");
-				} catch (MitarbeiterExistiertNichtException e) {
-					System.err.println("Mitarbeiter existiert bereits!");
-				} catch(NumberFormatException e) { 
-					System.err.println("Sie haben eine ungültige Zahl eingegeben!");
-				}
-			else 
-				try {
-					shop.fuegeMassengutartikelEin(shop.sucheMitarbeiter(Integer.parseInt(id)), Integer.parseInt(nummer), bezeichnung, Double.parseDouble(preis), Integer.parseInt(groesse), Integer.parseInt(bestand));
-					ok = true;
-				} catch (ArtikelExistiertBereitsException e) {
-					System.err.println("Massengutartikel existiert bereits!");
-				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					System.err.println("Bestand ist keine Vielfache der Packungsgroesse!");
-				} catch (MitarbeiterExistiertNichtException e) {
-					System.err.println("Mitarbeiter existiert bereits!");
-				} catch(NumberFormatException e) { 
-					System.err.println("Sie haben eine ungültige Zahl eingegeben!");
-				}
-			if (ok)
-				System.out.println("Einfügen ok");
-			else
-				System.out.println("Fehler beim Einfügen");
+			try {
+				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
+				System.out.print("Artikelnummer > ");
+				int nummer = Integer.parseInt(liesEingabe());
+				System.out.print("Bezeichnung > ");
+				String bezeichnung = liesEingabe();
+				System.out.print("Preis > ");
+				double preis = Double.parseDouble(liesEingabe());
+				System.out.print("Massengutartikel oder Einzelartikel? (m/e) > ");
+				String groesse = "";
+				if (liesEingabe().toLowerCase().equals("m")) {
+					System.out.print("Packungsgröße > ");
+					groesse = liesEingabe();
+				} 
+				System.out.print("Bestand > ");
+				int bestand = Integer.parseInt(liesEingabe());
+				boolean ok = false;
+				if (groesse.isEmpty()) 
+					shop.fuegeArtikelEin(m, nummer, bezeichnung, preis, bestand);	
+				else
+					shop.fuegeMassengutartikelEin(m, nummer, bezeichnung, preis, Integer.parseInt(groesse), bestand);
+				ok = true;
+				if (ok)
+					System.out.println("Einfügen ok");
+				else
+					System.out.println("Fehler beim Einfügen");
+			} catch (MitarbeiterExistiertNichtException e) {
+				System.err.println("Mitarbeiter existiert nicht!");
+			} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+				System.err.println("Bestand ist keine Vielfache der Packungsgroesse!");
+			} catch (ArtikelExistiertBereitsException e) {
+				System.err.println("Artikel existiert bereits!");
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
+			}
 		}
 		else if (line.equals("a")) {
 			Collection<Artikel> liste = shop.gibAlleArtikelSortiertNachArtikelnummer();
@@ -123,72 +114,71 @@ public class ShopClientCUI {
 			gibArtikellisteAus(liste);
 		}
 		else if (line.equals("c")) {
-			System.out.print("Mitarbeiter ID > ");
-			String id = liesEingabe();
-			int aID = Integer.parseInt(id);
-			System.out.print("Artikelnummer  > ");
-			String nummer = liesEingabe();
-			int aNr = Integer.parseInt(nummer);
-			System.out.print("Artikelanzahl  > ");
-			String anzahl = liesEingabe();
-			int aAn = Integer.parseInt(anzahl);
-			boolean ok = false;
 			try {
-				shop.artikelBestandErhoehen(shop.sucheMitarbeiter(aID), aNr, aAn);
+				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
+				System.out.print("Artikelnummer > ");
+				int nummer = Integer.parseInt(liesEingabe());
+				System.out.print("Artikelanzahl > ");
+				int anzahl = Integer.parseInt(liesEingabe());
+				boolean ok = false;
+				shop.artikelBestandErhoehen(m, nummer, anzahl);
 				ok = true;
-			} catch (ArtikelExistiertNichtException e) {
-				System.err.println("Artikel existiert nicht!");
+				if (ok)
+					System.out.println("Bestand erhöhen ok");
+				else
+					System.out.println("Fehler beim Bestand erhöhen");
 			} catch (MitarbeiterExistiertNichtException e) {
 				System.err.println("Mitarbeiter existiert nicht!");
+			} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+				System.err.println("Bestand ist keine Vielfache der Packungsgroesse!");
+			} catch (ArtikelExistiertNichtException e) {
+				System.err.println("Artikel existiert nicht!");
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
 			}
-			if (ok)
-				System.out.println("Bestand erhöhen ok");
-			else
-				System.out.println("Fehler beim Bestand erhöhen");
 		}
 		else if (line.equals("f")) {
-			System.out.print("Artikelnummer  > ");
-			String nummer = liesEingabe();
-			int aNr = Integer.parseInt(nummer);
-			List<Artikel> liste = shop.sucheArtikel(aNr);
+			System.out.print("Artikelnummer > ");
+			int nummer = Integer.parseInt(liesEingabe());
+			List<Artikel> liste = shop.sucheArtikel(nummer);
 			gibArtikellisteAus(liste);
 		}
 		else if (line.equals("g")) {
-			System.out.print("Artikelbezeichnung  > ");
+			System.out.print("Artikelbezeichnung > ");
 			String bezeichnung = liesEingabe();
 			List<Artikel> liste = shop.sucheArtikel(bezeichnung);
 			gibArtikellisteAus(liste);
 		}
 		else if (line.equals("k")) {
-			System.out.print("Artikelnummer > ");
-			String nummer = liesEingabe();
-			int aNr = Integer.parseInt(nummer);
-			boolean ok = false;
 			try {
-				shop.EntferneArtikel(aNr);
+				System.out.print("Artikelnummer > ");
+				int nummer = Integer.parseInt(liesEingabe());
+				boolean ok = false;
+				shop.entferneArtikel(nummer);
 				ok = true;
+				if (ok)
+					System.out.println("Löschen ok");
+				else
+					System.out.println("Fehler beim Löschen");
 			} catch (ArtikelExistiertNichtException e) {
 				System.err.println("Artikel existiert nicht!");
 			}
-			if (ok)
-				System.out.println("Löschen ok");
-			else
-				System.out.println("Fehler beim Löschen");
 		}
 		else if (line.equals("l")) {
-			System.out.print("Artikelbezeichnung  > ");
-			String bezeichnung = liesEingabe();
-			boolean ok = false;
 			try {
-				shop.EntferneArtikel(bezeichnung);
+				System.out.print("Artikelbezeichnung > ");
+				String bezeichnung = liesEingabe();
+				boolean ok = false;
+				shop.entferneArtikel(bezeichnung);
 				ok = true;
+				if (ok)
+					System.out.println("Löschen ok");
+				else
+					System.out.println("Fehler beim Löschen");
 			} catch (ArtikelExistiertNichtException e) {
 				System.err.println("Artikel existiert nicht!");
 			}
-			if (ok)
-				System.out.println("Löschen ok");
-			else
-				System.out.println("Fehler beim Löschen");
 		}
 		else if (line.equals("me")) {
 			System.out.print("Mitarbeiter ID >");
@@ -287,53 +277,61 @@ public class ShopClientCUI {
 		// Artikel zum Warenkorb hinzugen
 		
 		else if (line.equals("wh")) {
-			System.out.print("Kunden ID >");
-			int id = Integer.parseInt(liesEingabe());
-			System.out.println("Artikel Nr. >");
-			int artNr = Integer.parseInt(liesEingabe());
 			try {
-				Artikel a = shop.gibArtikel(artNr);
-				System.out.println("Stückzahl eingeben >");
+				System.out.print("Kunden ID > ");
+				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				System.out.print("Artikelnummer > ");
+				Artikel a = shop.gibArtikel(Integer.parseInt(liesEingabe()));
+				System.out.print("Stückzahl eingeben > ");
 				int stZa = Integer.parseInt(liesEingabe());
-				shop.inDenWarenkorbLegen(shop.sucheKunde(id), a, stZa);
+				boolean ok = false;
+				shop.inDenWarenkorbLegen(k, a, stZa);
+				ok = true;
+				if (ok)
+					System.out.println("Hinzufügen ok");
+				else
+					System.out.println("Fehler beim Hinzufügen");
+			} catch (KundeExistiertNichtException e){
+				System.err.println("Kunde existiert nicht!");
+			} catch (ArtikelExistiertNichtException e1) {
+				System.err.println("Artikel existiert nicht!");
+			} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+				System.err.println("Stückzahl ist keine Vielfache der Packungsgroesse!");
 			} catch (ArtikelBestandIstZuKleinException e) {
 				System.err.println("Der Bestand ist zu klein oder leer!");
-			} catch (KundeExistiertNichtException e){
-				System.err.println("Der Kunde existiert nicht!");
-			} catch (ArtikelExistiertNichtException e1) {
-				System.out.println("Artikel existiert nicht!");
-			}
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
+			} 
 		}
 		
 		// Artikel aus dem Warenkorb entfernen
 		
 		else if (line.equals("we")) {
-			System.out.print("Kunden ID >");
-			int id = Integer.parseInt(liesEingabe());
-			System.out.println("Artikel Nr. >");
-			int artNr = Integer.parseInt(liesEingabe());
-			boolean ok = false;
 			try {
-				shop.ausDemWarenkorbHerausnehmen(shop.sucheKunde(id), shop.gibArtikel(artNr));
+				System.out.print("Kunden ID > ");
+				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				System.out.print("Artikelnummer > ");
+				Artikel a = shop.gibArtikel(Integer.parseInt(liesEingabe()));
+				boolean ok = false;
+				shop.ausDemWarenkorbHerausnehmen(k, a);
 				ok = true;
+				if (ok)
+					System.out.println("Entfernen ok");
+				else
+					System.out.println("Fehler beim Entfernen");
 			} catch (KundeExistiertNichtException e){
-				System.err.println("Der Kunde existiert nicht!");
+				System.err.println("Kunde existiert nicht!");
 			} catch (ArtikelExistiertNichtException e) {
-				System.out.println("Artikel existiert nicht!");
+				System.err.println("Artikel existiert nicht!");
 			}
-			if (ok)
-				System.out.println("Entfernen ok");
-			else
-				System.out.println("Fehler beim Entfernen");
 		}
 		
 		// Inhalt des Warenkorbes anzeigen lassen
 		
 		else if (line.equals("wa")) {
-			System.out.print("Kunden ID >");
-			int id = Integer.parseInt(liesEingabe());
 			try {
-				Kunde k = shop.sucheKunde(id);
+				System.out.print("Kunden ID > ");
+				Kunde k = shop.sucheKunde( Integer.parseInt(liesEingabe()));
 				Collection<WarenkorbArtikel> liste = k.getWarenkorbVerwaltung().getWarenkorb();
 				gibWarenkorblisteAus(liste);
 			} catch (KundeExistiertNichtException e) {
@@ -344,11 +342,16 @@ public class ShopClientCUI {
 		// Warenkorb leeren
 		
 		else if (line.equals("wl")) {
-			System.out.print("Kunden ID >");
-			int id = Integer.parseInt(liesEingabe());
 			try {
-				Kunde k = shop.sucheKunde(id);
+				System.out.print("Kunden ID > ");
+				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				boolean ok = false;
 				shop.leeren(k);
+				ok = true;
+				if (ok)
+					System.out.println("Leeren ok");
+				else
+					System.out.println("Fehler beim Leeren");
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Kunde existiert nicht!");
 			}
@@ -357,16 +360,17 @@ public class ShopClientCUI {
 		// Artikel im Warenkorb kaufen und Rechnungsobjekt erstellen
 		
 		else if (line.equals("wk")) {
-			System.out.print("Kunden ID >");
 			try {
+				System.out.print("Kunden ID > ");
 				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
 				System.out.println(shop.kaufen(k).toString());
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Kunde existiert nicht!");
 			}
 		}
+		
 		else if (line.equals("q")) {
-			
+			System.out.println("Vielen Dank für ihren Besuch und beehren Sie uns bald wieder!");
 		}
 		else {
 			System.out.println("Dieser Befehl existiert nicht!");
