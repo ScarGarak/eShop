@@ -14,6 +14,7 @@ import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
+import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.persitence.log.FileLogPersistenceManager;
 import shop.local.persitence.log.LogPersistenceManager;
 import shop.local.valueobjects.Artikel;
@@ -255,11 +256,11 @@ public class ShopVerwaltung {
 		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
 	}
 	
-	public void ausDemWarenkorbHerausnehmen(Kunde kunde, Artikel artikel) throws ArtikelExistiertNichtException {
+	public void ausDemWarenkorbHerausnehmen(Kunde kunde, Artikel artikel) throws ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineKunden.ausDemWarenkorbHerausnehmen(kunde, kunde.getWarenkorbVerwaltung().getWarenkorbArtikel(artikel));
 	}
 	
-	public Rechnung kaufen(Kunde kunde) throws IOException {
+	public Rechnung kaufen(Kunde kunde) throws IOException, WarenkorbIstLeerException {
 		Rechnung rechnung = meineKunden.kaufen(kunde);
 		schreibeArtikel();
 		lpm.openForWriting("EinAuslagerung.log");
@@ -275,7 +276,7 @@ public class ShopVerwaltung {
 		return rechnung;
 	}
 	
-	public void leeren(Kunde k) {
+	public void leeren(Kunde k) throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineKunden.leeren(k);
 	}
 	

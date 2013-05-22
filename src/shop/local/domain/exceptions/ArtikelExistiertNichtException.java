@@ -2,11 +2,12 @@ package shop.local.domain.exceptions;
 
 import shop.local.valueobjects.Artikel;
 
-
 /**
- * Exception zur Signalisierung, dass ein Artikel nicht existiert (z.B. bei einem Lšschvorgang).
+ * Exception zur Signalisierung, dass ein Artikel nicht existiert. 
+ * (z.B. bei einem Lšschvorgang).
  * 
  * @author Christof Ferreira Torres
+ * @version 1.0.0
  */
 @SuppressWarnings("serial")
 public class ArtikelExistiertNichtException extends Exception {

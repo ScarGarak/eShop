@@ -17,6 +17,7 @@ import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
+import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
@@ -280,7 +281,7 @@ public class ShopClientCUI {
 			}
 		}
 
-		// Artikel zum Warenkorb hinzugen
+		// Artikel zum Warenkorb hinzufuegen
 		
 		else if (line.equals("wh")) {
 			try {
@@ -302,7 +303,7 @@ public class ShopClientCUI {
 			} catch (ArtikelExistiertNichtException e1) {
 				System.err.println("Artikel existiert nicht!");
 			} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-				System.err.println("Stückzahl ist keine Vielfache der Packungsgroesse!");
+				System.err.println("Die Stückzahl ist keine Vielfache der Packungsgroesse!");
 			} catch (ArtikelBestandIstZuKleinException e) {
 				System.err.println("Der Bestand ist zu klein oder leer!");
 			} catch(NumberFormatException e) { 
@@ -329,6 +330,10 @@ public class ShopClientCUI {
 				System.err.println("Kunde existiert nicht!");
 			} catch (ArtikelExistiertNichtException e) {
 				System.err.println("Artikel existiert nicht!");
+			} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+				System.err.println("Der Bestand ist keine Vielfache der Packungsgroesse!");
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
 			}
 		}
 		
@@ -342,6 +347,8 @@ public class ShopClientCUI {
 				gibWarenkorblisteAus(liste);
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Kunde existiert nicht!");
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
 			}
 		}
 		
@@ -360,6 +367,10 @@ public class ShopClientCUI {
 					System.out.println("Fehler beim Leeren");
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Kunde existiert nicht!");
+			} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+				System.err.println("Der Bestand ist keine Vielfache der Packungsgroesse!");
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
 			}
 		}
 		
@@ -372,9 +383,12 @@ public class ShopClientCUI {
 				System.out.println(shop.kaufen(k).toString());
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Kunde existiert nicht!");
+			} catch (WarenkorbIstLeerException e) {
+				System.err.println("Der Warenkorb ist leer!");
+			} catch(NumberFormatException e) { 
+				System.err.println("Sie haben eine ungültige Zahl eingegeben!");
 			}
 		}
-		
 		else if (line.equals("q")) {
 			System.out.println("Vielen Dank für ihren Besuch und beehren Sie uns bald wieder!");
 		}

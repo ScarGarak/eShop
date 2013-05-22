@@ -7,8 +7,8 @@ import java.util.Vector;
 import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
+import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.valueobjects.Artikel;
-import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 /**
@@ -34,9 +34,6 @@ public class WarenkorbVerwaltung {
 		if (warenkorb.contains(warenkorbArtikel)) {
 			this.stueckzahlAendern(warenkorbArtikel, warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getStueckzahl() + warenkorbArtikel.getStueckzahl());
 		} else {
-			if (((Massengutartikel) warenkorbArtikel.getArtikel()) instanceof Massengutartikel)
-				if (warenkorbArtikel.getStueckzahl() % ((Massengutartikel) warenkorbArtikel.getArtikel()).getPackungsgroesse() != 0)
-					throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(((Massengutartikel) warenkorbArtikel.getArtikel()), " - in hinzufuegen()'");
 			int alterBestand = warenkorbArtikel.getArtikel().getBestand();
 			if (alterBestand - warenkorbArtikel.getStueckzahl() >= 0) {
 				warenkorbArtikel.getArtikel().setBestand(alterBestand - warenkorbArtikel.getStueckzahl());
@@ -58,9 +55,6 @@ public class WarenkorbVerwaltung {
 	 */
 	public synchronized void stueckzahlAendern(WarenkorbArtikel warenkorbArtikel, int neueStueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		if (warenkorb.contains(warenkorbArtikel)) {
-			if (((Massengutartikel) warenkorbArtikel.getArtikel()) instanceof Massengutartikel)
-				if (warenkorbArtikel.getStueckzahl() % ((Massengutartikel) warenkorbArtikel.getArtikel()).getPackungsgroesse() != 0)
-					throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(((Massengutartikel) warenkorbArtikel.getArtikel()), " - in hinzufuegen()'");
 			int alterBestand = warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getArtikel().getBestand();
 			int alteStueckzahl = warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getStueckzahl();
 			if (alteStueckzahl < neueStueckzahl) {
@@ -84,8 +78,9 @@ public class WarenkorbVerwaltung {
 	 * 
 	 * @param warenkorbArtikel Der Warenkorb Artikel der entfernt werden soll.
 	 * @throws ArtikelExistiertNichtException 
+	 * @throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException 
 	 */
-	public synchronized void entfernen(WarenkorbArtikel warenkorbArtikel) throws ArtikelExistiertNichtException {
+	public synchronized void entfernen(WarenkorbArtikel warenkorbArtikel) throws ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		if (warenkorb.contains(warenkorbArtikel)) {
 			warenkorb.get(warenkorb.indexOf(warenkorbArtikel)).getArtikel().setBestand(warenkorbArtikel.getArtikel().getBestand() + warenkorbArtikel.getStueckzahl());
 			warenkorb.remove(warenkorbArtikel);
@@ -98,8 +93,11 @@ public class WarenkorbVerwaltung {
 	 * Methode zum kaufen aller im Warenkorb enthaltenen Artikel.
 	 * 
 	 * @return List<WarenkorbArtikel> Eine liste von den gekauften Warenkorb Artikeln.
+	 * @throws WarenkorbIstLeerException 
 	 */
-	public List<WarenkorbArtikel> kaufen() {
+	public List<WarenkorbArtikel> kaufen() throws WarenkorbIstLeerException {
+		if (warenkorb.isEmpty())
+			throw new WarenkorbIstLeerException(" - in 'kaufen()'");
 		List<WarenkorbArtikel> ergebnis = new Vector<WarenkorbArtikel>();
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
 		while (iter.hasNext()) {
@@ -111,8 +109,9 @@ public class WarenkorbVerwaltung {
 	
 	/**
 	 * Synchronisierte methode zum leeren des Warenkorbes.
+	 * @throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException 
 	 */
-	public synchronized void leeren() {
+	public synchronized void leeren() throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
 		while (iter.hasNext()) {
 			WarenkorbArtikel warenkorbArtikel = iter.next();

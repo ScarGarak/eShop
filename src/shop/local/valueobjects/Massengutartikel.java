@@ -1,7 +1,6 @@
 package shop.local.valueobjects;
 
-import java.util.Currency;
-import java.util.Locale;
+import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 
 /**
  * Klasse zur Repräsentation von Massengutartikeln.
@@ -15,9 +14,17 @@ public class Massengutartikel extends Artikel {
 	// Attribute zur Beschreibung eines Massengutartikels:
 	private int packungsgroesse;	
 
-	public Massengutartikel(int artikelnummer, String bezeichnung, double preis, int packungsgroesse, int bestand) {
+	public Massengutartikel(int artikelnummer, String bezeichnung, double preis, int packungsgroesse, int bestand) throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		super(artikelnummer, bezeichnung, preis, bestand);
 		this.packungsgroesse = packungsgroesse;
+		if (bestand % packungsgroesse != 0)
+			throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(this, " - in Massengutartikel()'");
+	}
+	
+	public void setBestand(int bestand) throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
+		if (bestand % packungsgroesse != 0)
+			throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(this, " - in setBestand()'");
+		super.setBestand(bestand);
 	}
 	
 	public void setPackungsgroesse(int packungsgroesse) {
@@ -29,7 +36,7 @@ public class Massengutartikel extends Artikel {
 	}
 	
 	public String toString() {
-		return ("Nr: " + getArtikelnummer() + "\t Bezeichnung: " + getBezeichnung() + "\t Preis: " + String.format("%.2f ", getPreis()) + Currency.getInstance(Locale.GERMANY) + "\t Bestand: " + getBestand() + "\t Packungsgröße: " + packungsgroesse);
+		return (super.toString() + "\t Packungsgröße: " + packungsgroesse);
 	}
 	
 	public boolean equals(Object andererArtikel) {

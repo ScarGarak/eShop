@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Currency;
 import java.util.Locale;
 
+import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
+
 /**
  * Klasse zur Repräsentation einzelner Artikel.
  * 
@@ -50,7 +52,7 @@ public class Artikel implements Serializable {
 		return preis;
 	}
 	
-	public void setBestand(int bestand) {
+	public void setBestand(int bestand) throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		this.bestand = bestand;
 	}
 	
