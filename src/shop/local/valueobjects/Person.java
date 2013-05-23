@@ -114,7 +114,7 @@ public abstract class Person implements Serializable{
 	 * Getter fuer "typ".
 	 * @param typ
 	 */
-	public PersonTyp getPersonTyp(PersonTyp typ){
+	public PersonTyp getPersonTyp(){
 		return this.typ;
 	}
 }

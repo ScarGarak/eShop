@@ -159,10 +159,12 @@ public class ShopClientCUI {
 		}
 		else if (line.equals("k")) {
 			try {
+				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
 				System.out.print("Artikelnummer > ");
 				int nummer = Integer.parseInt(liesEingabe());
 				boolean ok = false;
-				shop.entferneArtikel(nummer);
+				shop.entferneArtikel(m, nummer);
 				ok = true;
 				if (ok)
 					System.out.println("Lšschen ok");
@@ -170,14 +172,20 @@ public class ShopClientCUI {
 					System.out.println("Fehler beim Lšschen");
 			} catch (ArtikelExistiertNichtException e) {
 				System.err.println("Artikel existiert nicht!");
+			} catch (NumberFormatException e) {
+				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
+			} catch (MitarbeiterExistiertNichtException e) {
+				System.err.println(e.getMessage());
 			}
 		}
 		else if (line.equals("l")) {
 			try {
+				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
 				System.out.print("Artikelbezeichnung > ");
 				String bezeichnung = liesEingabe();
 				boolean ok = false;
-				shop.entferneArtikel(bezeichnung);
+				shop.entferneArtikel(m, bezeichnung);
 				ok = true;
 				if (ok)
 					System.out.println("Lšschen ok");
@@ -185,6 +193,10 @@ public class ShopClientCUI {
 					System.out.println("Fehler beim Lšschen");
 			} catch (ArtikelExistiertNichtException e) {
 				System.err.println("Artikel existiert nicht!");
+			} catch (NumberFormatException e) {
+				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
+			} catch (MitarbeiterExistiertNichtException e) {
+				System.err.println(e.getMessage());
 			}
 		}
 		else if (line.equals("me")) {
@@ -459,6 +471,7 @@ public class ShopClientCUI {
 		shop.schreibeArtikel();
 		shop.schreibeMitarbeiter();
 		shop.schreibeKunden();
+		shop.schreibeEreignisse();
 	}
 	
 	public static void main(String[] args) {

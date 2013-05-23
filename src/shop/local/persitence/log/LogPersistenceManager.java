@@ -1,10 +1,10 @@
 package shop.local.persitence.log;
 
 import java.io.IOException;
+import java.util.Date;
 
-import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
-import shop.local.valueobjects.WarenkorbArtikel;
+import shop.local.valueobjects.Person;
 
 /**
  * 
@@ -33,8 +33,8 @@ public interface LogPersistenceManager {
 	
 	public String ladeEinAuslagerung() throws IOException;
 
-	public void speichereEinlagerung(Mitarbeiter m, int anzahl, int artikelnummer) throws IOException;
+	public void speichereEinlagerung(Mitarbeiter m, int anzahl, int artikelnummer, Date datum) throws IOException;
 	
-	public void speichereAuslagerung(Kunde k, WarenkorbArtikel wa) throws IOException;
+	public void speichereAuslagerung(Person p, int anzahl, int artikelnummer, Date datum) throws IOException;
 	
 }
