@@ -32,7 +32,9 @@ public class EreignisVerwaltung {
 	}
 	
 	public String gibBestandsHistorie(int artikelID){
+		
 		//TODO
+		
 		return null;
 	}
 	
