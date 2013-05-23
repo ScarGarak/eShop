@@ -3,8 +3,7 @@ package shop.local.domain.exceptions;
 import shop.local.valueobjects.Massengutartikel;
 
 /**
- * Exception zur Signalisierung, dass der Bestand eines Massengutartikels 
- * keine Vielfache der Packungsgröße ist. 
+ * Exception zur Signalisierung, dass der Bestand eines Massengutartikels keine Vielfache der Packungsgröße ist. 
  * (z.B. beim hinzufügen eines Massengutartikels in den Bestand oder Warenkorb).
  * 
  * @author Christof Ferreira Torres

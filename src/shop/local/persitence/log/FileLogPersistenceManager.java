@@ -10,9 +10,9 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
-import shop.local.valueobjects.WarenkorbArtikel;
+import shop.local.valueobjects.Person;
+import shop.local.valueobjects.PersonTyp;
 /**
  * @author Christof Ferreira Torres
  * 
@@ -52,12 +52,19 @@ public class FileLogPersistenceManager implements LogPersistenceManager {
 		return liesZeile();
 	}
 
-	public void speichereEinlagerung(Mitarbeiter m, int anzahl, int artikelnummer) throws IOException {
-		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " Mitarbeiter " + m.getId() + " " + anzahl + " Stueck Artikel " + artikelnummer + " eingelagert");
+	public void speichereEinlagerung(Mitarbeiter m, int anzahl, int artikelnummer, Date datum) throws IOException {
+		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(datum) + " Mitarbeiter " + m.getId() + " " + anzahl + " Stueck Artikel " + artikelnummer + " eingelagert");
 	}
 	
-	public void speichereAuslagerung(Kunde k, WarenkorbArtikel wa) throws IOException {
-		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " Kunde " + k.getId() + " " + wa.getStueckzahl() + " Stueck Artikel " + wa.getArtikel().getArtikelnummer() + " verkauft");
+	public void speichereAuslagerung(Person p, int anzahl, int artikelnummer, Date datum) throws IOException {
+		String personTyp = p.getPersonTyp()+"";
+		String auslagerungsTyp = "";
+		if(p.getPersonTyp() == PersonTyp.Mitarbeiter){
+			auslagerungsTyp = "ausgelagert";
+		}else{
+			auslagerungsTyp = "verkauft";
+		}
+		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(datum) + " " + personTyp+ " " + p.getId() + " " + anzahl + " Stueck Artikel " + artikelnummer + " "+auslagerungsTyp);
 	}
 	
 	/*
@@ -70,7 +77,7 @@ public class FileLogPersistenceManager implements LogPersistenceManager {
 			return "";
 	}
 
-	private void schreibeZeile(String daten) {
+	public void schreibeZeile(String daten) {
 		if (writer != null)
 			writer.println(daten);
 	}

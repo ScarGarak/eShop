@@ -10,6 +10,7 @@ import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertBereitsException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
+import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.persitence.data.DataPersistenceManager;
 import shop.local.persitence.data.ObjectDataPersistenceManager;
 import shop.local.valueobjects.Kunde;
@@ -133,15 +134,15 @@ public class KundenVerwaltung {
 		kunde.getWarenkorbVerwaltung().hinzufuegen(warenkorbArtikel);
 	}
 
-	public void ausDemWarenkorbHerausnehmen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelExistiertNichtException {
+	public void ausDemWarenkorbHerausnehmen(Kunde kunde, WarenkorbArtikel warenkorbArtikel) throws ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		kunde.getWarenkorbVerwaltung().entfernen(warenkorbArtikel);
 	}
 	
-	public Rechnung kaufen(Kunde kunde) {
+	public Rechnung kaufen(Kunde kunde) throws WarenkorbIstLeerException {
 		return new Rechnung(kunde, new Date(), kunde.getWarenkorbVerwaltung().kaufen());
 	}
 	
-	public void leeren(Kunde kunde) {
+	public void leeren(Kunde kunde) throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		kunde.getWarenkorbVerwaltung().leeren();
 	}
 	

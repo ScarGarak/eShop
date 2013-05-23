@@ -12,7 +12,6 @@ import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.persitence.data.DataPersistenceManager;
 import shop.local.persitence.data.ObjectDataPersistenceManager;
 import shop.local.valueobjects.Artikel;
-import shop.local.valueobjects.Massengutartikel;
 
 /**
  * Klasse zur Verwaltung von Artikeln.
@@ -81,12 +80,6 @@ public class ArtikelVerwaltung {
 			throw new ArtikelExistiertBereitsException(artikel, " - in 'einfuegen()'");
 	}
 	
-	public void einfuegen(Massengutartikel artikel) throws ArtikelExistiertBereitsException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
-		if (artikel.getBestand() % artikel.getPackungsgroesse() != 0)
-			throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(artikel, " - in einfuegen()'");
-		einfuegen((Artikel) artikel);
-	}
-	
 	public void bestandErhoehen(int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		int index = -1;
 
@@ -98,9 +91,6 @@ public class ArtikelVerwaltung {
 		}
 		
 		if (index != -1) {
-			if (artikelBestand.get(index) instanceof Massengutartikel)
-				if (Math.abs(anzahl) % ((Massengutartikel) artikelBestand.get(index)).getPackungsgroesse() != 0)
-					throw new ArtikelBestandIstKeineVielfacheDerPackungsgroesseException(((Massengutartikel) artikelBestand.get(index)), " - in bestandErhoehen()'");
 			artikelBestand.get(index).setBestand(artikelBestand.get(index).getBestand() + Math.abs(anzahl));
 		} else 
 			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'bestandErhoehen()'");

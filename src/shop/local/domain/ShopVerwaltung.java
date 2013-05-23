@@ -1,6 +1,7 @@
 package shop.local.domain;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -14,9 +15,9 @@ import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
-import shop.local.persitence.log.FileLogPersistenceManager;
-import shop.local.persitence.log.LogPersistenceManager;
+import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.valueobjects.Artikel;
+import shop.local.valueobjects.Ereignis;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.Mitarbeiter;
@@ -34,9 +35,8 @@ public class ShopVerwaltung {
 	private ArtikelVerwaltung meineArtikel;
 	private MitarbeiterVerwaltung meineMitarbeiter;
 	private KundenVerwaltung meineKunden;
+	private EreignisVerwaltung meineEreignisse;
 	
-	// Persistenz-Schnittstelle, die für die Details des Dateizugriffs verantwortlich ist
-	private LogPersistenceManager lpm = new FileLogPersistenceManager();
 	
 	/**
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
@@ -60,6 +60,8 @@ public class ShopVerwaltung {
 		
 		meineKunden = new KundenVerwaltung();
 		meineKunden.liesDaten("SHOP_K.ser");
+		
+		meineEreignisse = new EreignisVerwaltung();
 	}
 	
 	// Artikel Methoden
@@ -67,17 +69,15 @@ public class ShopVerwaltung {
 	public void fuegeArtikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException, IOException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
 		meineArtikel.einfuegen(artikel);
-		lpm.openForWriting("EinAuslagerung.log");
-		lpm.speichereEinlagerung(mitarbeiter, bestand, artikelnummer);
-		lpm.close();
+		
+		meineEreignisse.hinzufuegen(new Ereignis(new Date(), artikel, bestand, mitarbeiter));
 	}
 	
 	public void fuegeMassengutartikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int packungsgroesse, int bestand) throws ArtikelExistiertBereitsException, IOException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		Massengutartikel artikel = new Massengutartikel(artikelnummer, bezeichnung, preis, packungsgroesse, bestand);
 		meineArtikel.einfuegen(artikel);
-		lpm.openForWriting("EinAuslagerung.log");
-		lpm.speichereEinlagerung(mitarbeiter, bestand, artikelnummer);
-		lpm.close();
+		
+		meineEreignisse.hinzufuegen(new Ereignis(new Date(), artikel, bestand, mitarbeiter));
 	}
 	
 	public Artikel gibArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
@@ -86,9 +86,7 @@ public class ShopVerwaltung {
 	
 	public void artikelBestandErhoehen(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, IOException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
-		lpm.openForWriting("EinAuslagerung.log");
-		lpm.speichereEinlagerung(mitarbeiter, anzahl, artikelnummer);
-		lpm.close();
+		meineEreignisse.hinzufuegen(new Ereignis(new Date(), gibArtikel(artikelnummer), anzahl, mitarbeiter));
 	}
 	
 	public List<Artikel> gibAlleArtikelSortiertNachArtikelnummer() {
@@ -107,11 +105,17 @@ public class ShopVerwaltung {
 		return meineArtikel.sucheArtikel(bezeichnung); 
 	}
 	
-	public void entferneArtikel(int artikelnummer) throws ArtikelExistiertNichtException {
+	public void entferneArtikel(Mitarbeiter m, int artikelnummer) throws ArtikelExistiertNichtException {
+		Artikel a = gibArtikel(artikelnummer);
+		meineEreignisse.hinzufuegen(new Ereignis(new Date(), a, -a.getBestand(), m));
+		
 		meineArtikel.entfernen(artikelnummer);
 	}
 	
-	public void entferneArtikel(String bezeichnung) throws ArtikelExistiertNichtException {
+	public void entferneArtikel(Mitarbeiter m, String bezeichnung) throws ArtikelExistiertNichtException {
+		//Problem: Keine ahnung wie ich hier ein einzelnes Artikel bekomme...
+			//Kann also im Moment nicht geloggt werden.
+		
 		meineArtikel.entfernen(bezeichnung);
 	}
 	
@@ -255,28 +259,34 @@ public class ShopVerwaltung {
 		meineKunden.inDenWarenkorbLegen(kunde, new WarenkorbArtikel(artikel, stueckzahl));
 	}
 	
-	public void ausDemWarenkorbHerausnehmen(Kunde kunde, Artikel artikel) throws ArtikelExistiertNichtException {
+	public void ausDemWarenkorbHerausnehmen(Kunde kunde, Artikel artikel) throws ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineKunden.ausDemWarenkorbHerausnehmen(kunde, kunde.getWarenkorbVerwaltung().getWarenkorbArtikel(artikel));
 	}
 	
-	public Rechnung kaufen(Kunde kunde) throws IOException {
+	public Rechnung kaufen(Kunde kunde) throws IOException, WarenkorbIstLeerException {
 		Rechnung rechnung = meineKunden.kaufen(kunde);
 		schreibeArtikel();
-		lpm.openForWriting("EinAuslagerung.log");
+		schreibeArtikel();
 		Iterator<WarenkorbArtikel> iter = rechnung.getWarenkorb().iterator();
 		while(iter.hasNext()){
 			try {
-				lpm.speichereAuslagerung(kunde, (WarenkorbArtikel) iter.next());
+				WarenkorbArtikel wa = iter.next();
+				meineEreignisse.hinzufuegen(new Ereignis(new Date(), wa.getArtikel(), -wa.getStueckzahl(), kunde));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		lpm.close();
 		return rechnung;
 	}
 	
-	public void leeren(Kunde k) {
+	public void leeren(Kunde k) throws ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		meineKunden.leeren(k);
+	}
+	
+	// Ereignis Methoden
+	
+	public void schreibeEreignisse() throws IOException{
+		meineEreignisse.schreibeDaten("EinAuslagerung.log");
 	}
 	
 }
