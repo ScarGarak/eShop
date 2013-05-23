@@ -266,11 +266,10 @@ public class ShopVerwaltung {
 	public Rechnung kaufen(Kunde kunde) throws IOException, WarenkorbIstLeerException {
 		Rechnung rechnung = meineKunden.kaufen(kunde);
 		schreibeArtikel();
-		schreibeArtikel();
 		Iterator<WarenkorbArtikel> iter = rechnung.getWarenkorb().iterator();
 		while(iter.hasNext()){
+			WarenkorbArtikel wa = iter.next();
 			try {
-				WarenkorbArtikel wa = iter.next();
 				meineEreignisse.hinzufuegen(new Ereignis(new Date(), wa.getArtikel(), -wa.getStueckzahl(), kunde));
 			} catch (Exception e) {
 				e.printStackTrace();
