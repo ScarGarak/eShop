@@ -48,6 +48,8 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel löschen nach Nr:     'k'");
 		System.out.print("         \n  Artikel löschen nach Bez.:   'l'");
+		System.out.print("         \n                                  ");
+		System.out.print("         \n  Gib Bestands Historie:       'bh'");
 		System.out.print("         \n                                   ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
@@ -197,6 +199,19 @@ public class ShopClientCUI {
 				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
 			} catch (MitarbeiterExistiertNichtException e) {
 				System.err.println(e.getMessage());
+			}
+		}
+		else if(line.equals("bh")){
+			
+			try {
+				System.out.print("Artikelnummer > ");
+				int nummer = Integer.parseInt(liesEingabe());
+				Artikel a = shop.gibArtikel(nummer);
+				System.out.println(shop.gibBestandsHistorie(a));
+			} catch (ArtikelExistiertNichtException e) {
+				System.err.println(e.getMessage());
+			} catch (NumberFormatException e){
+				System.err.println("Sie müssen für die Artikelnummer eine Zahl eingeben.");
 			}
 		}
 		else if (line.equals("me")) {

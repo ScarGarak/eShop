@@ -288,4 +288,8 @@ public class ShopVerwaltung {
 		meineEreignisse.schreibeDaten("EinAuslagerung.log");
 	}
 	
+	public String gibBestandsHistorie(Artikel artikel) throws IOException{
+		return meineEreignisse.gibBestandsHistorie(artikel, "EinAuslagerung.log");
+	}
+	
 }

@@ -49,7 +49,11 @@ public class FileLogPersistenceManager implements LogPersistenceManager {
 	
 
 	public String ladeEinAuslagerung() throws IOException {
-		return liesZeile();
+		String zeile = liesZeile();
+		if(zeile == null){
+			zeile = "";
+		}
+		return zeile;
 	}
 
 	public void speichereEinlagerung(Mitarbeiter m, int anzahl, int artikelnummer, Date datum) throws IOException {
