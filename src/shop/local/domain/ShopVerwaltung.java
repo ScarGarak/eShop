@@ -38,7 +38,6 @@ public class ShopVerwaltung {
 	private KundenVerwaltung meineKunden;
 	private EreignisVerwaltung meineEreignisse;
 	
-	
 	/**
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
 	 * (Initialisierung des Shops).
@@ -111,13 +110,6 @@ public class ShopVerwaltung {
 		meineEreignisse.hinzufuegen(new Ereignis(new Date(), a, -a.getBestand(), m));
 		
 		meineArtikel.entfernen(artikelnummer);
-	}
-	
-	public void entferneArtikel(Mitarbeiter m, String bezeichnung) throws ArtikelExistiertNichtException {
-		//Problem: Keine ahnung wie ich hier ein einzelnes Artikel bekomme...
-			//Kann also im Moment nicht geloggt werden.
-		
-		meineArtikel.entfernen(bezeichnung);
 	}
 	
 	/**
@@ -291,19 +283,16 @@ public class ShopVerwaltung {
 	 */
 	
 	public Person pruefeLogin(String username, String password) {
-		
-		
-		
 		Iterator<Mitarbeiter> itM = meineMitarbeiter.getMitarbeiterListe().iterator();
 		Person p = null;
-		while(itM.hasNext()){
+		while (itM.hasNext()) {
 			p = itM.next();
 			if (((String) p.getUsername()).equals(username) && ((String) p.getPasswort()).equals(password)) {
 				return p;
 			}
 		}
 		Iterator<Kunde> itK = meineKunden.getKundenListe().iterator();
-		while(itK.hasNext()){
+		while (itK.hasNext()) {
 			p = itK.next();
 			if (((String) p.getUsername()).equals(username) && ((String) p.getPasswort()).equals(password)) {
 				return p;

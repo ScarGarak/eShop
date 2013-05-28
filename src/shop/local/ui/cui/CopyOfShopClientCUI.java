@@ -47,7 +47,6 @@ public class CopyOfShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Nr:       'f'");
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
-		System.out.print("         \n  Artikel lšschen nach Bez.:   'l'");
 		System.out.print("         \n                                   ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
@@ -165,27 +164,6 @@ public class CopyOfShopClientCUI {
 				int nummer = Integer.parseInt(liesEingabe());
 				boolean ok = false;
 				shop.entferneArtikel(m, nummer);
-				ok = true;
-				if (ok)
-					System.out.println("Lšschen ok");
-				else
-					System.out.println("Fehler beim Lšschen");
-			} catch (ArtikelExistiertNichtException e) {
-				System.err.println("Artikel existiert nicht!");
-			} catch (NumberFormatException e) {
-				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
-			} catch (MitarbeiterExistiertNichtException e) {
-				System.err.println(e.getMessage());
-			}
-		}
-		else if (line.equals("l")) {
-			try {
-				System.out.print("Mitarbeiter ID > ");
-				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
-				System.out.print("Artikelbezeichnung > ");
-				String bezeichnung = liesEingabe();
-				boolean ok = false;
-				shop.entferneArtikel(m, bezeichnung);
 				ok = true;
 				if (ok)
 					System.out.println("Lšschen ok");

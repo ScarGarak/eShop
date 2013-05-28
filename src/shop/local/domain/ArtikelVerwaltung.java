@@ -151,22 +151,6 @@ public class ArtikelVerwaltung {
 			throw new ArtikelExistiertNichtException(artikelnummer, " - in 'entfernen()'");
 	}
 	
-	public void entfernen(String bezeichnung) throws ArtikelExistiertNichtException {
-		int index = -1;
-
-		Iterator<Artikel> iter = artikelBestand.iterator();
-		while (iter.hasNext()) {
-			Artikel artikel = iter.next();
-			if (artikel.getBezeichnung().equals(bezeichnung))
-				index = artikelBestand.indexOf(artikel);
-		}
-		
-		if (index != -1)
-			artikelBestand.remove(index);
-		else
-			throw new ArtikelExistiertNichtException(bezeichnung, " - in 'entfernen()'");
-	}
-	
 	public List<Artikel> getArtikelBestand() {
 		List<Artikel> ergebnis = new Vector<Artikel>();
 		ergebnis.addAll(artikelBestand);
