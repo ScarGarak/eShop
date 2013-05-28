@@ -281,7 +281,6 @@ public class ShopVerwaltung {
 	 * @param password
 	 * @return Person p
 	 */
-	
 	public Person pruefeLogin(String username, String password) {
 		Iterator<Mitarbeiter> itM = meineMitarbeiter.getMitarbeiterListe().iterator();
 		Person p = null;
