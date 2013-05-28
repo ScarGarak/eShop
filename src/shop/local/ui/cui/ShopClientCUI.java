@@ -21,6 +21,8 @@ import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.Person;
+import shop.local.valueobjects.PersonTyp;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 /**
@@ -33,13 +35,23 @@ public class ShopClientCUI {
 
 	private ShopVerwaltung shop;
 	private BufferedReader in;
+	private Person p;
 	
 	public ShopClientCUI() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
 		shop = new ShopVerwaltung();
 		in = new BufferedReader(new InputStreamReader(System.in));
 	}
-
-	private void gibMenueAus() {
+	
+	private void logIn() throws IOException {
+		System.out.print("Login > ");
+		System.out.print("Username > ");
+		String username = liesEingabe();
+		System.out.print("Passwort > ");
+		String password = liesEingabe();
+		p = shop.pruefeLogin(username, password);
+	}
+	
+	private void kundenMenue() {
 		System.out.print("Befehle: \n  Artikel einfuegen:           'e'");
 		System.out.print("         \n  Artikel ausgeben nach Nr:    'a'");
 		System.out.print("         \n  Artikel ausgeben nach Bez.:  'b'");
@@ -48,15 +60,19 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
 		System.out.print("         \n  Artikel lšschen nach Bez.:   'l'");
-		System.out.print("         \n                                  ");
-		System.out.print("         \n  Gib Bestands Historie:       'bh'");
 		System.out.print("         \n                                   ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
-		System.out.print("         \n                                   ");
-		System.out.print("         \n  Kunden einfuegen:            'ke'");
+		System.out.print("         \n                                   ");	
+		System.out.println("         \n  Beenden:                     'q'");
+		System.out.print("> ");
+		System.out.flush();		
+	}
+	
+	private void mitarbeiterMenue() {
+		System.out.print("Befehle: \n  Kunden einfuegen:            'ke'");
 		System.out.print("         \n  Kunden ausgeben:             'ka'");
 		System.out.print("         \n  Kunden suche nach ID:        'kf'");
 		System.out.print("         \n  Kunden lšschen nach ID:      'kl'");
@@ -66,9 +82,10 @@ public class ShopClientCUI {
 		System.out.print("         \n  Warenkorb anzeigen:          'wa'");
 		System.out.print("         \n  Warenkorb leeren:            'wl'");
 		System.out.print("         \n  Warenkorb kaufen:            'wk'");
+		System.out.print("         \n                                   ");			
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
-		System.out.flush();
+		System.out.flush();		
 	}
 
 	private String liesEingabe() throws IOException {
@@ -473,9 +490,16 @@ public class ShopClientCUI {
 	}
 
 	public void run() throws IOException {
-		String input = ""; 
+		String input = "";
 		do {
-			gibMenueAus();
+		do 
+		logIn();
+		while (p == null);
+		
+		if (p.getPersonTyp().equals(PersonTyp.Mitarbeiter)  /*== PersonTyp.Mitarbeiter*/) {
+			mitarbeiterMenue();
+		} else
+			kundenMenue();
 			try {
 				input = liesEingabe();
 				verarbeiteEingabe(input);
