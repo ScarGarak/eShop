@@ -21,6 +21,7 @@ import shop.local.valueobjects.Ereignis;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.Person;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
 
@@ -282,10 +283,45 @@ public class ShopVerwaltung {
 		meineKunden.leeren(k);
 	}
 	
+	/**
+	 * Methode zur überprüfung des Logins auf basis des Usernamens und des Passwortes
+	 * @param username
+	 * @param password
+	 * @return Person p
+	 */
+	
+	public Person pruefeLogin(String username, String password) {
+		
+		
+		
+		Iterator<Mitarbeiter> itM = meineMitarbeiter.getMitarbeiterListe().iterator();
+		Person p = null;
+		while(itM.hasNext()){
+			p = itM.next();
+			if (((String) p.getUsername()).equals(username) && ((String) p.getPasswort()).equals(password)) {
+				return p;
+			}
+		}
+		Iterator<Kunde> itK = meineKunden.getKundenListe().iterator();
+		while(itK.hasNext()){
+			p = itK.next();
+			if (((String) p.getUsername()).equals(username) && ((String) p.getPasswort()).equals(password)) {
+				return p;
+			}
+		}
+		System.out.println("Zugriff verweigert!!!");
+		System.out.println("Bitte überprüfen Sie ihren Usernamen und Ihr Passwort.");
+		return null;
+	}
+	
 	// Ereignis Methoden
 	
 	public void schreibeEreignisse() throws IOException{
 		meineEreignisse.schreibeDaten("EinAuslagerung.log");
+	}
+	
+	public String gibBestandsHistorie(Artikel artikel) throws IOException{
+		return meineEreignisse.gibBestandsHistorie(artikel, "EinAuslagerung.log");
 	}
 	
 }
