@@ -51,7 +51,7 @@ public class ShopVerwaltung {
 	 * @throws ArtikelExistiertBereitsException 
 	 * @throws ClassNotFoundException 
 	 */
-	public ShopVerwaltung() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException{
+	public ShopVerwaltung() throws IOException {
 		meineArtikel = new ArtikelVerwaltung();
 		meineArtikel.liesDaten("SHOP_A.ser");
 		

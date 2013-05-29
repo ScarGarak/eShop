@@ -37,7 +37,7 @@ public class ShopClientCUI {
 	private BufferedReader in;
 	private Person p;
 	
-	public ShopClientCUI() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
+	public ShopClientCUI() throws IOException {
 		shop = new ShopVerwaltung();
 		in = new BufferedReader(new InputStreamReader(System.in));
 	}
@@ -496,13 +496,9 @@ public class ShopClientCUI {
 		try {
 			cui = new ShopClientCUI();
 			cui.run();
-		} catch (IOException IOe) {
-			IOe.printStackTrace();
-		} catch (ArtikelExistiertBereitsException AEBe) {
-			AEBe.printStackTrace();
-		} catch (ClassNotFoundException CNFe) {
-			CNFe.printStackTrace();
-		}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 	}
 	
 }

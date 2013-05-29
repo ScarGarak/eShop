@@ -34,7 +34,7 @@ public class ArtikelVerwaltung {
 	 * @throws ArtikelExistiertBereitsException 
 	 * @throws ClassNotFoundException 
 	 */
-	public void liesDaten(String datei) throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
+	public void liesDaten(String datei) throws IOException {
 		// PersistenzManager für Lesevorgänge öffnen
 		pm.openForReading(datei);
 
@@ -44,7 +44,12 @@ public class ArtikelVerwaltung {
 			einArtikel = pm.ladeArtikel();
 			if (einArtikel != null) {
 				// Artikel in die Liste einfügen
-				einfuegen(einArtikel);
+				try {
+					einfuegen(einArtikel);
+				} catch (ArtikelExistiertBereitsException e) {
+					System.err.println(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		} while (einArtikel != null);
 
