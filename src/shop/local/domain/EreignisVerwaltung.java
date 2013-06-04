@@ -184,7 +184,7 @@ public class EreignisVerwaltung {
 						bestandsVeraenderung += Integer.parseInt(tokens[4]);
 					}
 				}catch (NumberFormatException e){
-					
+					System.err.println();
 				}
 
 				zeile = lpm.ladeEinAuslagerung();
