@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import java.util.ListIterator;
@@ -25,7 +24,18 @@ public class EreignisVerwaltung {
 	
 	private Hashtable<Integer, Vector<String[]>> bestandsHistorieListe;	// Wenn man eine Artikel ID angibt, bekommt man dessen Bestandshistorie
 	
+	
+	/**
+	 * Diese Methode schreibt die Ereignisse in der Ereignisliste in die Logdatei
+	 * 
+	 * @see LogPersistenceManager
+	 * @see FileLogPersistenceManager
+	 * @param dateiname Name der Logdatei
+	 * @throws IOException
+	 */
 	public void schreibeDaten(String dateiname) throws IOException{
+		this.cleanLogdatei(dateiname);
+		
 		lpm.openForWriting(dateiname);
 
 		Iterator<Ereignis> it = ereignisListe.iterator();
@@ -42,6 +52,20 @@ public class EreignisVerwaltung {
 		lpm.close();
 	}
 	
+	
+	/**
+	 * Diese Methode gibt die Bestandshistorie des angegebenen Artikels als ein einziger String zurueck.
+	 * 
+	 * Bevor sie dies tut, wird kontrolliert, ob die Bestandshistorie des angegebenen Artikels bereits
+	 * gebildet wurde. Wenn nicht, ruft sie die Methode zum erstellen der Bestandshistorie auf.
+	 * Anschließend iteriert sie durch die Bestandshistorie und fügt alles in einen String.
+	 * 
+	 * @see EreignisVerwaltung#erstelleBestandsHistorie(Artikel, String)
+	 * @param artikel
+	 * @param dateiname
+	 * @return Bestandshistorie des angegebenen Artikels
+	 * @throws IOException
+	 */
 	public String gibBestandsHistorie(Artikel artikel, String dateiname) throws IOException{
 		int artikelID = artikel.getArtikelnummer();
 		if(bestandsHistorieListe == null){
@@ -64,6 +88,22 @@ public class EreignisVerwaltung {
 		return result;
 	}
 
+	
+	/**
+	 * Diese Methode erstellt die Bestandshistorie des angegebenen Artikels. 
+	 * Sie realisiert dies indem sie durch die Logdatei geht und die Einträge des Artikels,
+	 * die jünger als 30 Tage sind, entnimmt und mit Hilfe der Anzahl der Ein-/Auslagerungen
+	 * und des Datums die Bestandsveraenderungen eines ganzen Tages rechnet.
+	 * 
+	 * Anschließend ruft sie noch die Methode zur Berechnung der Bestände mit Hilfe des
+	 * aktuellen Artikelbestandes.
+	 * 
+	 * @see EreignisVerwaltung#rechneBestand(int, int)
+	 * @see EreignisVerwaltung#istDatumGueltig(String)
+	 * @param artikel
+	 * @param dateiname
+	 * @throws IOException
+	 */
 	private void erstelleBestandsHistorie(Artikel artikel, String dateiname) throws IOException {
 		int artikelID = artikel.getArtikelnummer();
 		lpm.openForReading(dateiname);
@@ -73,34 +113,34 @@ public class EreignisVerwaltung {
 		bestandsHistorieListe.put(artikelID, bestandsHistorie);
 		
 		String datum = "";
-		String linie = "";
-		StringTokenizer sTok = null;
+		String zeile = "";
+		String[] tokens = null;
 
 		// Gehe von Linie zur Linie, und kontrolliere, ob das Datum nicht älter als 30 Tage ist.
 		// Wenn die Linie nicht älter als 30 Tage ist, gehe weiter.
 		do{
-			linie = lpm.ladeEinAuslagerung();
-			sTok = new StringTokenizer(linie);
-			datum = sTok.nextToken()+" "+sTok.nextToken();
+			zeile = lpm.ladeEinAuslagerung();
+			tokens = zeile.split(" ");
+			datum = tokens[0]+" "+tokens[1];
 		}while(!istDatumGueltig(datum));
 
 		String[] eintrag = new String[2];
 		int bestandsVeraenderung = 0;
 		boolean ersterDurchlauf = true;
-		// Gehe von Linie zur Linie, bis zum Schluss der Datei
+		// Gehe von Zeile zur zeile, bis zum Schluss der Datei
 		do{
 			// Solange wie die eingelesene Linie nicht das Pattern 'Artikel artikelID'
 			// beinhaltet, gehen wir zur nächsten Linie.
-			while(!linie.contains("Artikel "+artikelID) && !linie.equals("")){
-				linie = lpm.ladeEinAuslagerung();
+			while(!zeile.contains("Artikel "+artikelID) && !zeile.equals("")){
+				zeile = lpm.ladeEinAuslagerung();
 			}
 			
-			if(!linie.equals("")){
+			if(!zeile.equals("")){
 				///////////////////////// Eintrag gefunden /////////////////////////
 
 				// Speichere in newDatum das Datum (YYYY-MM-DD) der eingelesenen Zeile
-				sTok = new StringTokenizer(linie);
-				String newDatum = sTok.nextToken();
+				tokens = zeile.split(" ");
+				String newDatum = tokens[0];
 
 
 				// Neuer Tag
@@ -127,28 +167,22 @@ public class EreignisVerwaltung {
 
 
 				// Entnehmen der Bestands-Veraenderung in der Zeile
-				int bVZeile = 0;	// Die Bestands Veränderung in dieser Zeile
-				for(int i = 1; sTok.hasMoreTokens(); i++){		// i=1, weil 0 die Kolonne mit Datum war
-					if(i == 4){	// Kolonne mit der anzahl der Ein- oder Auslagerung
-						bVZeile = Integer.parseInt(sTok.nextToken());
-					}else if(i == 8){	// Kolonne mit 'eingelagert', 'verkauft' oder 'ausgelagert'
-						String tmp = sTok.nextToken();
-						if(tmp.equals("eingelagert")){	
-							bestandsVeraenderung -= bVZeile;	// Wenn das Artikel eingelagert wurde, müssen wir die anzahl
-							// wieder subtrahieren, um den Bestand vom aktuellem Bestand
-							// aus zu berechnen.
-						}else{
-							bestandsVeraenderung += bVZeile;
-						}
+				try{
+					if(tokens[8].equals("eingelagert")){
+						// Da wir den Bestand vom aktuellem Bestand zurueck rechnen,
+						// müssen wir die anzahl der Einlagerung wieder subtrahieren
+						bestandsVeraenderung -= Integer.parseInt(tokens[4]);
 					}else{
-						sTok.nextToken();
+						bestandsVeraenderung += Integer.parseInt(tokens[4]);
 					}
+				}catch (NumberFormatException e){
+					
 				}
 
-
-				linie = lpm.ladeEinAuslagerung();
+				zeile = lpm.ladeEinAuslagerung();
 			}
-		}while(!linie.equals(""));
+		}while(!zeile.equals(""));
+		
 		
 		int bestand = artikel.getBestand();
 		
@@ -160,13 +194,14 @@ public class EreignisVerwaltung {
 			bestandsHistorie.add(eintrag);
 		}else{ 
 			// Um die Bestandshistorie zurueck rechnen zu können
-			// müssen die Ein- und Auslagerungen von Heute
+			// müssen die Ein- und Auslagerungen von Heute jedoch
 			// beachtet werden
 			bestand += bestandsVeraenderung;
 		}
 		
 		// Jetzt müssen nur noch die Ereignisse in der Ereignissliste
-		// überprüft werden
+		// überprüft werden, da diese noch nich in der Log Datei
+		// zu finden sind
 		
 		if(!ereignisListe.isEmpty()){
 			Iterator<Ereignis> iter = ereignisListe.iterator();
@@ -180,9 +215,19 @@ public class EreignisVerwaltung {
 		
 		lpm.close();
 		
+		// Jetzt wird das Feld mit der Bestandsveraenderung, durch
+		// den Bestand, der am Ende des jeweiligen Tages vorliegte,
+		// ersetzt
 		rechneBestand(artikel.getArtikelnummer(), bestand);
 	}
 	
+	/**
+	 * Diese Methode berechnet den Bestand am Ende des Tages, der letzten 30 Tage.
+	 * Dies tut sie indem sie vom aktuellen Bestand des Artikels zurueck rechnet.
+	 * 
+	 * @param artikelID
+	 * @param bestand Bestand wie er am Anfang des heutigen Tages, bzw am Ende des gestrigen Tages war.
+	 */
 	private void rechneBestand(int artikelID, int bestand){
 		Vector<String[]> bestandsHistorie = bestandsHistorieListe.get(artikelID);
 		ListIterator<String[]> lIter = bestandsHistorie.listIterator(bestandsHistorie.size());
@@ -195,6 +240,14 @@ public class EreignisVerwaltung {
 		}
 	}
 	
+	/**
+	 * Diese Methode kontrolliert, ob das angegebene Datum (im Format "yyyy-MM-dd HH:mm:ss") nicht
+	 * älter als 30 Tage ist.
+	 * 
+	 * @see Calendar
+	 * @param datum Datum im Format "yyyy-MM-dd HH:mm:ss".
+	 * @return true wenn das angegebene Datum nicht älter als 30 Tage ist
+	 */
 	private boolean istDatumGueltig(String datum){
 		boolean gueltig = false;
 		try {
@@ -222,10 +275,47 @@ public class EreignisVerwaltung {
 		return gueltig;
 	}
 	
+	/**
+	 * Diese Methode löscht alle Zeilen aus der Logdatei, die älter als 30 Tage sind.
+	 * Dies realisiert sie indem sie durch die Logdatei geht und die erste Zeile, die
+	 * jünger als 30 Tage ist, der LogPersistenceManager-internen-Methode übergibt.
+	 * 
+	 * @see LogPersistenceManager#cleanLogdatei(String)
+	 * @see FileLogPersistenceManager#cleanLogdatei(String)
+	 * @param dateiname Name der Logdatei
+	 * @throws IOException
+	 */
+	private void cleanLogdatei(String dateiname) throws IOException{
+		lpm.openForReading(dateiname);
+		String zeile = "";
+		
+		// Suche nachd er ersten Zeile die nicht älter als 30 Tage ist
+		while(!(zeile = lpm.ladeEinAuslagerung()).equals("")){
+			String[] tokens = zeile.split(" ");
+			if(istDatumGueltig(tokens[0]+" "+tokens[1])){
+				break;
+			}
+		}
+		
+		lpm.close();
+		
+		// Löschen aller Zeilen, die sich vor der gefundenen Zeile befinden
+		lpm.cleanLogdatei(zeile, dateiname);
+	}
+	
+	/**
+	 * Dies Methode fuegt ein Ereignis zur Ereignisliste hinzu.
+	 * 
+	 * @param e
+	 */
 	public void hinzufuegen(Ereignis e){
 		ereignisListe.add(e);
 	}
 	
+	/**
+	 * Diese Methode gibt die Ereignisliste zurueck.
+	 * @return Ereignisliste
+	 */
 	public Vector<Ereignis> getEreignisListe(){
 		return ereignisListe;
 	}

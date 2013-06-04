@@ -37,4 +37,6 @@ public interface LogPersistenceManager {
 	
 	public void speichereAuslagerung(Person p, int anzahl, int artikelnummer, Date datum) throws IOException;
 	
+	public boolean cleanLogdatei(String zeile, String dateiname) throws IOException;
+	
 }

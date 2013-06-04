@@ -2,6 +2,7 @@ package shop.local.persitence.log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -18,7 +19,7 @@ import shop.local.valueobjects.PersonTyp;
  * 
  * Schnittstelle zur persistenten Speicherung von
  * Ein- und AuslagerungsDaten in .log Dateien
- * @see shop.local.persitence.log.persistence.LogPersistenceManager
+ * @see LogPersistenceManager
  */
 public class FileLogPersistenceManager implements LogPersistenceManager {
 	
@@ -71,8 +72,54 @@ public class FileLogPersistenceManager implements LogPersistenceManager {
 		schreibeZeile(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(datum) + " " + personTyp+ " " + p.getId() + " " + anzahl + " Stueck Artikel " + artikelnummer + " "+auslagerungsTyp);
 	}
 	
+	public boolean cleanLogdatei(String zeile, String dateiname) throws IOException{
+		try {
+
+			File original = new File(dateiname);
+			File tmp = new File(original.getAbsolutePath() + ".tmp");
+
+			// eigenes Bilden von Reader und Writer, da hier File Objekte übergeben werden,
+			// die wir zum Löschen, respkt. umbenennen der Dateien brauchen
+			reader = new BufferedReader(new FileReader(original));
+			writer = new PrintWriter(new FileWriter(tmp));
+
+			String str = null;
+
+			// Gehe von Zeile zur Zeile bis die eingelsene Zeile leer ist
+			// oder der variablen "zeile" entspricht
+			while ((str = reader.readLine()) != null && !str.equals(zeile)); 
+
+			if(str != null){
+				// Schreibe den String in die temporäre Datei
+				do{
+					writer.println(str);
+					writer.flush();
+				}while ((str = reader.readLine()) != null);
+			}
+
+			close();
+
+			//Lösche das Original
+			if (!original.delete()) {
+				System.err.println("Löschen des originals fehlgeschlagen!");
+				return false;
+			}
+
+			//Gib der temporären Datei, den Namen des originals
+			if (!tmp.renameTo(original))
+				System.err.println("Umbenennen der temporären Datei fehlgeschlagen!");
+
+		} catch (FileNotFoundException e) {
+			System.err.println("Datei nicht gefunden!");
+			System.err.println(e.getMessage());
+		}
+		
+		return true;
+	}
+	
+	
 	/*
-	 * Private Hilfsmethoden zum lesen bzw. schreiben einer Zeile
+	 * Hilfsmethoden zum lesen bzw. schreiben einer Zeile
 	 */
 	private String liesZeile() throws IOException {
 		if (reader != null)
@@ -85,5 +132,6 @@ public class FileLogPersistenceManager implements LogPersistenceManager {
 		if (writer != null)
 			writer.println(daten);
 	}
+	
 	
 }
