@@ -56,4 +56,12 @@ public class Kunde extends Person {
 		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort + "\n";
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Kunde) {
+				return ((Kunde) o).getId() == this.getId();
+		}else
+			return false;
+	}
+	
 }
