@@ -359,6 +359,7 @@ public class ShopClientCUI {
 			if (eingabe.equals("y")) {
 			try {
 				shop.kundenLoeschen(shop.sucheKunde(p.getId()));
+//				shop.kundenLoeschen(p); funktioniert?
 			} catch (KundeExistiertNichtException e) {
 				// ist die Exception überhaupt noch notwendig?
 				System.err.println("Der Kunde existiert nicht!");
@@ -558,7 +559,7 @@ public class ShopClientCUI {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} while (!input.equals("q") || !input.equals("y"));
+		} while (!input.equals("q"));
 			shop.schreibeArtikel();
 			shop.schreibeMitarbeiter();
 			shop.schreibeKunden();
