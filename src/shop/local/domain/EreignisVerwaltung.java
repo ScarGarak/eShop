@@ -1,5 +1,13 @@
 package shop.local.domain;
 
+/**
+ * Diese Klasse dient zur Verwaltung der Ereignisse. Ein Ereignis entsteht bei einer
+ * Aus- oder Einlagerung eines Artikels. Diese Verwaltung stellt mehrere Methoden zur
+ * Verwaltung von der Logdatei zur Verfügung.
+ * 
+ *  @autho Migliosi Angelo
+ */
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

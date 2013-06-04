@@ -18,6 +18,7 @@ import shop.local.valueobjects.Person;
  */
 public interface LogPersistenceManager {
 
+	
 	/**
 	 * Methoden zum šffnen und schlie§en einer externen Datenquelle
 	 * 

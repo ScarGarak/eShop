@@ -23,6 +23,7 @@ import shop.local.valueobjects.PersonTyp;
  */
 public class FileLogPersistenceManager implements LogPersistenceManager {
 	
+	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
 	
