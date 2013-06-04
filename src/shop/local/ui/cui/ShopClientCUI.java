@@ -42,13 +42,13 @@ public class ShopClientCUI {
 		in = new BufferedReader(new InputStreamReader(System.in));
 	}
 	
-	private void logIn() throws IOException {
-		System.out.print("Login > ");
-		System.out.print("Username > ");
-		String username = liesEingabe();
-		System.out.print("Passwort > ");
-		String password = liesEingabe();
-		p = shop.pruefeLogin(username, password);
+	private void anmeldungMenue() {
+		System.out.print("Befehle: \n  Anmelden >                          'a'");
+		System.out.print("         \n  Registrieren >                      'r'");
+		System.out.print("       \n  Username oder Passwort vergessen? > 'v'");
+		System.out.println("         \n  Beenden >                           'q'");		
+		System.out.print("> ");
+		System.out.flush();				
 	}
 	
 	private void mitarbeiterMenue() {
@@ -64,6 +64,10 @@ public class ShopClientCUI {
 		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
 		System.out.print("         \n  Mitarbeiter lšschen nach ID: 'ml'");
+		System.out.print("         \n                                   ");
+		System.out.print("         \n  Kunden ausgeben:             'ka'");
+		System.out.print("         \n  Kunden suche nach ID:        'kf'");
+		System.out.print("         \n  Kunden lšschen nach ID:      'kl'");
 		System.out.print("         \n                                   ");	
 		System.out.println("         \n  Beenden:                     'q'");
 		System.out.print("> ");
@@ -71,10 +75,10 @@ public class ShopClientCUI {
 	}
 	
 	private void kundenMenue() {
-		System.out.print("Befehle: \n  Kunden einfuegen:            'ke'");
-		System.out.print("         \n  Kunden ausgeben:             'ka'");
-		System.out.print("         \n  Kunden suche nach ID:        'kf'");
-		System.out.print("         \n  Kunden lšschen nach ID:      'kl'");
+		System.out.print("Befehle: \n  Account loeschen:            'al'");
+		System.out.print("         \n                                   ");
+		System.out.print("         \n  Artikel ausgeben nach Nr:    'a'");
+		System.out.print("         \n  Artikel ausgeben nach Bez.:  'b'");
 		System.out.print("         \n                                   ");
 		System.out.print("         \n  Warenkorb Artikel hinzufŸgen:'wh'");
 		System.out.print("         \n  Warenkorb Artikel entfernen: 'we'");
@@ -91,11 +95,53 @@ public class ShopClientCUI {
 		return in.readLine();
 	}
 
-	private void verarbeiteEingabe(String line) throws IOException {
+	private void logIn() throws IOException {
+		System.out.println("Login > ");
+		System.out.print("Username > ");
+		String username = liesEingabe();
+		System.out.print("Passwort > ");
+		String password = liesEingabe();
+		p = shop.pruefeLogin(username, password);
+//		system prints aus shopverwaltung einfügen
+	}
+	
+	private void verarbeiteAnmeldungEingabe(String line) throws IOException {
+		if (line.equals("r")) {
+			System.out.print("Registrierung >");
+			System.out.print("ID >");
+			String strId = liesEingabe();
+			int id = Integer.parseInt(strId);
+			System.out.print("Username >");
+			String username = liesEingabe();
+			System.out.print("Passwort >");
+			String passwort = liesEingabe();
+			System.out.print("Name >");
+			String name = liesEingabe();
+			System.out.println("Strasse >");
+			String strasse = liesEingabe();
+			System.out.println("Postleitzahl >");
+			String strPlz = liesEingabe();
+			int plz = Integer.parseInt(strPlz);
+			System.out.println("Wohnort >");
+			String wohnort = liesEingabe();
+			try {
+				shop.fuegeKundenHinzu(id, username, passwort, name, strasse, plz, wohnort);
+				System.out.println("Kunde wurde hinzugefügt!");
+			} catch (KundeExistiertBereitsException e) {
+				System.err.println(e.getMessage());
+			} catch (UsernameExistiertBereitsException e) {
+				System.err.println(e.getMessage());
+			}
+		} else if (line.equals("v")) {
+			// methodenaufruf zum überschreiben des Usernamens und des passwortes
+		}
+	}	
+	
+	private void verarbeiteMitarbeiterEingabe(String line) throws IOException {
 		if (line.equals("e")) { 
 			try {
-				System.out.print("Mitarbeiter ID > ");
-				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
+//				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
 				System.out.print("Artikelnummer > ");
 				int nummer = Integer.parseInt(liesEingabe());
 				System.out.print("Bezeichnung > ");
@@ -140,8 +186,8 @@ public class ShopClientCUI {
 		}
 		else if (line.equals("c")) {
 			try {
-				System.out.print("Mitarbeiter ID > ");
-				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
+//				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
 				System.out.print("Artikelnummer > ");
 				int nummer = Integer.parseInt(liesEingabe());
 				System.out.print("Artikelanzahl > ");
@@ -177,12 +223,36 @@ public class ShopClientCUI {
 		}
 		else if (line.equals("k")) {
 			try {
-				System.out.print("Mitarbeiter ID > ");
-				Mitarbeiter m = shop.sucheMitarbeiter(Integer.parseInt(liesEingabe()));
+//				System.out.print("Mitarbeiter ID > ");
+				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
 				System.out.print("Artikelnummer > ");
 				int nummer = Integer.parseInt(liesEingabe());
 				boolean ok = false;
 				shop.entferneArtikel(m, nummer);
+//<<<<<<< HEAD
+//				ok = true;
+//				if (ok)
+//					System.out.println("Lšschen ok");
+//				else
+//					System.out.println("Fehler beim Lšschen");
+//			} catch (ArtikelExistiertNichtException e) {
+//				System.err.println("Artikel existiert nicht!");
+//			} catch (NumberFormatException e) {
+//				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
+//			} catch (MitarbeiterExistiertNichtException e) {
+//				System.err.println(e.getMessage());
+//			}
+//		}
+//		else if (line.equals("l")) {
+//			try {
+////				System.out.print("Mitarbeiter ID > ");
+//				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
+//				System.out.print("Artikelbezeichnung > ");
+//				String bezeichnung = liesEingabe();
+//				boolean ok = false;
+//				shop.entferneArtikel(m, bezeichnung);
+//=======
+//>>>>>>> branch 'master' of https://github.com/ChristofTorres/eShop.git
 				ok = true;
 				if (ok)
 					System.out.println("Lšschen ok");
@@ -254,30 +324,6 @@ public class ShopClientCUI {
 				System.out.println(e1.getMessage());
 				e1.printStackTrace();
 			}
-		}else  if(line.equals("ke")){
-			System.out.print("Kunden ID >");
-			String strId = liesEingabe();
-			int id = Integer.parseInt(strId);
-			System.out.print("Username >");
-			String username = liesEingabe();
-			System.out.print("Passwort >");
-			String passwort = liesEingabe();
-			System.out.print("Name >");
-			String name = liesEingabe();
-			System.out.println("Strasse >");
-			String strasse = liesEingabe();
-			System.out.println("Postleitzahl >");
-			String strPlz = liesEingabe();
-			int plz = Integer.parseInt(strPlz);
-			System.out.println("Wohnort >");
-			String wohnort = liesEingabe();
-			try {
-				shop.fuegeKundenHinzu(id, username, passwort, name, strasse, plz, wohnort);
-			} catch (KundeExistiertBereitsException e) {
-				System.err.println(e.getMessage());
-			} catch (UsernameExistiertBereitsException e) {
-				System.err.println(e.getMessage());
-			}
 		}
 		else if (line.equals("ka")) {
 			Collection<Kunde> liste = shop.gibAlleKunden();
@@ -302,13 +348,44 @@ public class ShopClientCUI {
 				System.err.println("Der Kunde existiert nicht!");
 			}
 		}
+	}
+	
+	private void verarbeiteKundenEingabe(String line) throws IOException {
+		if (line.equals("al")) {
+			String eingabe;
+//			do {
+			System.out.print("Sind Sie sicher? (y/n) >");
+			eingabe = liesEingabe();
+			if (eingabe.equals("y")) {
+			try {
+				shop.kundenLoeschen(shop.sucheKunde(p.getId()));
+			} catch (KundeExistiertNichtException e) {
+				// ist die Exception überhaupt noch notwendig?
+				System.err.println("Der Kunde existiert nicht!");
+			}
+			System.out.println("Ihr Account wurde gelöscht und der Client wird nun geschlossen!");
+//			shop.schreibeArtikel();
+//			shop.schreibeMitarbeiter();
+//			shop.schreibeKunden();
+//			shop.schreibeEreignisse();
+//			System.exit(0);
+			} else if (eingabe.equals("n"))
+				System.out.println("Ihr Account wurde nicht gelöscht.");
+//			} while (!eingabe.equals("n"));
+		} else if (line.equals("a")) {
+			Collection<Artikel> liste = shop.gibAlleArtikelSortiertNachArtikelnummer();
+			gibArtikellisteAus(liste);
+		}
+		else if (line.equals("b")) {
+			Collection<Artikel> liste = shop.gibAlleArtikelSortiertNachBezeichnung();
+			gibArtikellisteAus(liste);
+		}
 
 		// Artikel zum Warenkorb hinzufuegen
 		
 		else if (line.equals("wh")) {
 			try {
-				System.out.print("Kunden ID > ");
-				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				Kunde k = shop.sucheKunde(p.getId());
 				System.out.print("Artikelnummer > ");
 				Artikel a = shop.gibArtikel(Integer.parseInt(liesEingabe()));
 				System.out.print("StŸckzahl eingeben > ");
@@ -337,8 +414,7 @@ public class ShopClientCUI {
 		
 		else if (line.equals("we")) {
 			try {
-				System.out.print("Kunden ID > ");
-				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				Kunde k = shop.sucheKunde(p.getId());
 				System.out.print("Artikelnummer > ");
 				Artikel a = shop.gibArtikel(Integer.parseInt(liesEingabe()));
 				boolean ok = false;
@@ -363,8 +439,7 @@ public class ShopClientCUI {
 		
 		else if (line.equals("wa")) {
 			try {
-				System.out.print("Kunden ID > ");
-				Kunde k = shop.sucheKunde( Integer.parseInt(liesEingabe()));
+				Kunde k = shop.sucheKunde(p.getId());
 				Collection<WarenkorbArtikel> liste = k.getWarenkorbVerwaltung().getWarenkorb();
 				gibWarenkorblisteAus(liste);
 			} catch (KundeExistiertNichtException e) {
@@ -378,8 +453,7 @@ public class ShopClientCUI {
 		
 		else if (line.equals("wl")) {
 			try {
-				System.out.print("Kunden ID > ");
-				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				Kunde k = shop.sucheKunde(p.getId());
 				boolean ok = false;
 				shop.leeren(k);
 				ok = true;
@@ -395,13 +469,9 @@ public class ShopClientCUI {
 				System.err.println("Sie haben eine ungŸltige Zahl eingegeben!");
 			}
 		}
-		
-		// Artikel im Warenkorb kaufen und Rechnungsobjekt erstellen
-		
 		else if (line.equals("wk")) {
 			try {
-				System.out.print("Kunden ID > ");
-				Kunde k = shop.sucheKunde(Integer.parseInt(liesEingabe()));
+				Kunde k = shop.sucheKunde(p.getId());
 				System.out.println(shop.kaufen(k).toString());
 			} catch (KundeExistiertNichtException e) {
 				System.err.println("Kunde existiert nicht!");
@@ -410,12 +480,6 @@ public class ShopClientCUI {
 			} catch(NumberFormatException e) { 
 				System.err.println("Sie haben eine ungŸltige Zahl eingegeben!");
 			}
-		}
-		else if (line.equals("q")) {
-			System.out.println("Vielen Dank fŸr ihren Besuch und beehren Sie uns bald wieder!");
-		}
-		else {
-			System.out.println("Dieser Befehl existiert nicht!");
 		}
 	}
 	
@@ -470,25 +534,35 @@ public class ShopClientCUI {
 	public void run() throws IOException {
 		String input = "";
 		do {
-		do 
-		logIn();
-		while (p == null);
-		
-		if (p.getPersonTyp().equals(PersonTyp.Mitarbeiter)) {
-			mitarbeiterMenue();
+			anmeldungMenue();
+			input = liesEingabe();
+			verarbeiteAnmeldungEingabe(input);
+			if (input.equals("q"))
+				System.exit(0);
+		} while (!input.equals("a"));
+		do {
+			logIn();
+		} while (p == null);
+		do {
+			if (p.getPersonTyp().equals(PersonTyp.Mitarbeiter)) {
+				mitarbeiterMenue();
 		} else
 			kundenMenue();
 			try {
 				input = liesEingabe();
-				verarbeiteEingabe(input);
+				if (p.getPersonTyp().equals(PersonTyp.Mitarbeiter)) {
+					verarbeiteMitarbeiterEingabe(input);
+				} else {
+					verarbeiteKundenEingabe(input);
+				 }
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} while (!input.equals("q"));
-		shop.schreibeArtikel();
-		shop.schreibeMitarbeiter();
-		shop.schreibeKunden();
-		shop.schreibeEreignisse();
+		} while (!input.equals("q") || !input.equals("y"));
+			shop.schreibeArtikel();
+			shop.schreibeMitarbeiter();
+			shop.schreibeKunden();
+			shop.schreibeEreignisse();
 	}
 	
 	public static void main(String[] args) {
