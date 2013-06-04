@@ -59,10 +59,13 @@ public class ObjectDataPersistenceManager implements DataPersistenceManager {
 	 * @return Artikel-Objekt, wenn einlesen erfolgreich, false null
 	 * @throws ClassNotFoundException 
 	 */
-	public Artikel ladeArtikel() throws IOException, ClassNotFoundException {
+	public Artikel ladeArtikel() throws IOException{
 		try {
 			return (Artikel) ois.readObject();
 		} catch (EOFException e) {
+			return null;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

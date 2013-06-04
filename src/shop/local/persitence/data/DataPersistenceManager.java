@@ -37,7 +37,7 @@ public interface DataPersistenceManager {
 	 * @throws IOException
 	 * @throws ClassNotFoundException 
 	 */
-	public Artikel ladeArtikel() throws IOException, ClassNotFoundException;
+	public Artikel ladeArtikel() throws IOException;
 
 	/**
 	 * Methode zum Schreiben der Buchdaten in eine externe Datenquelle.
