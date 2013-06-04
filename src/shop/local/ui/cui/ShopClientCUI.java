@@ -37,13 +37,13 @@ public class ShopClientCUI {
 	private BufferedReader in;
 	private Person p;
 	
-	public ShopClientCUI() throws IOException, ArtikelExistiertBereitsException, ClassNotFoundException {
+	public ShopClientCUI() throws IOException {
 		shop = new ShopVerwaltung();
 		in = new BufferedReader(new InputStreamReader(System.in));
 	}
 	
 	private void anmeldungMenue() {
-		System.out.print("Befehle: \n  Anmelden >                         'a'");
+		System.out.print("Befehle: \n  Anmelden >                          'a'");
 		System.out.print("         \n  Registrieren >                      'r'");
 		System.out.print("       \n  Username oder Passwort vergessen? > 'v'");
 		System.out.println("         \n  Beenden >                           'q'");		
@@ -59,7 +59,6 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Nr:       'f'");
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
-		System.out.print("         \n  Artikel lšschen nach Bez.:   'l'");
 		System.out.print("         \n                                   ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
@@ -230,27 +229,30 @@ public class ShopClientCUI {
 				int nummer = Integer.parseInt(liesEingabe());
 				boolean ok = false;
 				shop.entferneArtikel(m, nummer);
-				ok = true;
-				if (ok)
-					System.out.println("Lšschen ok");
-				else
-					System.out.println("Fehler beim Lšschen");
-			} catch (ArtikelExistiertNichtException e) {
-				System.err.println("Artikel existiert nicht!");
-			} catch (NumberFormatException e) {
-				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
-			} catch (MitarbeiterExistiertNichtException e) {
-				System.err.println(e.getMessage());
-			}
-		}
-		else if (line.equals("l")) {
-			try {
-//				System.out.print("Mitarbeiter ID > ");
-				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
-				System.out.print("Artikelbezeichnung > ");
-				String bezeichnung = liesEingabe();
-				boolean ok = false;
-				shop.entferneArtikel(m, bezeichnung);
+//<<<<<<< HEAD
+//				ok = true;
+//				if (ok)
+//					System.out.println("Lšschen ok");
+//				else
+//					System.out.println("Fehler beim Lšschen");
+//			} catch (ArtikelExistiertNichtException e) {
+//				System.err.println("Artikel existiert nicht!");
+//			} catch (NumberFormatException e) {
+//				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
+//			} catch (MitarbeiterExistiertNichtException e) {
+//				System.err.println(e.getMessage());
+//			}
+//		}
+//		else if (line.equals("l")) {
+//			try {
+////				System.out.print("Mitarbeiter ID > ");
+//				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
+//				System.out.print("Artikelbezeichnung > ");
+//				String bezeichnung = liesEingabe();
+//				boolean ok = false;
+//				shop.entferneArtikel(m, bezeichnung);
+//=======
+//>>>>>>> branch 'master' of https://github.com/ChristofTorres/eShop.git
 				ok = true;
 				if (ok)
 					System.out.println("Lšschen ok");
@@ -362,7 +364,11 @@ public class ShopClientCUI {
 				System.err.println("Der Kunde existiert nicht!");
 			}
 			System.out.println("Ihr Account wurde gelöscht und der Client wird nun geschlossen!");
-			System.exit(0);
+//			shop.schreibeArtikel();
+//			shop.schreibeMitarbeiter();
+//			shop.schreibeKunden();
+//			shop.schreibeEreignisse();
+//			System.exit(0);
 			} else if (eingabe.equals("n"))
 				System.out.println("Ihr Account wurde nicht gelöscht.");
 //			} while (!eingabe.equals("n"));
@@ -552,7 +558,7 @@ public class ShopClientCUI {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} while (!input.equals("q"));
+		} while (!input.equals("q") || !input.equals("y"));
 			shop.schreibeArtikel();
 			shop.schreibeMitarbeiter();
 			shop.schreibeKunden();
@@ -564,13 +570,9 @@ public class ShopClientCUI {
 		try {
 			cui = new ShopClientCUI();
 			cui.run();
-		} catch (IOException IOe) {
-			IOe.printStackTrace();
-		} catch (ArtikelExistiertBereitsException AEBe) {
-			AEBe.printStackTrace();
-		} catch (ClassNotFoundException CNFe) {
-			CNFe.printStackTrace();
-		}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 	}
 	
 }
