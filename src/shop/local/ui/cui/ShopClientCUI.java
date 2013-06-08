@@ -60,6 +60,8 @@ public class ShopClientCUI {
 		System.out.print("         \n  Artikel suche nach Bez.:     'g'");
 		System.out.print("         \n  Artikel lšschen nach Nr:     'k'");
 		System.out.print("         \n                                   ");
+		System.out.print("         \n  Bestandshistorie ausgeben    'bh'");
+		System.out.print("         \n                                   ");
 		System.out.print("         \n  Mitarbeiter einfuegen:       'me'");
 		System.out.print("         \n  Mitarbeiter ausgeben:        'ma'");
 		System.out.print("         \n  Mitarbeiter suche nach ID:   'mf'");
@@ -229,30 +231,6 @@ public class ShopClientCUI {
 				int nummer = Integer.parseInt(liesEingabe());
 				boolean ok = false;
 				shop.entferneArtikel(m, nummer);
-//<<<<<<< HEAD
-//				ok = true;
-//				if (ok)
-//					System.out.println("Lšschen ok");
-//				else
-//					System.out.println("Fehler beim Lšschen");
-//			} catch (ArtikelExistiertNichtException e) {
-//				System.err.println("Artikel existiert nicht!");
-//			} catch (NumberFormatException e) {
-//				System.err.println("Die Mitarbeiter ID erwartet eine Zahl!");
-//			} catch (MitarbeiterExistiertNichtException e) {
-//				System.err.println(e.getMessage());
-//			}
-//		}
-//		else if (line.equals("l")) {
-//			try {
-////				System.out.print("Mitarbeiter ID > ");
-//				Mitarbeiter m = shop.sucheMitarbeiter(p.getId());
-//				System.out.print("Artikelbezeichnung > ");
-//				String bezeichnung = liesEingabe();
-//				boolean ok = false;
-//				shop.entferneArtikel(m, bezeichnung);
-//=======
-//>>>>>>> branch 'master' of https://github.com/ChristofTorres/eShop.git
 				ok = true;
 				if (ok)
 					System.out.println("Lšschen ok");
