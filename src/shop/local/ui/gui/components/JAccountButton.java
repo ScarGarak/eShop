@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -20,12 +21,11 @@ public class JAccountButton extends JButton {
 		super();
 		this.name = name;
 		try {                
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			InputStream input = classLoader.getResourceAsStream("shop/local/ui/gui/images/account.png");
+			InputStream input = new FileInputStream("images/account.png");
 			image = ImageIO.read(input);
-	    } catch (IOException ex) {
-	    	   
-	    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setMinimumSize(new Dimension(100, 100));
 		setPreferredSize(new Dimension(100, 100));
 		setMaximumSize(new Dimension(100, 100));

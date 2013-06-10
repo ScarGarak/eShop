@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,16 +23,24 @@ public class JWarenkorbButton extends JButton {
 		super();
 		this.artikelAnzahl = artikelAnzahl;
 		try {                
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			InputStream input = classLoader.getResourceAsStream("shop/local/ui/gui/images/warenkorb.png");
+			InputStream input = new FileInputStream("images/warenkorb.png");
 			image = ImageIO.read(input);
-	    } catch (IOException ex) {
-	    	   
-	    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setMinimumSize(new Dimension(70, 50));
 		setPreferredSize(new Dimension(70, 50));
 		setMaximumSize(new Dimension(70, 50));
 		setOpaque(false);
+	}
+	
+	public void artikelAnzahlErhoehen() {
+		artikelAnzahl++;
+		repaint();
+	}
+	
+	public int getArtikelAnzahl() {
+		return artikelAnzahl;
 	}
 	
 	@Override
@@ -47,7 +56,7 @@ public class JWarenkorbButton extends JButton {
 		// Warenkorb zeichnen
 		g.drawImage(image, width / 2 - (image.getWidth() + textWidth) / 2, height / 2 - image.getHeight() / 2, null);
 		// Artikel Anzahl ausgeben
-		g.setColor(Color.orange);
+		g.setColor(Color.ORANGE);
 		g.setFont(myFont);
 		g.drawString(String.valueOf(artikelAnzahl), (width / 2 - (image.getWidth() + textWidth) / 2) + image.getWidth(), height / 2 + textHeight / 2);	
 	}
