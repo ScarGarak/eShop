@@ -230,6 +230,7 @@ public class ShopClientCUI {
 				System.out.print("Artikelnummer > ");
 				int nummer = Integer.parseInt(liesEingabe());
 				boolean ok = false;
+
 				shop.entferneArtikel(m, nummer);
 				ok = true;
 				if (ok)
