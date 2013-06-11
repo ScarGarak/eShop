@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 
 import shop.local.valueobjects.WarenkorbArtikel;
 
 @SuppressWarnings("serial")
-public class WarenkorbArtikelTableModel extends DefaultTableModel {
+public class WarenkorbArtikelTableModel extends AbstractTableModel {
 
 	private Vector<String> columnNames;
-	private Vector<Vector<String>> data;
+	private Vector<WarenkorbArtikel> data;
 	
 	public WarenkorbArtikelTableModel(List<WarenkorbArtikel> warenkorbArtikel) {
 		super();
@@ -23,22 +23,46 @@ public class WarenkorbArtikelTableModel extends DefaultTableModel {
 		columnNames.add("Bezeichner");
 		columnNames.add("Preis");
 		
-		data = new Vector<Vector<String>>();
 		updateDataVector(warenkorbArtikel);
 	}
 	
-	public void updateDataVector(List<WarenkorbArtikel> warenkorbArtikel) {
-		data.clear();
-		
-		for (WarenkorbArtikel wa: warenkorbArtikel) {
-			Vector<String> artikelVector = new Vector<String>();
-			artikelVector.add(" " + wa.getStueckzahl());
-			artikelVector.add(" " + wa.getArtikel().getBezeichnung());
-			artikelVector.add(" " + String.format("%.2f ", wa.getArtikel().getPreis()) + Currency.getInstance(Locale.GERMANY));
-			data.add(artikelVector);
+	@Override
+	public int getColumnCount() {
+		return columnNames.size();
+	}
+
+	@Override
+	public int getRowCount() {
+		return data.size();
+	}
+	
+	@Override
+	public String getColumnName(int column) {
+        return columnNames.get(column);
+    }
+	
+	@Override
+    public boolean isCellEditable(int row, int column) {
+       return false;
+    }
+
+	@Override
+	public Object getValueAt(int row, int col) {
+		WarenkorbArtikel wa = data.get(row);
+		switch(col) {
+			case 0: return (" " + wa.getStueckzahl());
+			case 1: return (" " + wa.getArtikel().getBezeichnung());
+			case 2: return (" " + String.format("%.2f ", wa.getArtikel().getPreis()) + Currency.getInstance(Locale.GERMANY));
+			default: return (" ");
 		}
-		
-		setDataVector(data, columnNames);
+	}
+	
+	public void updateDataVector(List<WarenkorbArtikel> warenkorbArtikel) {
+		data = (Vector<WarenkorbArtikel>) warenkorbArtikel;
+	}
+	
+	public WarenkorbArtikel getRowValue(int row) {
+		return data.get(row);
 	}
 	
 }
