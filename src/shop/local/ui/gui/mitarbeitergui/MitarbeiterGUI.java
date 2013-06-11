@@ -164,6 +164,7 @@ public class MitarbeiterGUI extends JFrame{
 		artikelTable.setDefaultRenderer(Object.class, artikelTableCellRenderer);
 		artikelTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		artikelTable.getTableHeader().setReorderingAllowed(false);
+		artikelTable.setAutoCreateRowSorter(true);
 		
 		artikelTableScrollPane = new JScrollPane(artikelTable);
 		artikelTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
@@ -175,7 +176,30 @@ public class MitarbeiterGUI extends JFrame{
 		artikelButtonsPanel.setLayout(new BoxLayout(artikelButtonsPanel, BoxLayout.Y_AXIS));
 		
 		artikelHinzufuegen = new JButton("    Hinzufügen    ");
+		artikelHinzufuegen.addActionListener(new ActionListener() {
+			////////// Artikel hinzufuegen //////////
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Die Funktion 'Artikel Hinzufuegen' wird demnächst implementiert!\n");
+			}
+		});
 		artikelEntfernen =   new JButton("     Entfernen      ");
+		artikelEntfernen.addActionListener(new ActionListener() {
+			////////// Artikel entfernen //////////
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = artikelTable.getSelectedRow();
+				
+				if(row != -1){
+					row = artikelTable.convertRowIndexToModel(row);
+					Artikel a = artikelTableModel.getArtikel(row);
+					System.out.println("Das Artikel das Sie entfernen möchten ist:");
+					System.out.println(a.toString()+"\n");
+				}else{
+					System.err.println("Keine Zeile ausgewählt!");
+				}
+			}
+		});
 		artikelBearbeiten =  new JButton("Bestand erhöhen");
 		artikelBearbeiten.addActionListener(new ActionListener() {
 			////////// Bestand erhöhen //////////
@@ -184,8 +208,10 @@ public class MitarbeiterGUI extends JFrame{
 				int row = artikelTable.getSelectedRow();
 				
 				if(row != -1){
+					row = artikelTable.convertRowIndexToModel(row);
 					Artikel a = artikelTableModel.getArtikel(row);
-					System.out.println(a.toString());
+					System.out.println("Das Artikel dessen Bestand Sie erhöhen möchten ist:");
+					System.out.println(a.toString()+"\n");
 				}else{
 					System.err.println("Keine Zeile ausgewählt!");
 				}
@@ -211,10 +237,11 @@ public class MitarbeiterGUI extends JFrame{
 		
 		mitarbeiterTable = new JTable(mitarbeiterTableModel);
 		mitarbeiterTable.setShowGrid(true);
-		mitarbeiterTable.setGridColor(Color.BLACK);
+		mitarbeiterTable.setGridColor(Color.LIGHT_GRAY);
 		
 		mitarbeiterTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mitarbeiterTable.getTableHeader().setReorderingAllowed(false);
+		mitarbeiterTable.setAutoCreateRowSorter(true);
 		
 		mitarbeiterTableScrollPane = new JScrollPane(mitarbeiterTable);
 		mitarbeiterTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
@@ -225,7 +252,30 @@ public class MitarbeiterGUI extends JFrame{
 		mitarbeiterButtonsPanel.setLayout(new BoxLayout(mitarbeiterButtonsPanel, BoxLayout.Y_AXIS));
 		
 		mitarbeiterHinzufuegen = new JButton("Hinzufügen ");
+		mitarbeiterHinzufuegen.addActionListener(new ActionListener() {
+			////////// Mitarbeiter hinzufuegen //////////
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Die Funktion 'Mitarbeiter Hinzufuegen' wird demnächst implementiert!\n");
+			}
+		});
 		mitarbeiterEntfernen =   new JButton("  Entfernen  ");
+		mitarbeiterEntfernen.addActionListener(new ActionListener() {
+			////////// Mitarbeiter entfernen //////////
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = mitarbeiterTable.getSelectedRow();
+				
+				if(row != -1){
+					row = mitarbeiterTable.convertRowIndexToModel(row);
+					Mitarbeiter m = mitarbeiterTableModel.getMitarbeiter(row);
+					System.out.println("Der Mitarbeiter den Sie entfernen möchten ist:");
+					System.out.println(m.toString()+" ");
+				}else{
+					System.err.println("Keine Zeile ausgewählt!");
+				}
+			}
+		});
 		
 		mitarbeiterButtonsPanel.add(mitarbeiterHinzufuegen);
 		mitarbeiterButtonsPanel.add(mitarbeiterEntfernen);
@@ -243,10 +293,11 @@ public class MitarbeiterGUI extends JFrame{
 		
 		kundenTable = new JTable(kundenTableModel);
 		kundenTable.setShowGrid(true);
-		kundenTable.setGridColor(Color.BLACK);
+		kundenTable.setGridColor(Color.LIGHT_GRAY);
 		
 		kundenTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		kundenTable.getTableHeader().setReorderingAllowed(false);
+		kundenTable.setAutoCreateRowSorter(true);
 		
 		kundenTableScrollPane = new JScrollPane(kundenTable);
 		kundenTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
@@ -257,6 +308,22 @@ public class MitarbeiterGUI extends JFrame{
 		kundenButtonsPanel.setLayout(new BoxLayout(kundenButtonsPanel, BoxLayout.Y_AXIS));
 		
 		kundenEntfernen =   new JButton("Entfernen");
+		kundenEntfernen.addActionListener(new ActionListener() {
+			////////// Kunde entfernen //////////
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = kundenTable.getSelectedRow();
+				
+				if(row != -1){
+					row = kundenTable.convertRowIndexToModel(row);
+					Kunde k = kundenTableModel.getKunde(row);
+					System.out.println("Den Kunde den Sie entfernen möchten ist:");
+					System.out.println(k.toString());
+				}else{
+					System.err.println("Keine Zeile ausgewählt!");
+				}
+			}
+		});
 		
 		kundenButtonsPanel.add(kundenEntfernen);
 		kundenButtonsPanel.setAlignmentY(TOP_ALIGNMENT);
