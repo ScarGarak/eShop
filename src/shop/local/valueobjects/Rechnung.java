@@ -38,7 +38,7 @@ public class Rechnung {
 	}
 	
 	/**
-	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artiekl.
+	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artikel.
 	 * 
 	 * @return double Den Gesamtpreis aller Warenkorb Artikel.
 	 */
