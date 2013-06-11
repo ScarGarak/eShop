@@ -161,9 +161,14 @@ public class EreignisVerwaltung {
 						eintrag[0] = datum;
 						eintrag[1] = bestandsVeraenderung+"";
 						bestandsHistorie.add(eintrag);
+						
+						// Die fehlenden Tage zwischen Datum und NewDatum hinzufügen
+						fehlendeTageHinzufuegen(bestandsHistorie, datum, newDatum);
 					}else{
 						ersterDurchlauf = false;
+						
 					}
+					
 					// Das neue Datum wird in 'datum' gespeichert
 					datum = newDatum;
 
@@ -184,7 +189,7 @@ public class EreignisVerwaltung {
 						bestandsVeraenderung += Integer.parseInt(tokens[4]);
 					}
 				}catch (NumberFormatException e){
-					
+					System.err.println();
 				}
 
 				zeile = lpm.ladeEinAuslagerung();
@@ -193,14 +198,18 @@ public class EreignisVerwaltung {
 		
 		
 		int bestand = artikel.getBestand();
+		String heute = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		
 		// Wenn das Datum der letzten Zeile das heutige Datum ist, wird es nicht abgespeichert
-		if(!new SimpleDateFormat("yyyy-MM-dd").format(new Date()).equals(datum)){
+		if(!heute.equals(datum)){
 			// Abspeicheren der zwischengelagerten Daten:
 			eintrag[0] = datum;
 			eintrag[1] = bestandsVeraenderung+"";
 			bestandsHistorie.add(eintrag);
-		}else{ 
+			
+			// Fuege noch die Tage bis heute hinzu
+			fehlendeTageHinzufuegen(bestandsHistorie, datum, heute);
+		}else{
 			// Um die Bestandshistorie zurueck rechnen zu können
 			// müssen die Ein- und Auslagerungen von Heute jedoch
 			// beachtet werden
@@ -223,10 +232,72 @@ public class EreignisVerwaltung {
 		
 		lpm.close();
 		
+		// Jetzt wird noch die 'Vorgeschichte' des Artikels hinzugefuegt! Dies ist nötig, um 
+		// 30 Eintraege in der Bestandshistorie zu haben, auch wenn das Artikel noch nicht
+		// solange im Bestand ist, oder es Bestandsveraenderungen gab, die aelter als 30 Tage sind.
+		if(bestandsHistorie.size() < 30)
+			fuegeVorgeschichteHinzu(bestandsHistorie);
+		
 		// Jetzt wird das Feld mit der Bestandsveraenderung, durch
 		// den Bestand, der am Ende des jeweiligen Tages vorliegte,
 		// ersetzt
 		rechneBestand(artikel.getArtikelnummer(), bestand);
+	}
+	
+	private void fuegeVorgeschichteHinzu(Vector<String[]> bestandsHistorie){
+		try {
+			Calendar datum = Calendar.getInstance();
+			datum.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(bestandsHistorie.get(0)[0]));
+			
+			while(bestandsHistorie.size() < 30){
+				datum.add(Calendar.DAY_OF_MONTH, -1);
+				String[] eintrag = new String[2];
+				eintrag[0] = new SimpleDateFormat("yyyy-MM-dd").format(datum.getTime());
+				eintrag[1] = 0+"";
+				bestandsHistorie.add(0, eintrag);
+			}
+		} catch (ParseException e) {
+			System.err.println("Fehler beim parsen des Datums! - in fuegeVorgeschichteHinzu()");
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	private void fehlendeTageHinzufuegen(Vector<String[]> bestandsHistorie, String oldDatum, String newDatum){
+		try {
+			// Gib die Calendar Instanz
+			Calendar altesDatum = Calendar.getInstance();
+			Calendar neuesDatum = Calendar.getInstance();
+			
+			// Setze die Daten
+			altesDatum.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(oldDatum));
+			neuesDatum.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(newDatum));
+			
+			// Da es sich um das angegebene 'oldDatum' um das Datum handelt, was zuletzt zur Bestandshistorie
+			// hinzugefügt wurde, muss es zuerst noch inkrementiert werden, bevor wir in die Schleife gehen
+			altesDatum.add(Calendar.DAY_OF_MONTH, 1);
+			
+			// Wenn newDatum heute ist wird es dekrementiert, da Heute nicht in der Bestandshistorie angezeigt
+			// werden soll.
+			if(new SimpleDateFormat("yyyy-MM-dd").format(new Date()).equals(newDatum)){
+				neuesDatum.add(Calendar.DAY_OF_MONTH, -1);
+			}
+			
+			if(!neuesDatum.before(altesDatum)){
+				while(!altesDatum.equals(neuesDatum)){
+					String tmpDatum = new SimpleDateFormat("yyyy-MM-dd").format(altesDatum.getTime());
+					String eintrag[] = new String[2];
+					eintrag[0] = tmpDatum;
+					eintrag[1] = 0+"";
+					bestandsHistorie.add(eintrag);
+					altesDatum.add(Calendar.DAY_OF_MONTH, 1);
+				}
+			}
+			
+		} catch (ParseException e) {
+			System.err.println("Fehler beim parsen des Datums!");
+			System.err.println("Fehler ausgelöst durch: '"+oldDatum+"' oder '"+newDatum+"'!");
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	/**

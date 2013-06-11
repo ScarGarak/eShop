@@ -34,8 +34,9 @@ public class JWarenkorbButton extends JButton {
 		setOpaque(false);
 	}
 	
-	public void artikelAnzahlErhoehen() {
-		artikelAnzahl++;
+	public void setArtikelAnzahl(int artikelAnzahl) {
+		this.artikelAnzahl = artikelAnzahl;
+		validate();
 		repaint();
 	}
 	
