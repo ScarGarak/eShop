@@ -1,8 +1,6 @@
-package shop.local.ui.gui.table;
+package shop.local.ui.gui.kundengui.table;
 
-import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
@@ -50,10 +48,10 @@ public class WarenkorbArtikelTableModel extends AbstractTableModel {
 	public Object getValueAt(int row, int col) {
 		WarenkorbArtikel wa = data.get(row);
 		switch(col) {
-			case 0: return (" " + wa.getStueckzahl());
-			case 1: return (" " + wa.getArtikel().getBezeichnung());
-			case 2: return (" " + String.format("%.2f ", wa.getArtikel().getPreis()) + Currency.getInstance(Locale.GERMANY));
-			default: return (" ");
+			case 0: return wa.getStueckzahl();
+			case 1: return wa.getArtikel().getBezeichnung();
+			case 2: return wa.getArtikel().getPreis();
+			default: return "";
 		}
 	}
 	

@@ -66,7 +66,7 @@ public class Rechnung {
 		while (iter.hasNext()) {
 			ergebnis += (iter.next().toString() + "\n");
 		}
-		ergebnis += ("Gesamtpreis: " + String.format("%.2f ", getGesamtpreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
+		ergebnis += ("\nGesamtpreis: " + String.format("%.2f ", getGesamtpreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
 		return ergebnis;
 	}
 	

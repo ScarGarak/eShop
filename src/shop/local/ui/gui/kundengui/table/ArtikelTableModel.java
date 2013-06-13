@@ -1,8 +1,6 @@
-package shop.local.ui.gui.table;
+package shop.local.ui.gui.kundengui.table;
 
-import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
@@ -40,20 +38,29 @@ public class ArtikelTableModel extends AbstractTableModel {
 	public String getColumnName(int column) {
         return columnNames.get(column);
     }
-
+	
 	@Override
     public boolean isCellEditable(int row, int column) {
        return false;
     }
 	
 	@Override
+	public Class<?> getColumnClass(int column) {
+		if (column == 2) {
+			return getValueAt(0, column).getClass();
+		} else {
+			return super.getColumnClass(column);
+		}
+	}
+	
+	@Override
 	public Object getValueAt(int row, int col) {
 		Artikel a = data.get(row);
 		switch(col) {
-			case 0: return (" " + a.getBezeichnung());
-			case 1: return (" " + String.format("%.2f ", a.getPreis()) + Currency.getInstance(Locale.GERMANY));
-			case 2: return (" " + a.getBestand());
-			default: return (" ");
+			case 0: return a.getBezeichnung();
+			case 1: return a.getPreis();
+			case 2: return a.getBestand();
+			default: return "";
 		}
 	}
 	
