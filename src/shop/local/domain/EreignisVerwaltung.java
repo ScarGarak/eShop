@@ -391,6 +391,20 @@ public class EreignisVerwaltung {
 		ereignisListe.add(e);
 	}
 	
+	public String liesLogDatei(String dateiname) throws IOException{
+		String log = "";		
+		lpm.openForReading(dateiname);
+		
+		String zeile = lpm.ladeEinAuslagerung();
+		while(!zeile.equals("")){
+			log += zeile+"\n";
+			zeile = lpm.ladeEinAuslagerung();
+		}
+		
+		lpm.close();
+		return log;
+	}
+	
 	/**
 	 * Diese Methode gibt die Ereignisliste zurueck.
 	 * @return Ereignisliste

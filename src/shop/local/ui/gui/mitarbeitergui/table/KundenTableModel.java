@@ -49,6 +49,11 @@ public class KundenTableModel extends AbstractTableModel{
 	    return columnNames[column];
 	}
 	
+	@Override
+	public Class<?> getColumnClass(int c) {
+        return getValueAt(0, c).getClass();
+    }
+	
 	public Kunde getKunde(int row){
 		return kundenListe.get(row);
 	}
