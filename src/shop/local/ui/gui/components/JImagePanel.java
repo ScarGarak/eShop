@@ -57,10 +57,10 @@ public class JImagePanel extends JPanel {
 		// Rand zeichnen
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(borderSize, borderSize, Math.abs(width - borderSize - 1), Math.abs(height - 2 * borderSize - 1));
+		g.setColor(Color.WHITE);
+		g.fillRect(borderSize + 1, borderSize + 1, Math.abs(width - borderSize - 2), Math.abs(height - 2 * borderSize - 2));
 		// Bild zeichnen
 		if (image != null) {
-			g.setColor(Color.WHITE);
-			g.fillRect(borderSize + 1, borderSize + 1, Math.abs(width - borderSize - 2), Math.abs(height - 2 * borderSize - 2));
 			g.drawImage(image, borderSize + 1, borderSize + 1, Math.abs(width - borderSize - 2), image.getHeight(), null);	
 		}
 	}

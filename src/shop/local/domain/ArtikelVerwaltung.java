@@ -123,6 +123,7 @@ public class ArtikelVerwaltung {
 			}
 		}
 		
+		Collections.sort(ergebnis, new SortierungNachArtikelnummer());
 		return ergebnis;
 	}
 	
@@ -137,6 +138,7 @@ public class ArtikelVerwaltung {
 			}
 		}
 		
+		Collections.sort(ergebnis, new SortierungNachBezeichnung());
 		return ergebnis;
 	}
 	

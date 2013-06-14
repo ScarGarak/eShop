@@ -53,7 +53,7 @@ public class Kunde extends Person {
 	}
 	
 	public String toString() {
-		return "Kundennummer: " + getId() + "\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort + "\n";
+		return "Kundennummer: " + getId() + "\n\n" + getName() + "\n" + strasse + "\n" + plz + " " + wohnort + "\n";
 	}
 	
 	@Override
