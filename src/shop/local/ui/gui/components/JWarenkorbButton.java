@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,40 +17,48 @@ import javax.swing.JButton;
 public class JWarenkorbButton extends JButton {
 
 	private BufferedImage image = null;
-	private int artikelAnzahl = 0;
+	private int artikelanzahl = 0;
 	
-	public JWarenkorbButton(int artikelAnzahl) {
+	public JWarenkorbButton(int artikelanzahl) {
 		super();
-		this.artikelAnzahl = artikelAnzahl;
+		this.artikelanzahl = artikelanzahl;
 		try {                
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			InputStream input = classLoader.getResourceAsStream("shop/local/ui/gui/images/warenkorb.png");
+			InputStream input = new FileInputStream("images/warenkorb.png");
 			image = ImageIO.read(input);
-	    } catch (IOException ex) {
-	    	   
-	    }
-		setMinimumSize(new Dimension(70, 50));
-		setPreferredSize(new Dimension(70, 50));
-		setMaximumSize(new Dimension(70, 50));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		setMinimumSize(new Dimension(80, 60));
+		setPreferredSize(new Dimension(80, 60));
+		setMaximumSize(new Dimension(80, 60));
 		setOpaque(false);
+	}
+	
+	public void setArtikelanzahl(int artikelanzahl) {
+		this.artikelanzahl = artikelanzahl;
+		validate();
+		repaint();
+	}
+	
+	public int getArtikelanzahl() {
+		return artikelanzahl;
 	}
 	
 	@Override
 	public void paint(Graphics g) {
-		// Laenge und Breite ermitteln
-		Dimension d = this.getSize();
-		int width = (int) d.getWidth();
-		int height = (int) d.getHeight();
+		int width = (int) this.getSize().getWidth();
+		int height = (int) this.getSize().getHeight();
 		Font myFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
 		FontMetrics fm = g.getFontMetrics();
-		int textWidth = fm.stringWidth(String.valueOf(artikelAnzahl));
+		int textWidth = fm.stringWidth(String.valueOf(artikelanzahl));
 		int textHeight = fm.getHeight();
-		// Warenkorb zeichnen
 		g.drawImage(image, width / 2 - (image.getWidth() + textWidth) / 2, height / 2 - image.getHeight() / 2, null);
-		// Artikel Anzahl ausgeben
-		g.setColor(Color.orange);
+		textWidth = fm.stringWidth("Warenkorb");
+		g.drawString("Warenkorb", (width - textWidth) / 2, height);
+		textWidth = fm.stringWidth(String.valueOf(artikelanzahl));
+		g.setColor(Color.ORANGE);
 		g.setFont(myFont);
-		g.drawString(String.valueOf(artikelAnzahl), (width / 2 - (image.getWidth() + textWidth) / 2) + image.getWidth(), height / 2 + textHeight / 2);	
+		g.drawString(String.valueOf(artikelanzahl), (width / 2 - (image.getWidth() + textWidth) / 2) + image.getWidth(), height / 2 + textHeight / 2);			
 	}
 	
 }
