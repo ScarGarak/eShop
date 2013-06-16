@@ -15,7 +15,7 @@ public class Mitarbeiter extends Person{
 	private static final long serialVersionUID = -3584470750142428422L;
 	
 	// Attribute zur Beschreibung eines Mitarbeiters:
-	private int gehalt;
+	private double gehalt;
 	
 	/**
 	 * Konstruktor
@@ -34,7 +34,7 @@ public class Mitarbeiter extends Person{
 	 * Setter Funktion fŸr das Attribut "gehalt".
 	 * @param gehalt Der Gehalt des Mitarbeiters.
 	 */
-	public void setGehalt(int gehalt){
+	public void setGehalt(double gehalt){
 		this.gehalt = gehalt;
 	}
 	
@@ -42,7 +42,7 @@ public class Mitarbeiter extends Person{
 	 * Getter Funktion fŸr das Attribut "gehalt".
 	 * @return Den Gehalt des Mitarbeiters.
 	 */
-	public int getGehalt(){
+	public double getGehalt(){
 		return this.gehalt;
 	}
 	

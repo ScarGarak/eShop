@@ -66,14 +66,14 @@ public class ShopVerwaltung {
 	
 	// Artikel Methoden
 	
-	public void fuegeArtikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException, IOException {
+	public void fuegeArtikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int bestand) throws ArtikelExistiertBereitsException {
 		Artikel artikel = new Artikel(artikelnummer, bezeichnung, preis, bestand);
 		meineArtikel.einfuegen(artikel);
 		
 		meineEreignisse.hinzufuegen(new Ereignis(new Date(), artikel, bestand, mitarbeiter));
 	}
 	
-	public void fuegeMassengutartikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int packungsgroesse, int bestand) throws ArtikelExistiertBereitsException, IOException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
+	public void fuegeMassengutartikelEin(Mitarbeiter mitarbeiter, int artikelnummer, String bezeichnung, double preis, int packungsgroesse, int bestand) throws ArtikelExistiertBereitsException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
 		Massengutartikel artikel = new Massengutartikel(artikelnummer, bezeichnung, preis, packungsgroesse, bestand);
 		meineArtikel.einfuegen(artikel);
 		
@@ -310,6 +310,10 @@ public class ShopVerwaltung {
 	
 	public String gibBestandsHistorie(Artikel artikel) throws IOException{
 		return meineEreignisse.gibBestandsHistorie(artikel, "EinAuslagerung.log");
+	}
+	
+	public String gibLogDatei() throws IOException{
+		return meineEreignisse.liesLogDatei("EinAuslagerung.log");
 	}
 	
 }

@@ -38,7 +38,7 @@ public class Rechnung {
 	}
 	
 	/**
-	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artiekl.
+	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artikel.
 	 * 
 	 * @return double Den Gesamtpreis aller Warenkorb Artikel.
 	 */
@@ -66,7 +66,7 @@ public class Rechnung {
 		while (iter.hasNext()) {
 			ergebnis += (iter.next().toString() + "\n");
 		}
-		ergebnis += ("Gesamtpreis: " + String.format("%.2f ", getGesamtpreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
+		ergebnis += ("\nGesamtpreis: " + String.format("%.2f ", getGesamtpreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
 		return ergebnis;
 	}
 	

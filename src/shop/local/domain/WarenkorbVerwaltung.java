@@ -151,4 +151,19 @@ public class WarenkorbVerwaltung {
 			throw new ArtikelExistiertNichtException(artikel, " - in 'getWarenkorbArtikel()'");
 	}
 	
+	/**
+	 * Methode zum berechnen des Gesamtpreises aller Warenkorb Artikel.
+	 * 
+	 * @return double Den Gesamtpreis aller Warenkorb Artikel.
+	 */
+	public double getGesamtpreis() {
+		Iterator<WarenkorbArtikel> iter = warenkorb.iterator();
+		double summe = 0.0;
+		while (iter.hasNext()) {
+			WarenkorbArtikel warenkorbArtikel = iter.next();
+			summe += warenkorbArtikel.getStueckzahl() * warenkorbArtikel.getArtikel().getPreis();
+		}
+		return summe;
+	}
+	
 }
