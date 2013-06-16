@@ -47,6 +47,11 @@ public class MitarbeiterTableModel extends AbstractTableModel{
 	    return columnNames[column];
 	}
 	
+	@Override
+	public Class<?> getColumnClass(int c) {
+        return getValueAt(0, c).getClass();
+    }
+	
 	public Mitarbeiter getMitarbeiter(int row){
 		return mitarbeiterListe.get(row);
 	}

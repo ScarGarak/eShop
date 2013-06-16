@@ -25,7 +25,6 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer{
 		}else{
 			comp.setBackground(Color.BLUE);
 		}
-
 		return this; 
 	} 
 }
