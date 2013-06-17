@@ -37,7 +37,6 @@ import shop.local.domain.ShopVerwaltung;
 import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
-import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.ui.gui.components.JAccountButton;
 import shop.local.ui.gui.components.JImagePanel;
@@ -58,6 +57,7 @@ public class KundeGUI extends JFrame {
 	private ShopVerwaltung shop;
 	private Kunde kunde;
 	
+	// Header
 	private JPanel headerPanel;
 	private JButton accountButton;
 	private JButton logoutButton;
@@ -69,6 +69,8 @@ public class KundeGUI extends JFrame {
 	private JPanel kaufenLeerenPanel;
 	private JButton kaufenButton;
 	private JButton leerenButton;
+	
+	// Search Table & Warenkorb Table
 	private JPanel tablePanel;
 	private JTable searchTable;
 	private JScrollPane searchScrollPane;
@@ -78,7 +80,10 @@ public class KundeGUI extends JFrame {
 	private JLabel gesamtpreis;
 	private JPanel tableFooterPanel;
 	private JTextArea rechnung;
-	private JPanel rechnungPanel; 
+	private JPanel rechnungPanel;
+	private JButton pdfButton;
+	
+	// Details
 	private JPanel detailsPanel;
 	private JPanel bildPanel;
 	private JPanel infoPanel;
@@ -168,7 +173,7 @@ public class KundeGUI extends JFrame {
 		searchTable = new JTable(new ArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung()));
 		searchTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		searchTable.getSelectionModel().addListSelectionListener(new SelectionDetailListener());
-		searchTable.setDefaultRenderer(Object.class, new ArtikelTableCellRenderer());
+		searchTable.setDefaultRenderer(Object.class, new ArtikelTableCellRenderer(searchTable));
 		searchTable.setAutoCreateRowSorter(true);
 		searchTable.setShowGrid(true);
 		searchTable.setGridColor(Color.LIGHT_GRAY);
@@ -184,7 +189,7 @@ public class KundeGUI extends JFrame {
 		warenkorbTable = new JTable(new WarenkorbArtikelTableModel(kunde.getWarenkorbVerwaltung().getWarenkorb()));
 		warenkorbTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		warenkorbTable.getSelectionModel().addListSelectionListener(new SelectionDetailListener());
-		warenkorbTable.setDefaultRenderer(Object.class, new WarenkorbArtikelTableCellRenderer());
+		warenkorbTable.setDefaultRenderer(Object.class, new WarenkorbArtikelTableCellRenderer(warenkorbTable));
 		warenkorbTable.setAutoCreateRowSorter(true);
 		warenkorbTable.setShowGrid(true);
 		warenkorbTable.setGridColor(Color.LIGHT_GRAY);
@@ -202,14 +207,22 @@ public class KundeGUI extends JFrame {
 		tableFooterPanel.add(artikelanzahl, BorderLayout.WEST);
 		tableFooterPanel.add(gesamtpreis, BorderLayout.EAST);
 		rechnung = new JTextArea();
-		rechnung.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), BorderFactory.createTitledBorder("Rechnung")));
 		rechnung.setEditable(false);
 		rechnung.setOpaque(false);
+		JScrollPane rechnungPane = new JScrollPane(rechnung);
+		rechnungPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), BorderFactory.createTitledBorder("Rechnung")));
+		rechnungPane.setOpaque(false);
+		pdfButton = new JButton("Rechnung als PDF");
+		pdfButton.addActionListener(new PDFListener()); 
+		JPanel pdfPanel = new JPanel();
+		pdfPanel.setLayout(new BorderLayout());
+		pdfPanel.add(pdfButton, BorderLayout.EAST);
 		rechnungPanel = new JPanel();
 		rechnungPanel.setLayout(new BorderLayout());
 		rechnungPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		rechnungPanel.add(new JLabel("Vielen Dank für ihren Einkauf und besuchen Sie uns bald wieder!"), BorderLayout.NORTH);
-		rechnungPanel.add(rechnung, BorderLayout.CENTER);
+		rechnungPanel.add(rechnungPane, BorderLayout.CENTER);
+		rechnungPanel.add(pdfPanel, BorderLayout.SOUTH);
 	}
 	
 	private void createDetails() {
@@ -265,8 +278,9 @@ public class KundeGUI extends JFrame {
 	}
 	
 	private void updateSearchTable(List<Artikel> artikel) {
-		ArtikelTableModel atm = (ArtikelTableModel) searchTable.getModel();
-		atm.updateDataVector(artikel);
+		ArtikelTableModel atm = new ArtikelTableModel(artikel);
+		searchTable.setModel(atm);
+		atm.fireTableDataChanged();
 	}
 	
 	private void updateArtikelMenge(Artikel a) {
@@ -377,11 +391,14 @@ public class KundeGUI extends JFrame {
 					tablePanel.validate();
 					tablePanel.repaint();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showConfirmDialog(null,
+							e.getMessage(), "Kaufen",
+			                JOptionPane.PLAIN_MESSAGE);
 				} catch (WarenkorbIstLeerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showConfirmDialog(null,
+							"Ihr Warenkorb ist leer.\n" +
+							"Bitte fügen Sie zuerst einige Artikel in ihren Warenkorb.", "Kaufen",
+			                JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		}
@@ -391,16 +408,28 @@ public class KundeGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(leerenButton)) {
-				try {
-					shop.leeren(kunde);
-					updateArtikelanzahl();
-					updateGesamtpreis();
-					warenkorbTable.clearSelection();
-					tablePanel.validate();
-					tablePanel.repaint();
-				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (kunde.getWarenkorbVerwaltung().getWarenkorb().isEmpty()) {
+					JOptionPane.showConfirmDialog(null,
+						"Ihr Warenkorb ist leer.\n" +
+						"Bitte fügen Sie zuerst einige Artikel in ihren Warenkorb.", "Warenkorb leeren",
+		                JOptionPane.PLAIN_MESSAGE);
+				} else
+				if (JOptionPane.showConfirmDialog(null,
+						"Sind Sie sich sicher dass Sie den Warenkorb leeren wollen?\n" +
+						"Sie werden alle Artikel die sich in ihrem Warenkorb befinden verlieren.", "Warenkorb leeren",
+		                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {		
+					try {
+						shop.leeren(kunde);
+						updateArtikelanzahl();
+						updateGesamtpreis();
+						warenkorbTable.clearSelection();
+						tablePanel.validate();
+						tablePanel.repaint();
+					} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
+						JOptionPane.showConfirmDialog(null,
+								"Der Bestand eines Artikels ist keine Vielfache der Packungsgröße.", "Warenkorb leeren",
+				                JOptionPane.PLAIN_MESSAGE);
+					}
 				}
 			}
 		}
@@ -476,7 +505,7 @@ public class KundeGUI extends JFrame {
 				} catch (ArtikelExistiertNichtException e) {
 					errorMessage.setText("Dieser Artikel existiert nicht.");
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					errorMessage.setText("Der gewählte Menge ist keine Vielfache der Packungsgröße dieses Artikels.");
+					errorMessage.setText("Die gewählte Menge ist keine Vielfache der Packungsgröße dieses Artikels.");
 				}
 			}
 		}
@@ -496,11 +525,9 @@ public class KundeGUI extends JFrame {
 					tablePanel.validate();
 					tablePanel.repaint();
 				} catch (ArtikelExistiertNichtException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					errorMessage.setText("Dieser Artikel existiert nicht.");
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					errorMessage.setText("Die gewählte Stückzahl ist keine Vielfache der Packungsgröße dieses Artikels.");
 				}
 			}
 		}
@@ -525,15 +552,44 @@ public class KundeGUI extends JFrame {
 						detailsPanel.repaint();
 					}
 				} catch (ArtikelBestandIstZuKleinException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					errorMessage.setText("Der Bestand dieses Artikels ist zu klein oder leer.");
 				} catch (ArtikelExistiertNichtException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					errorMessage.setText("Dieser Artikel existiert nicht.");
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					errorMessage.setText("Die gewählte Stückzahl ist keine Vielfache der Packungsgröße dieses Artikels.");
 				}
+			}
+		}
+	}
+	
+	class PDFListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().equals(pdfButton)) {
+				/*// Create a document and add a page to it
+				PDDocument document = new PDDocument();
+				PDPage page = new PDPage();
+				document.addPage( page );
+
+				// Create a new font object selecting one of the PDF base fonts
+				PDFont font = PDType1Font.HELVETICA_BOLD;
+
+				// Start a new content stream which will "hold" the to be created content
+				PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+				// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
+				contentStream.beginText();
+				contentStream.setFont( font, 12 );
+				contentStream.moveTextPositionByAmount( 100, 700 );
+				contentStream.drawString( "Hello World" );
+				contentStream.endText();
+
+				// Make sure that the content stream is closed:
+				contentStream.close();
+
+				// Save the results and ensure that the document is properly closed:
+				document.save( "Hello World.pdf");
+				document.close();*/
 			}
 		}
 	}
@@ -554,8 +610,9 @@ public class KundeGUI extends JFrame {
 					try {
 						shop.leeren(kunde);
 					} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showConfirmDialog(null,
+								"Der Bestand eines Artikels ist keine Vielfache der Packungsgröße.", "Anwendung beenden",
+				                JOptionPane.PLAIN_MESSAGE);
 					}
 					w.setVisible(false);
 					w.dispose();
@@ -564,19 +621,6 @@ public class KundeGUI extends JFrame {
 					w.setVisible(true);
 				}
 			}
-		}
-	}
-	
-	public static void main(String[] args) {
-		try {
-			ShopVerwaltung shop = new ShopVerwaltung();
-			new KundeGUI(shop.sucheKunde(1), shop);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KundeExistiertNichtException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	

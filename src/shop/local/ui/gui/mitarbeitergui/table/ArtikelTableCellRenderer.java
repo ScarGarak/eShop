@@ -23,7 +23,7 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer{
 				comp.setBackground(null);
 			}
 		}else{
-			comp.setBackground(Color.BLUE);
+			comp.setBackground(super.getBackground());
 		}
 		return this; 
 	} 

@@ -4,12 +4,20 @@ import java.awt.Component;
 import java.util.Currency;
 import java.util.Locale;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 @SuppressWarnings("serial")
 public class WarenkorbArtikelTableCellRenderer extends DefaultTableCellRenderer {
 
+DefaultTableCellRenderer renderer;
+	
+	public WarenkorbArtikelTableCellRenderer(JTable table) {
+        renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        renderer.setHorizontalAlignment(JLabel.LEFT);
+    }
+	
 	 @Override
      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		 switch(column) {

@@ -1,3 +1,4 @@
+
 package shop.local.ui.gui.components;
 
 import java.awt.Dimension;

@@ -21,7 +21,7 @@ public class ArtikelTableModel extends AbstractTableModel {
 		columnNames.add("Preis");
 		columnNames.add("Bestand");
 		
-		updateDataVector(artikel);
+		data = (Vector<Artikel>) artikel;
 	}
 	
 	@Override
@@ -47,7 +47,11 @@ public class ArtikelTableModel extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int column) {
 		if (column == 2) {
-			return getValueAt(0, column).getClass();
+			if (getValueAt(0, column) != null) {
+				return getValueAt(0, column).getClass();
+			} else {
+				return Object.class;
+			}
 		} else {
 			return super.getColumnClass(column);
 		}
@@ -55,17 +59,17 @@ public class ArtikelTableModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(int row, int col) {
-		Artikel a = data.get(row);
-		switch(col) {
-			case 0: return a.getBezeichnung();
-			case 1: return a.getPreis();
-			case 2: return a.getBestand();
-			default: return "";
+		if (data != null && data.size() != 0) {
+			Artikel a = data.get(row);
+			switch(col) {
+				case 0: return a.getBezeichnung();
+				case 1: return a.getPreis();
+				case 2: return a.getBestand();
+				default: return null;
+			}
+		} else {
+			return null;
 		}
-	}
-	
-	public void updateDataVector(List<Artikel> artikel) {
-		data = (Vector<Artikel>) artikel;
 	}
 	
 	public Artikel getRowValue(int row) {
