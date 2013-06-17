@@ -21,7 +21,7 @@ public class WarenkorbArtikelTableModel extends AbstractTableModel {
 		columnNames.add("Bezeichner");
 		columnNames.add("Preis");
 		
-		updateDataVector(warenkorbArtikel);
+		data = (Vector<WarenkorbArtikel>) warenkorbArtikel;
 	}
 	
 	@Override
@@ -46,17 +46,17 @@ public class WarenkorbArtikelTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		WarenkorbArtikel wa = data.get(row);
-		switch(col) {
-			case 0: return wa.getStueckzahl();
-			case 1: return wa.getArtikel().getBezeichnung();
-			case 2: return wa.getArtikel().getPreis();
-			default: return "";
+		if (data != null && data.size() != 0) {
+			WarenkorbArtikel wa = data.get(row);
+			switch(col) {
+				case 0: return wa.getStueckzahl();
+				case 1: return wa.getArtikel().getBezeichnung();
+				case 2: return wa.getArtikel().getPreis();
+				default: return null;
+			}
+		} else {
+			return null;
 		}
-	}
-	
-	public void updateDataVector(List<WarenkorbArtikel> warenkorbArtikel) {
-		data = (Vector<WarenkorbArtikel>) warenkorbArtikel;
 	}
 	
 	public WarenkorbArtikel getRowValue(int row) {
