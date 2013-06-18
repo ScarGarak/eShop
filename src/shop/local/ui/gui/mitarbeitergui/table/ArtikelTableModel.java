@@ -1,8 +1,6 @@
 package shop.local.ui.gui.mitarbeitergui.table;
 
-import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -12,7 +10,7 @@ import shop.local.valueobjects.Massengutartikel;
 @SuppressWarnings("serial")
 public class ArtikelTableModel extends AbstractTableModel {
 
-	private String[] columnNames = {"Artikelnummer", "Bezeichnung", "Preis ("+Currency.getInstance(Locale.GERMANY)+")", "Packungsgrš§e", "Bestand"};
+	private String[] columnNames = {"Artikelnummer", "Bezeichnung", "Preis", "Packungsgrš§e", "Bestand"};
 	private List<Artikel> artikelListe;
 	
 	public ArtikelTableModel(List<Artikel> artikelListe) {
