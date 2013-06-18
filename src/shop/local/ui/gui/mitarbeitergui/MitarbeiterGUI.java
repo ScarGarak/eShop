@@ -45,6 +45,7 @@ import shop.local.ui.gui.components.JAccountButton;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableModel;
 import shop.local.ui.gui.mitarbeitergui.table.KundenTableModel;
+import shop.local.ui.gui.mitarbeitergui.table.MitarbeiterTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.MitarbeiterTableModel;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
@@ -224,8 +225,6 @@ public class MitarbeiterGUI extends JFrame{
 		/////////// Artikel Tabelle ///////////
 		artikelTableModel = new ArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
 		
-		artikelTableCellRenderer = new ArtikelTableCellRenderer();
-		
 		artikelTable = new JTable(artikelTableModel);
 		artikelTable.setShowGrid(true);
 		artikelTable.setGridColor(Color.LIGHT_GRAY);
@@ -235,6 +234,7 @@ public class MitarbeiterGUI extends JFrame{
 		artikelTable.getTableHeader().setReorderingAllowed(false);
 		artikelTable.setAutoCreateRowSorter(true);
 		artikelTable.getSelectionModel().addListSelectionListener(new ArtikelSelectionListener());
+		artikelTableCellRenderer = new ArtikelTableCellRenderer(artikelTable);
 		setTableCellAlignment(artikelTableCellRenderer, artikelTable, JLabel.LEFT);
 		
 		JScrollPane artikelTableScrollPane = new JScrollPane(artikelTable);
@@ -859,7 +859,8 @@ public class MitarbeiterGUI extends JFrame{
 		mitarbeiterTable.getTableHeader().setReorderingAllowed(false);
 		mitarbeiterTable.setAutoCreateRowSorter(true);
 		mitarbeiterTable.getSelectionModel().addListSelectionListener(new MitarbeiterSelectionListener());
-		setTableCellAlignment(new DefaultTableCellRenderer(), mitarbeiterTable, JLabel.LEFT);
+		MitarbeiterTableCellRenderer mitarbeiterTableCellRenderer = new MitarbeiterTableCellRenderer(artikelTable);
+		setTableCellAlignment(mitarbeiterTableCellRenderer, mitarbeiterTable, JLabel.LEFT);
 		
 		JScrollPane mitarbeiterTableScrollPane = new JScrollPane(mitarbeiterTable);
 		mitarbeiterTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
