@@ -44,19 +44,22 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	 * 
 	 */
 	
-//	private KundeSucheGUI kSGUI;
 	private ShopVerwaltung shop;
 	private Person p;
 	private int key;
 
+//	login/register objects
 	private JButton logInButton = new JButton("LogIn");
 	private JTextField usernameField = new JTextField();
-//	private JTextField passwordField = new JTextField();
 	private JTextField passwordField = new JPasswordField();
 	private JLabel usernameLabel = new JLabel("Username");
 	private JLabel passwordLabel = new JLabel("Passwort");
-	private JLabel forgetLabel = new JLabel("Login vergessen?"/*, TextAttribute.UNDERLINE*/);
-	private JLabel registerLabel = new JLabel("Registrieren");
+	private JLabel userError = new JLabel("Bitte Usernamen eingeben");
+	private JLabel passwdError = new JLabel("Bitte Passwort eingeben");
+	private JLabel forgetLabel = new JLabel("<html><u>Login vergessen?</u></html>");
+	private JLabel registerLabel = new JLabel("<html><u>Registrieren</u></html>");
+	
+//	layout objects
 	private JPanel borderPanNorth = new JPanel();
 	private JPanel borderPanSouth = new JPanel();
 	private JPanel borderPanEast = new JPanel();
@@ -70,13 +73,33 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	private JPanel labelPanelLeft = new JPanel();
 	private JPanel labelPanelRight = new JPanel();
 	
+//	register/forget objects
+	private JButton registerButton = new JButton();
+	private JLabel nameLabel = new JLabel();
+	private JLabel streetLabel = new JLabel();
+	private JLabel zipcodeLabel = new JLabel();
+	private JLabel townLabel = new JLabel();
+	private JTextField nameField = new JTextField();
+	private JTextField streetField = new JTextField();
+	private JTextField zipcodeField = new JTextField();
+	private JTextField townField = new JTextField();
 	
-	public LogInGUI(/*KundeSucheGUI kSGUI*/) throws IOException {
+//	forget objects
+	private JButton renewButton = new JButton();
+	
+	public LogInGUI() throws IOException {
 		super("eShop - LogIn");
 		shop = new ShopVerwaltung();
-//		forgetLabel.setFont(JTextAttribute.UNDERLINE);
 		initialize();
+//		initialize2();
 	}
+	
+	
+//	private void initialize2() {
+//		setTitle("LogIn");
+//		setResizable(false);
+//		setSize(new Dimension(700, 500));
+//	}
 	
 	private void initialize() {
 		setTitle("LogIn");
@@ -123,6 +146,9 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		forgetLabel.addMouseListener(this);
 		registerLabel.addMouseListener(this);
 		
+//		forgetLabel.setForeground(Color.BLUE);
+//		registerLabel.setForeground(Color.BLUE);
+		
 	}
 	
 	// Methoden zur verarbeitung und prüfung der Nutzer eingaben
@@ -137,7 +163,8 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		if (p != null) {
 			if (p.getPersonTyp().equals(PersonTyp.Mitarbeiter)) {
 				try {
-					dispose();
+//					dispose();
+					this.setVisible(false);
 					new MitarbeiterGUI((Mitarbeiter)p, shop);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -145,7 +172,8 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 				}
 		} else
 				try {
-					dispose();
+//					dispose();
+					this.setVisible(false);
 					new KundeGUI((Kunde)p, shop);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -166,20 +194,22 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 //					tf.setText
 				}
 			} else {
-//				passwordField.setText("Passwort eingeben!");
+//				Error Label einfügen
 				passwordField.setBackground(new Color(250,240,230));
 				passwordField.requestFocus();
 			}
 		} else {
 			if (passwordField.getText().equals("")) {
 				passwordField.setBackground(new Color(250,240,230));
-				usernameField.setText("Usernamen eingeben!");
+//				Error Label einfügen
+//				usernameField.setText("Usernamen eingeben!");
 				usernameField.setBackground(new Color(250,240,230));
 				usernameField.requestFocus();
 			} else {
-			usernameField.setText("Usernamen eingeben!");
-			usernameField.setBackground(new Color(250,240,230));
-			usernameField.requestFocus();
+//				Error Label einfügen
+//				usernameField.setText("Usernamen eingeben!");
+				usernameField.setBackground(new Color(250,240,230));
+				usernameField.requestFocus();
 			}
 		}
 	}
@@ -205,15 +235,22 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	@Override
 	public void mousePressed(MouseEvent mp) {
 		// TODO Auto-generated method stub
-//		Component pos = mp.getComponent();
-//		System.out.println("Component pos: " + pos);
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent mr) {
 		// TODO Auto-generated method stub
-		Component pos = mr.getComponent();
-		System.out.println("Component pos: " + pos);
+		Component comp = mr.getComponent();
+		System.out.println("Component pos: " + comp);
+		if (comp.equals(forgetLabel)) {
+//			einblenden anderer Komponenten
+			forgetLabel.setForeground(Color.BLUE);
+		}
+		if (comp.equals(registerLabel)) {
+//			einblenden anderer Komponenten
+			registerLabel.setForeground(Color.BLUE);
+		}
 	}
 	
 	public void keyPressed(KeyEvent kp) {

@@ -39,6 +39,7 @@ import shop.local.domain.exceptions.ArtikelBestandIstZuKleinException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.WarenkorbIstLeerException;
+import shop.local.ui.gui.LogInGUI;
 import shop.local.ui.gui.components.JAccountButton;
 import shop.local.ui.gui.components.JImagePanel;
 import shop.local.ui.gui.components.JWarenkorbButton;
@@ -125,6 +126,7 @@ public class KundeGUI extends JFrame {
 	private void createHeader() {
 		accountButton = new JAccountButton(kunde.getName());
 		logoutButton = new JButton("Abmelden");
+		logoutButton.addActionListener(new logoutListener());
 		accountPanel = new JPanel();
 		accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.PAGE_AXIS));
 		accountPanel.add(accountButton);
@@ -312,6 +314,21 @@ public class KundeGUI extends JFrame {
 	
 	private void updateGesamtpreis() {
 		gesamtpreis.setText(String.format("Gesamtpreis: %.2f ", kunde.getWarenkorbVerwaltung().getGesamtpreis()) + Currency.getInstance(Locale.GERMANY));
+	}
+	
+	class logoutListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().equals(logoutButton)) {
+				try {
+					dispose();
+					shop.logoutGUI();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	class SearchListener implements ActionListener {
