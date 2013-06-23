@@ -1,5 +1,6 @@
 package shop.local.domain;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.domain.exceptions.WarenkorbIstLeerException;
+import shop.local.ui.gui.LogInGUI;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Ereignis;
 import shop.local.valueobjects.Kunde;
@@ -314,6 +316,14 @@ public class ShopVerwaltung {
 	
 	public String gibLogDatei() throws IOException{
 		return meineEreignisse.liesLogDatei("EinAuslagerung.log");
+	}
+	
+	
+//	auf gui ebene
+	public void logoutGUI() throws IOException {
+		LogInGUI gUI = new LogInGUI();
+		gUI.setLocationRelativeTo(null);
+		gUI.setVisible(true);
 	}
 	
 }
