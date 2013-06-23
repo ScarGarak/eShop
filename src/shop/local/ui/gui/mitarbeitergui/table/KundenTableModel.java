@@ -31,6 +31,7 @@ public class KundenTableModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+//		if(kundenListe.size() != 0)
 		Kunde k = kundenListe.get(rowIndex);
 		switch(columnIndex){
 		case 0: return k.getId();

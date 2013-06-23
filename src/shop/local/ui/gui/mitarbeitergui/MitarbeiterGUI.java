@@ -1499,15 +1499,15 @@ public class MitarbeiterGUI extends JFrame{
 		}
 	}
 	
-	public static void main(String[] args){
-		try {
-			ShopVerwaltung shop = new ShopVerwaltung();
-			Mitarbeiter m = shop.sucheMitarbeiter(1);
-			new MitarbeiterGUI(m, shop);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (MitarbeiterExistiertNichtException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args){
+//		try {
+//			ShopVerwaltung shop = new ShopVerwaltung();
+//			Mitarbeiter m = shop.sucheMitarbeiter(1);
+//			new MitarbeiterGUI(m, shop);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (MitarbeiterExistiertNichtException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
