@@ -210,10 +210,8 @@ public class KundeGUI extends JFrame {
 		tableFooterPanel.add(gesamtpreis, BorderLayout.EAST);
 		rechnung = new JTextArea();
 		rechnung.setEditable(false);
-		rechnung.setOpaque(false);
 		JScrollPane rechnungPane = new JScrollPane(rechnung);
 		rechnungPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), BorderFactory.createTitledBorder("Rechnung")));
-		rechnungPane.setOpaque(false);
 		pdfButton = new JButton("Rechnung als PDF");
 		pdfButton.addActionListener(new PDFListener()); 
 		JPanel pdfPanel = new JPanel();
