@@ -147,6 +147,7 @@ public class MitarbeiterGUI extends JFrame{
 	private JButton accountButton;
 	private JTextField searchField;
 	private JButton searchButton;
+	private JButton logoutButton;
 	
 	
 	public MitarbeiterGUI(Mitarbeiter mitarbeiter, ShopVerwaltung shop) throws IOException{
@@ -174,7 +175,8 @@ public class MitarbeiterGUI extends JFrame{
 	
 	private void createHeader(){
 		accountButton = new JAccountButton(mitarbeiter.getName());
-		JButton logoutButton = new JButton("Abmelden");
+		logoutButton = new JButton("Abmelden");
+		logoutButton.addActionListener(new logoutListener());
 		JPanel accountPanel = new JPanel();
 		accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.PAGE_AXIS));
 		accountPanel.add(accountButton);
@@ -1324,6 +1326,22 @@ public class MitarbeiterGUI extends JFrame{
 	}
 	
 	////////////////////// Listener //////////////////////
+	
+	class logoutListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().equals(logoutButton)) {
+				try {
+//					p = null;
+					dispose();
+					shop.logoutGUI();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	class SearchListener implements ActionListener {
 		@Override
