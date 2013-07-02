@@ -17,7 +17,7 @@ public class WarenkorbArtikelTableModel extends AbstractTableModel {
 		super();
 		
 		columnNames = new Vector<String>();
-		columnNames.add("Stückzahl");
+		columnNames.add("St\u00fcckzahl");
 		columnNames.add("Bezeichner");
 		columnNames.add("Preis");
 		
@@ -44,6 +44,15 @@ public class WarenkorbArtikelTableModel extends AbstractTableModel {
        return false;
     }
 
+	@Override
+	public Class<?> getColumnClass(int column) {
+		if (getValueAt(0, column) != null) {
+			return getValueAt(0, column).getClass();
+		} else {
+			return Object.class;
+		}
+	}
+	
 	@Override
 	public Object getValueAt(int row, int col) {
 		if (data != null && data.size() != 0) {

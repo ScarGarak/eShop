@@ -41,6 +41,7 @@ import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
+import shop.local.ui.gui.LogInGUI;
 import shop.local.ui.gui.components.JAccountButton;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableModel;
@@ -1331,13 +1332,11 @@ public class MitarbeiterGUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(logoutButton)) {
+				dispose();
 				try {
-//					p = null;
-					dispose();
-					shop.logoutGUI();
+					new LogInGUI();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showConfirmDialog(null, "IOException: " + e.getMessage(), "eShop", JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		}

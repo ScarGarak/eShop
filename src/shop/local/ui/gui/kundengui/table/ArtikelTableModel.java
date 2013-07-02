@@ -46,14 +46,10 @@ public class ArtikelTableModel extends AbstractTableModel {
 	
 	@Override
 	public Class<?> getColumnClass(int column) {
-		if (column == 2) {
-			if (getValueAt(0, column) != null) {
-				return getValueAt(0, column).getClass();
-			} else {
-				return Object.class;
-			}
+		if (getValueAt(0, column) != null) {
+			return getValueAt(0, column).getClass();
 		} else {
-			return super.getColumnClass(column);
+			return Object.class;
 		}
 	}
 	

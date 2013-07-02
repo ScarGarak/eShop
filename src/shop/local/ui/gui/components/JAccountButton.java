@@ -35,6 +35,13 @@ public class JAccountButton extends JButton {
 	}
 	
 	@Override
+	public void setText(String text) {
+		this.name = text;
+		validate();
+		repaint();
+	}
+	
+	@Override
 	public void paint(Graphics g) {
 		int width = (int) this.getSize().getWidth();
 		int height = (int) this.getSize().getHeight();
