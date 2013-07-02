@@ -21,6 +21,7 @@ import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.MitarbeiterFunktion;
 import shop.local.valueobjects.WarenkorbArtikel;
 
 /**
@@ -203,12 +204,16 @@ public class CopyOfShopClientCUI {
 				int id = Integer.parseInt(strId);
 				
 				shop.fuegeMitarbeiterHinzu(id, username, passwort, name);
+				shop.sucheMitarbeiter(id).setFunktion(MitarbeiterFunktion.Mitarbeiter);
+				
 			} catch (MitarbeiterExistiertBereitsException e){
 				System.err.println(e.getMessage());
 			} catch (UsernameExistiertBereitsException e){
 				System.err.println(e.getMessage());
 			} catch (NumberFormatException e){
 				System.err.println("Die id ist keine Zahl! Bitte versuchen Sie es erneut.");
+			} catch (MitarbeiterExistiertNichtException e) {
+				System.err.println("Fehler!");
 			}
 		}
 		else if (line.equals("ma")) {

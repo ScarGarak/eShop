@@ -7,7 +7,7 @@ import shop.local.valueobjects.Kunde;
 @SuppressWarnings("serial")
 public class KundenTableModel extends AbstractTableModel{
 	
-	private String[] columnNames = {"ID", "Username", "Name", "Stra§e", "Wohnort", "Postleitzahl"};
+	private String[] columnNames = {"ID", "Username", "Name", "Stra§e", "Wohnort", "Postleitzahl", "Blockiert"};
 	private List<Kunde> kundenListe;
 	
 	public KundenTableModel(List<Kunde> kundenListe) {
@@ -26,7 +26,7 @@ public class KundenTableModel extends AbstractTableModel{
 
 	@Override
 	public int getColumnCount() {
-		return 6;
+		return 7;
 	}
 
 	@Override
@@ -39,6 +39,7 @@ public class KundenTableModel extends AbstractTableModel{
 		case 3: return k.getStrasse();
 		case 4: return k.getWohnort();
 		case 5: return k.getPlz();
+		case 6: return k.getBlockiert() ? "Blockiert" : "Aktiv";
 		default: return null;
 		}
 		

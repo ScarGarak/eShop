@@ -16,6 +16,7 @@ public class Mitarbeiter extends Person{
 	
 	// Attribute zur Beschreibung eines Mitarbeiters:
 	private double gehalt;
+	private MitarbeiterFunktion funktion;
 	
 	/**
 	 * Konstruktor
@@ -24,9 +25,10 @@ public class Mitarbeiter extends Person{
 	 * @param passwort Passwort des Mitarbeiters
 	 * @param name Name des Mitarbeiters
 	 */
-	public Mitarbeiter(int id, String username, String passwort, String name){
+	public Mitarbeiter(int id, String username, String passwort, String name, MitarbeiterFunktion funktion){
 		super(id, username, passwort, name, PersonTyp.Mitarbeiter);
 		gehalt = 0;
+		this.funktion = funktion;
 	}
 	
 	
@@ -46,12 +48,29 @@ public class Mitarbeiter extends Person{
 		return this.gehalt;
 	}
 	
+	/**
+	 * Setter Funktion für das Attribut "funktion".
+	 * @param funktion Die Funktion des Mitarbeiters.
+	 */
+	public void setFunktion(MitarbeiterFunktion funktion){
+		this.funktion = funktion;
+	}
+	
+	/**
+	 * Getter Funktion für das Attribut "funktion".
+	 * @return Die Funktion des Mitarbeiters.
+	 */
+	public MitarbeiterFunktion getFunktion(){
+		return this.funktion;
+	}
+	
 	
 	@Override
 	public String toString(){
 		String output = "\nMitarbeiternummer: \t "+this.getId()+"\n"
 					  + "Name:  \t\t"+this.getName()+"\n"
-					  + "Username:\t\t" +this.getUsername()+"\n";
+					  + "Username:\t\t" +this.getUsername()+"\n"
+					  + "Funktion:\t\t" +this.funktion+"\n";
 		
 		if(this.gehalt != 0){
 			output += "Gehalt: \t\t "+this.gehalt+"\n";

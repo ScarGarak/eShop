@@ -3,15 +3,22 @@ package shop.local.ui.gui.mitarbeitergui.table;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.MitarbeiterFunktion;
 
 @SuppressWarnings("serial")
 public class MitarbeiterTableModel extends AbstractTableModel{
 	
-	private String[] columnNames = {"ID", "Username", "Name", "Gehalt"};
+	private String[] columnNames = {"ID", "Username", "Name", "Funktion", "Gehalt", "Blockiert"};
 	private List<Mitarbeiter> mitarbeiterListe;
+	private int columnCount;
 	
-	public MitarbeiterTableModel(List<Mitarbeiter> mitarbeiterListe) {
+	public MitarbeiterTableModel(List<Mitarbeiter> mitarbeiterListe, MitarbeiterFunktion mf) {
 		this.mitarbeiterListe = mitarbeiterListe;
+		if(mf.equals(MitarbeiterFunktion.Admin)){
+			columnCount = 6; 
+		}else{
+			columnCount = 3;
+		}
 	}
 	
 	@Override
@@ -26,7 +33,7 @@ public class MitarbeiterTableModel extends AbstractTableModel{
 
 	@Override
 	public int getColumnCount() {
-		return 4;
+		return columnCount;
 	}
 
 	@Override
@@ -36,7 +43,9 @@ public class MitarbeiterTableModel extends AbstractTableModel{
 		case 0: return m.getId();
 		case 1: return m.getUsername();
 		case 2: return m.getName();
-		case 3: return m.getGehalt();
+		case 3: return m.getFunktion().toString();
+		case 4: return m.getGehalt();
+		case 5: return m.getBlockiert() ? "Blockiert" : "Aktiv";
 		default: return null;
 		}
 		

@@ -95,6 +95,33 @@ public class EreignisVerwaltung {
 		}
 		return result;
 	}
+	
+	public int[] gibBestandsHistorieDaten(Artikel artikel, String dateiname) throws IOException{
+		int artikelID = artikel.getArtikelnummer();
+		if(bestandsHistorieListe == null){
+			bestandsHistorieListe = new Hashtable<Integer, Vector<String[]>>();
+		}
+		
+		
+		if(!bestandsHistorieListe.containsKey(artikelID)){
+			erstelleBestandsHistorie(artikel, dateiname);
+		}
+		
+		int[] result = new int[30];
+		
+		// Die Bestandshistorie für den Artikel mit artikelID wurde bereits berechnet
+		try{
+			Iterator<String[]> it = bestandsHistorieListe.get(artikelID).iterator();
+			for(int i = 0; i < result.length && it.hasNext(); i++){
+				String[] bestandHistorie = it.next();
+				result[i] = Integer.parseInt(bestandHistorie[1]);
+			}
+		}catch (NumberFormatException nfe){
+			result = null;
+		}
+		
+		return result;
+	}
 
 	
 	/**
@@ -129,7 +156,12 @@ public class EreignisVerwaltung {
 		do{
 			zeile = lpm.ladeEinAuslagerung();
 			tokens = zeile.split(" ");
-			datum = tokens[0]+" "+tokens[1];
+			if(tokens != null && tokens.length > 1){
+				datum = tokens[0]+" "+tokens[1];
+			}else{
+				// Es sind keine Einträge in den letzten 30 Tagen vorhanden
+				break;
+			}
 		}while(!istDatumGueltig(datum));
 
 		String[] eintrag = new String[2];

@@ -27,10 +27,6 @@ public class Massengutartikel extends Artikel {
 		super.setBestand(bestand);
 	}
 	
-	public void setPackungsgroesse(int packungsgroesse) {
-		this.packungsgroesse = packungsgroesse;
-	}
-	
 	public int getPackungsgroesse() {
 		return packungsgroesse;
 	}

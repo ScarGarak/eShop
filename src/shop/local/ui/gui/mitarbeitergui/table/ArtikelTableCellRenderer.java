@@ -22,7 +22,8 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer{
 		
 		if(!isSelected){
 			switch(column){
-			case 2: return super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
+			case 2: comp = super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
+					break;
 			case 4: if((Integer)value == 0){
 						comp.setBackground(Color.RED);
 					}else{
@@ -31,11 +32,13 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer{
 					break;
 			default: comp.setBackground(null);
 			}
+			comp.setForeground(Color.BLACK);
 		}else{
-			comp.setBackground(super.getBackground());
 			if(column == 2){
-				return super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
+				comp = super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
 			}
+			comp.setBackground(new Color(35, 79, 154));
+			comp.setForeground(Color.WHITE);
 		}
 		return comp; 
 	} 
