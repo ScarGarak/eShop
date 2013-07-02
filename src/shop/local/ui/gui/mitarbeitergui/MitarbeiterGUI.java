@@ -51,6 +51,7 @@ import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableModel;
 import shop.local.ui.gui.mitarbeitergui.table.KundenTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.KundenTableModel;
+import shop.local.ui.gui.mitarbeitergui.table.LogTableModel;
 import shop.local.ui.gui.mitarbeitergui.table.MitarbeiterTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.MitarbeiterTableModel;
 import shop.local.valueobjects.Artikel;
@@ -151,7 +152,6 @@ public class MitarbeiterGUI extends JFrame{
 	
 	//////////// Log Panel ////////////
 	private JPanel logPanel;
-	private JTextArea logTextArea;
 	private JScrollPane logScrollPane;
 	
 	//////////// Header ////////////
@@ -1082,11 +1082,18 @@ public class MitarbeiterGUI extends JFrame{
 	private void createLogPanel() throws IOException{
 		logPanel = new JPanel(new BorderLayout());
 		
-		logTextArea = new JTextArea();
-		logTextArea.setText(shop.gibLogDatei());
-		logTextArea.setEditable(false);
+		LogTableModel logTableModel = new LogTableModel(shop.gibLogDatei());
+		JTable logTable = new JTable(logTableModel);
+		logTable.setShowGrid(true);
+		logTable.setGridColor(Color.LIGHT_GRAY);
 		
-		logScrollPane = new JScrollPane(logTextArea);
+		logTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		logTable.getTableHeader().setReorderingAllowed(false);
+		logTable.setAutoCreateRowSorter(true);
+		
+		setTableCellAlignment(new DefaultTableCellRenderer(), logTable, JLabel.LEFT);
+		
+		logScrollPane = new JScrollPane(logTable);
 		
 		
 		logPanel.add(logScrollPane, BorderLayout.CENTER);
