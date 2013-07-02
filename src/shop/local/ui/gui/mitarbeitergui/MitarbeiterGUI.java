@@ -45,6 +45,7 @@ import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
+import shop.local.ui.gui.components.BestandshistorieGraphik;
 import shop.local.ui.gui.components.JAccountButton;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableCellRenderer;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableModel;
@@ -72,6 +73,9 @@ public class MitarbeiterGUI extends JFrame{
 	private JPanel artikelPanel;
 	private ArtikelTableModel artikelTableModel;
 	private ArtikelTableCellRenderer artikelTableCellRenderer;
+	
+		//Artikel Center Panel
+	private JPanel artikelCenterPanel;
 	private JTable artikelTable;
 	private JPanel artikelButtonsPanel;
 	private JButton artikelHinzufuegen;
@@ -232,8 +236,8 @@ public class MitarbeiterGUI extends JFrame{
 		
 		ArtikelPanelListener listener = new ArtikelPanelListener();
 		
-		JPanel artikelNorthPanel = new JPanel();
-		artikelNorthPanel.setLayout(new BoxLayout(artikelNorthPanel, BoxLayout.X_AXIS));
+		artikelCenterPanel = new JPanel();
+		artikelCenterPanel.setLayout(new BoxLayout(artikelCenterPanel, BoxLayout.X_AXIS));
 		
 		/////////// Artikel Tabelle ///////////
 		artikelTableModel = new ArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
@@ -258,7 +262,7 @@ public class MitarbeiterGUI extends JFrame{
 		/////////// Artikel Buttons ///////////
 		artikelButtonsPanel = new JPanel(new GridLayout(0,1));
 		
-		artikelHinzufuegen = new JButton("Hinzufügen");
+		artikelHinzufuegen = new JButton("Hinzuf\u00fcgen");
 		artikelHinzufuegen.addActionListener(listener);
 		
 		artikelBearbeiten = new JButton("Bearbeiten");
@@ -290,12 +294,12 @@ public class MitarbeiterGUI extends JFrame{
 		artikelButtonsPanel.add(artikelEntfernen);
 		artikelButtonsPanel.setAlignmentY(TOP_ALIGNMENT);
 		
-		artikelNorthPanel.add(artikelTableScrollPane);
-		artikelNorthPanel.add(artikelButtonsPanel);
+		artikelCenterPanel.add(artikelTableScrollPane);
+		artikelCenterPanel.add(artikelButtonsPanel);
 		
 		createArtikelFooterWrapper();
 		
-		artikelPanel.add(artikelNorthPanel, BorderLayout.CENTER);
+		artikelPanel.add(artikelCenterPanel, BorderLayout.CENTER);
 		artikelPanel.add(artikelFooterWrapper, BorderLayout.SOUTH);
 	}
 	
@@ -340,7 +344,7 @@ public class MitarbeiterGUI extends JFrame{
 		artikelHinzufuegenButtonsPanel = new JPanel();
 		artikelHinzufuegenButtonsPanel.setLayout(new BoxLayout(artikelHinzufuegenButtonsPanel, BoxLayout.Y_AXIS));
 
-		JButton bestaetigen = new JButton(" Hinzufügen ");
+		JButton bestaetigen = new JButton(" Hinzuf\u00fcgen ");
 		bestaetigen.addActionListener(new ActionListener() {
 			///////////// Artikel Hinzufuegen /////////////
 			@Override
@@ -368,9 +372,9 @@ public class MitarbeiterGUI extends JFrame{
 
 					success = true;
 				}catch (NumberFormatException nfe){
-					setErrorMsg("Bitte fügen Sie richtige Werte ein!", artikelFooterWrapper);
+					setErrorMsg("Bitte f\u00fcgen Sie richtige Werte ein!", artikelFooterWrapper);
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException ex) {
-					setErrorMsg("Bestand ist keine Vielfache der Packungsgröße!", artikelFooterWrapper);
+					setErrorMsg("Bestand ist keine Vielfache der Packungsgr\u00f6\u00dfe!", artikelFooterWrapper);
 				} catch (ArtikelExistiertBereitsException ex) {
 					setErrorMsg("Die angegebene ID existiert bereits!", artikelFooterWrapper);
 				}
@@ -420,7 +424,7 @@ public class MitarbeiterGUI extends JFrame{
 		artikelHinzufuegenEingabeFeld.add(new JLabel("   Preis:"));
 		artikelHinzufuegenEingabeFeld.add(artikelPreisInput);
 		
-		artikelHinzufuegenEingabeFeld.add(new JLabel("   Packungsgröße:"));
+		artikelHinzufuegenEingabeFeld.add(new JLabel("   Packungsgr\u00f6\u00dfe:"));
 		artikelHinzufuegenEingabeFeld.add(artikelPackungsGroesseInput);
 		
 		artikelHinzufuegenEingabeFeld.add(new JLabel("   Bestand:"));
@@ -449,7 +453,7 @@ public class MitarbeiterGUI extends JFrame{
 						bezeichnung = artikelBezeichnungInput.getText();
 						preis = Double.parseDouble(artikelPreisInput.getText());
 						if(bezeichnung.equals("")){
-							setErrorMsg("Die Bezeichnung muss einen gültigen Namen haben!", artikelFooterWrapper);
+							setErrorMsg("Die Bezeichnung muss einen g\u00fcltigen Namen haben!", artikelFooterWrapper);
 						}else{
 							success = true;
 						}
@@ -457,7 +461,7 @@ public class MitarbeiterGUI extends JFrame{
 						setErrorMsg("Geben Sie bitte richtege Werte ein!", artikelFooterWrapper);
 					}
 				}else{
-					setErrorMsg("Ups... Keine Zeile ausgewählt!", artikelFooterWrapper);
+					setErrorMsg("Ups... Keine Zeile ausgew\u00e4hlt!", artikelFooterWrapper);
 				}
 				
 				if(a == null){
@@ -510,7 +514,7 @@ public class MitarbeiterGUI extends JFrame{
 		artikelPreisInput.setText(a.getPreis()+"");
 		
 		if(a instanceof Massengutartikel){
-			artikelBearbeitenEingabeFeld.add(new JLabel("   Packungsgröße:"));
+			artikelBearbeitenEingabeFeld.add(new JLabel("   Packungsgr\u00f6\u00dfe:"));
 			artikelBearbeitenEingabeFeld.add(artikelPackungsGroesseInput);
 			artikelPackungsGroesseInput.setText(((Massengutartikel) a).getPackungsgroesse()+"");
 		}
@@ -536,15 +540,15 @@ public class MitarbeiterGUI extends JFrame{
 					try{
 						anzahl = Integer.parseInt(artikelBestandInput.getText());
 						if(anzahl < 0){
-							setErrorMsg("Sie können nur eine positive Zahl eingeben!", artikelFooterWrapper);
+							setErrorMsg("Sie k\u00f6nnen nur eine positive Zahl eingeben!", artikelFooterWrapper);
 						}else{
 							success = true;
 						}
 					} catch (NumberFormatException nfe){
-						setErrorMsg("Geben Sie einen gültigen Wert ein!", artikelFooterWrapper);
+						setErrorMsg("Geben Sie einen g\u00fcltigen Wert ein!", artikelFooterWrapper);
 					}
 				}else{
-					setErrorMsg("Ups... Keine Zeile ausgewählt!", artikelFooterWrapper);
+					setErrorMsg("Ups... Keine Zeile ausgew\u00e4hlt!", artikelFooterWrapper);
 				}
 				
 				if(a == null){
@@ -615,17 +619,17 @@ public class MitarbeiterGUI extends JFrame{
 					try{
 						anzahl = Integer.parseInt(artikelBestandInput.getText());
 						if(anzahl < 0){
-							setErrorMsg("Sie können nur eine positive Zahl eingeben!", artikelFooterWrapper);
+							setErrorMsg("Sie k\u00f6nnen nur eine positive Zahl eingeben!", artikelFooterWrapper);
 						}else if(anzahl > a.getBestand()){
-							setErrorMsg("Sie können nicht soviel auslagern!", artikelFooterWrapper);
+							setErrorMsg("Sie k\u00f6nnen nicht soviel auslagern!", artikelFooterWrapper);
 						}else{
 							success = true;
 						}
 					} catch (NumberFormatException nfe){
-						setErrorMsg("Geben Sie einen gültigen Wert ein!", artikelFooterWrapper);
+						setErrorMsg("Geben Sie einen g\u00fcltigen Wert ein!", artikelFooterWrapper);
 					}
 				}else{
-					setErrorMsg("Ups... Keine Zeile ausgewählt!", artikelFooterWrapper);
+					setErrorMsg("Ups... Keine Zeile ausgew\u00e4hlt!", artikelFooterWrapper);
 				}
 				
 				if(a == null){
@@ -734,7 +738,7 @@ public class MitarbeiterGUI extends JFrame{
 
 			MitarbeiterPanelListener listener = new MitarbeiterPanelListener();
 
-			mitarbeiterHinzufuegen = new JButton("Hinzufügen");
+			mitarbeiterHinzufuegen = new JButton("Hinzuf\u00fcgen");
 			mitarbeiterHinzufuegen.addActionListener(listener);
 
 			mitarbeiterBearbeiten = new JButton("Bearbeiten");
@@ -828,7 +832,7 @@ public class MitarbeiterGUI extends JFrame{
 		mitarbeiterHinzufuegenButtonsPanel = new JPanel(new GridLayout(0,1));
 		mitarbeiterHinzufuegenButtonsPanel.setMaximumSize(new Dimension(100, 2*25));
 
-		JButton bestaetigen = new JButton(" Hinzufügen ");
+		JButton bestaetigen = new JButton(" Hinzuf\u00fcgen ");
 		bestaetigen.addActionListener(new ActionListener() {
 			///////////// Mitarbeiter Hinzufuegen /////////////
 			@Override
@@ -847,14 +851,14 @@ public class MitarbeiterGUI extends JFrame{
 					MitarbeiterFunktion mf = (MitarbeiterFunktion)mitarbeiterFunktionInput.getSelectedItem();
 
 					if(username.equals("") || name.equals("")){
-						setErrorMsg("Sie müssen 'Username' und 'Name' angeben!", mitarbeiterFooterWrapper);
+						setErrorMsg("Sie m\u00fcssen 'Username' und 'Name' angeben!", mitarbeiterFooterWrapper);
 					}else{
 //						shop.fuegeMitarbeiterHinzu(ID, username, "123" , name);
 //						shop.sucheMitarbeiter(ID).setGehalt(gehalt);
 						success = true;
 					}
 				} catch (NumberFormatException nfe){
-					setErrorMsg("Bitte geben Sie nur gültige Werte an!", mitarbeiterFooterWrapper);
+					setErrorMsg("Bitte geben Sie nur g\u00fcltige Werte an!", mitarbeiterFooterWrapper);
 				}// catch (MitarbeiterExistiertBereitsException ex) {
 //					setErrorMsg("Es existiert bereits ein Mitarbeiter mit dieser ID!", mitarbeiterFooterWrapper);
 //				} catch (UsernameExistiertBereitsException ex) {
@@ -927,19 +931,19 @@ public class MitarbeiterGUI extends JFrame{
 						gehalt = Double.parseDouble(mitarbeiterGehaltInput.getText());
 						
 						if(gehalt < 0){
-							setErrorMsg("Sie können keinen negativen Wert eingeben!", mitarbeiterFooterWrapper);
+							setErrorMsg("Sie k\u00f6nnen keinen negativen Wert eingeben!", mitarbeiterFooterWrapper);
 						}else if(gehalt < MINDESTLOHN){
-							setErrorMsg(String.format("Der Mindestlohn für Mitarbeiter beträgt: %.2f "+ Currency.getInstance(Locale.GERMANY), MINDESTLOHN) , mitarbeiterFooterWrapper);
+							setErrorMsg(String.format("Der Mindestlohn f\u00fcr Mitarbeiter betr\u00e4gt: %.2f "+ Currency.getInstance(Locale.GERMANY), MINDESTLOHN) , mitarbeiterFooterWrapper);
 						}else{
 							m.setGehalt(gehalt);
 							m.setFunktion((MitarbeiterFunktion)mitarbeiterFunktionInput.getSelectedItem());
 							success = true;
 						}
 					} catch (NumberFormatException nfe){
-						setErrorMsg("Bitte geben Sie einen gültigen Wert an!", mitarbeiterFooterWrapper);
+						setErrorMsg("Bitte geben Sie einen g\u00fcltigen Wert an!", mitarbeiterFooterWrapper);
 					}
 				}else{
-					setErrorMsg("Keine Zeile ausgewählt!", mitarbeiterFooterWrapper);
+					setErrorMsg("Keine Zeile ausgew\u00e4hlt!", mitarbeiterFooterWrapper);
 				}
 				
 				if(success){
@@ -1181,11 +1185,37 @@ public class MitarbeiterGUI extends JFrame{
 					artikelFooterWrapper.setVisible(true);
 
 				}else if(e.getSource().equals(artikelBestandshistorie)){			// Artikel Bestandshistorie
-
+					
+					int[] yWerte = null;
 					try {
-						System.out.println(shop.gibBestandsHistorie(a));
+						 yWerte = shop.gibBestandsHistorieDaten(a);
 					} catch (IOException e1) {
 						setErrorMsg("Fehler beim Lesen der Log Datei aufgetreten!", artikelFooterWrapper);
+					}
+					
+					if(yWerte != null){
+						BestandshistorieGraphik g = new BestandshistorieGraphik(yWerte, a);
+						
+						JButton zurueck = new JButton("Zur\u00fcck");
+						zurueck.addActionListener(new ActionListener() {
+							//////////// Zurueck ////////////
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								artikelPanel.removeAll();
+								artikelPanel.add(artikelCenterPanel, BorderLayout.CENTER);
+								artikelPanel.add(artikelFooterWrapper, BorderLayout.SOUTH);
+								artikelPanel.revalidate();
+								artikelPanel.repaint();
+							}
+						});
+						
+						JPanel tmp = new JPanel();
+						tmp.add(zurueck);
+						
+						artikelPanel.removeAll();
+						artikelPanel.add(g, BorderLayout.CENTER);
+						artikelPanel.add(tmp, BorderLayout.EAST);
+						artikelPanel.revalidate();
 					}
 
 				}else if(e.getSource().equals(artikelEntfernen)){					// Artikel Entfernen
@@ -1193,7 +1223,7 @@ public class MitarbeiterGUI extends JFrame{
 					try {
 						int choice = JOptionPane.showConfirmDialog(new JFrame(),
 								"Sind Sie sicher, dass Sie das Artikel '"+a.getBezeichnung()+"'\n"
-										+"mit der ID "+a.getArtikelnummer()+" löschen möchten?", "Sicher?!",
+										+"mit der ID "+a.getArtikelnummer()+" l\u00f6schen m\u00f6chten?", "Sicher?!",
 										JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 						if(choice == 0){
@@ -1211,7 +1241,7 @@ public class MitarbeiterGUI extends JFrame{
 					// do nothing
 				}
 			}else{ //row == -1
-				setErrorMsg("Keine Zeile ausgewählt!", artikelFooterWrapper);
+				setErrorMsg("Keine Zeile ausgew\u00e4hlt!", artikelFooterWrapper);
 				artikelFooterWrapper.setVisible(true);
 			}
 		}
@@ -1275,7 +1305,7 @@ public class MitarbeiterGUI extends JFrame{
 					}else if(e.getSource().equals(mitarbeiterEntfernen)){
 						
 						int choice = JOptionPane.showConfirmDialog(new JFrame(), "Sind Sie sicher, dass Sie Mitarbeiter '" + m.getName() + "'\n"
-								+"(ID: "+m.getId()+") löschen möchten?", "Sicher?!", JOptionPane.YES_NO_OPTION, 
+								+"(ID: "+m.getId()+") l\u00f6schen m\u00f6chten?", "Sicher?!", JOptionPane.YES_NO_OPTION, 
 								JOptionPane.WARNING_MESSAGE);
 
 						if(choice == JOptionPane.YES_OPTION){
@@ -1288,11 +1318,11 @@ public class MitarbeiterGUI extends JFrame{
 						//do nothing
 					}
 				}else{
-					setErrorMsg("Sie können sich hier nicht selbst verändern! Bitte gehen Sie dafür in Ihre Account Einstellungen!", mitarbeiterFooterWrapper);
+					setErrorMsg("Sie k\u00f6nnen sich hier nicht selbst ver\u00e4ndern! Bitte gehen Sie daf\u00fcr in Ihre Account Einstellungen!", mitarbeiterFooterWrapper);
 					mitarbeiterFooterWrapper.setVisible(true);
 				}
 			}else{
-				setErrorMsg("Keine Zeile ausgewählt!", mitarbeiterFooterWrapper);
+				setErrorMsg("Keine Zeile ausgew\u00e4hlt!", mitarbeiterFooterWrapper);
 				mitarbeiterFooterWrapper.setVisible(true);
 			}
 		}
@@ -1313,7 +1343,7 @@ public class MitarbeiterGUI extends JFrame{
 					if(e.getSource().equals(kundenEntfernen)){					//Kunde Entfernen
 
 						int choice = JOptionPane.showConfirmDialog(new JFrame(), "Sind Sie sicher, dass Sie Kunde '"+k.getName()+"'\n"
-								+ "(ID: "+k.getId()+") löschen möchten!", "Sicher?!",
+								+ "(ID: "+k.getId()+") l\u00f6schen m\u00f6chten!", "Sicher?!",
 								JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 						if(choice == JOptionPane.YES_OPTION){
@@ -1335,7 +1365,7 @@ public class MitarbeiterGUI extends JFrame{
 					// do nothing
 				}
 			}else{
-				setErrorMsg("Keine Zeile ausgewählt!", kundenFooterWrapper);
+				setErrorMsg("Keine Zeile ausgew\u00e4hlt!", kundenFooterWrapper);
 				kundenFooterWrapper.setVisible(true);
 			}
 		}
@@ -1407,7 +1437,7 @@ public class MitarbeiterGUI extends JFrame{
 							break;
 					case 3: //System.out.println("Log Tab!");
 							break;
-					default:System.err.println("Interner Fehler: 'Anzahl der Tabs überschritten'!");
+					default:System.err.println("Interner Fehler: 'Anzahl der Tabs \u00fcberschritten'!");
 					}
 				}
 				

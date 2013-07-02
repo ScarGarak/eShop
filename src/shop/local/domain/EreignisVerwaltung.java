@@ -95,6 +95,33 @@ public class EreignisVerwaltung {
 		}
 		return result;
 	}
+	
+	public int[] gibBestandsHistorieDaten(Artikel artikel, String dateiname) throws IOException{
+		int artikelID = artikel.getArtikelnummer();
+		if(bestandsHistorieListe == null){
+			bestandsHistorieListe = new Hashtable<Integer, Vector<String[]>>();
+		}
+		
+		
+		if(!bestandsHistorieListe.containsKey(artikelID)){
+			erstelleBestandsHistorie(artikel, dateiname);
+		}
+		
+		int[] result = new int[30];
+		
+		// Die Bestandshistorie für den Artikel mit artikelID wurde bereits berechnet
+		try{
+			Iterator<String[]> it = bestandsHistorieListe.get(artikelID).iterator();
+			for(int i = 0; i < result.length && it.hasNext(); i++){
+				String[] bestandHistorie = it.next();
+				result[i] = Integer.parseInt(bestandHistorie[1]);
+			}
+		}catch (NumberFormatException nfe){
+			result = null;
+		}
+		
+		return result;
+	}
 
 	
 	/**

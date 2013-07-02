@@ -1,6 +1,5 @@
 package shop.local.domain;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
@@ -313,6 +312,10 @@ public class ShopVerwaltung {
 	
 	public String gibBestandsHistorie(Artikel artikel) throws IOException{
 		return meineEreignisse.gibBestandsHistorie(artikel, "EinAuslagerung.log");
+	}
+	
+	public int[] gibBestandsHistorieDaten(Artikel artikel) throws IOException{
+		return meineEreignisse.gibBestandsHistorieDaten(artikel, "EinAuslagerung.log");
 	}
 	
 	public String gibLogDatei() throws IOException{
