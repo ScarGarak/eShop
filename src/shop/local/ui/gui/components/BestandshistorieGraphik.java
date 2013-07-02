@@ -20,15 +20,17 @@ public class BestandshistorieGraphik extends JPanel{
 	public BestandshistorieGraphik(int[] yWerte, Artikel artikel){
 		this.yWerte = yWerte;
 		this.artikel = artikel;
+
+		super.setBackground(Color.WHITE);
+		super.setBorder(BorderFactory.createEtchedBorder());
 	}
 	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		super.setBackground(Color.WHITE);
-		super.setBorder(BorderFactory.createEtchedBorder());
 		
 		Graphics2D g2D = (Graphics2D)g;
+		int[] yWerteKopie = yWerte.clone();
 		
 		// Setze den Titel
 		String titel = "Bestandshistorie - "+artikel.getBezeichnung();
@@ -40,15 +42,15 @@ public class BestandshistorieGraphik extends JPanel{
 		
 		//Maximalen Wert der Bestandshistorie finden
 		int max = 0;
-		for(int i = 0; i < yWerte.length; i++){
-			if(yWerte[i] > max)
-				max = yWerte[i];
+		for(int i = 0; i < yWerteKopie.length; i++){
+			if(yWerteKopie[i] > max)
+				max = yWerteKopie[i];
 		}
 		
 		max += max/10;
 		
 		int xAxeLength = (getWidth()-2*ABSTANDZUMRAND);
-		Double xAxePixelProPunkt = (double)xAxeLength/(yWerte.length+(yWerte.length/10));
+		Double xAxePixelProPunkt = (double)xAxeLength/(yWerteKopie.length+(yWerteKopie.length/10));
 		int yAxeLength = (getHeight()-2*ABSTANDZUMRAND);
 		Double yAxePixelProPunkt = (double)yAxeLength/max;
 		
@@ -59,14 +61,13 @@ public class BestandshistorieGraphik extends JPanel{
 		g2D.drawLine(ABSTANDZUMRAND, getHeight()-ABSTANDZUMRAND, ABSTANDZUMRAND, ABSTANDZUMRAND);
 		
 		// Werte der Y-Axe anpassen:
-		
-		for(int i = 0; i < yWerte.length; i++){
-			Double dWert = (getHeight()-ABSTANDZUMRAND)-(yWerte[i]*yAxePixelProPunkt);
-			yWerte[i] = dWert.intValue();
+		for(int i = 0; i < yWerteKopie.length; i++){
+			Double dWert = (getHeight()-ABSTANDZUMRAND)-(yWerteKopie[i]*yAxePixelProPunkt);
+			yWerteKopie[i] = dWert.intValue();
 		}
 		
 		//Werte der X-Axe:
-		int[] xWerte = new int[yWerte.length];
+		int[] xWerte = new int[yWerteKopie.length];
 		for(int i = 0; i < xWerte.length; i++){
 			Double dWert = (i*xAxePixelProPunkt) + ABSTANDZUMRAND;
 			xWerte[i] = dWert.intValue();
@@ -74,6 +75,6 @@ public class BestandshistorieGraphik extends JPanel{
 		
 		// Graphik zeichnen
 		g2D.setColor(new Color(53, 126, 199));
-		g2D.drawPolyline(xWerte, yWerte, yWerte.length);
+		g2D.drawPolyline(xWerte, yWerteKopie, yWerteKopie.length);
 	}
 }

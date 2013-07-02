@@ -1382,14 +1382,14 @@ public class MitarbeiterGUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(logoutButton)) {
-				try {
+//				try {
 //					p = null;
-					dispose();
-					shop.logoutGUI();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//					dispose();
+//					shop.logoutGUI();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 		}
 	}
