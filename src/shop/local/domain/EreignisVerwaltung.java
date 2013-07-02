@@ -129,7 +129,12 @@ public class EreignisVerwaltung {
 		do{
 			zeile = lpm.ladeEinAuslagerung();
 			tokens = zeile.split(" ");
-			datum = tokens[0]+" "+tokens[1];
+			if(tokens != null && tokens.length > 1){
+				datum = tokens[0]+" "+tokens[1];
+			}else{
+				// Es sind keine EintrŠge in den letzten 30 Tagen vorhanden
+				break;
+			}
 		}while(!istDatumGueltig(datum));
 
 		String[] eintrag = new String[2];

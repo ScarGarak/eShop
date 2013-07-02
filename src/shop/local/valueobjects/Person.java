@@ -10,6 +10,7 @@ public abstract class Person implements Serializable{
 	private String passwort;
 	private String name;
 	private PersonTyp typ;
+	private boolean blockiert;
 	
 	/**
 	 * Konstruktor
@@ -25,6 +26,7 @@ public abstract class Person implements Serializable{
 		this.passwort = passwort;
 		this.name = name;
 		this.typ = typ;
+		this.blockiert = false;
 	}
 	
 	
@@ -117,4 +119,23 @@ public abstract class Person implements Serializable{
 	public PersonTyp getPersonTyp(){
 		return this.typ;
 	}
+	
+	//////////PersonTyp //////////
+
+	/**
+	 * Setter fuer den "blockiert".
+	 * @param true wenn die Person blockiert werden soll, false wenn nicht.
+	 */
+	public void setBlockiert(boolean blockiert) {
+		this.blockiert = blockiert;
+	}
+	
+	/**
+	 * Getter fuer "blockiert".
+	 * @param true wenn die Person blockiert ist, false wenn nicht
+	 */
+	public boolean getBlockiert() {
+		return blockiert;
+	}
+	
 }

@@ -1,6 +1,5 @@
 package shop.local.domain;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
@@ -23,6 +22,7 @@ import shop.local.valueobjects.Ereignis;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.MitarbeiterFunktion;
 import shop.local.valueobjects.Person;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
@@ -162,7 +162,7 @@ public class ShopVerwaltung {
 	public void fuegeMitarbeiterHinzu(int id, String username, String passwort, String name) throws MitarbeiterExistiertBereitsException, UsernameExistiertBereitsException{
 		this.existiertUsernameSchon(username, " - in fuegeMitarbeiterHinzu() !");
 		
-		Mitarbeiter m = new Mitarbeiter(id, username, passwort, name);
+		Mitarbeiter m = new Mitarbeiter(id, username, passwort, name, MitarbeiterFunktion.Mitarbeiter);
 		meineMitarbeiter.einfuegen(m);
 	}
 
