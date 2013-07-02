@@ -1357,6 +1357,7 @@ public class MitarbeiterGUI extends JFrame{
 		}
 	}
 	
+	
 	class SearchListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
