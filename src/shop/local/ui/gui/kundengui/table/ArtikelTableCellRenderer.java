@@ -1,5 +1,6 @@
 package shop.local.ui.gui.kundengui.table;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.Currency;
 import java.util.Locale;
@@ -11,25 +12,27 @@ import javax.swing.table.DefaultTableCellRenderer;
 @SuppressWarnings("serial")
 public class ArtikelTableCellRenderer extends DefaultTableCellRenderer {
 
-	DefaultTableCellRenderer renderer;
-	
 	public ArtikelTableCellRenderer(JTable table) {
-        renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
-        renderer.setHorizontalAlignment(JLabel.LEFT);
+		DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.LEFT);
     }
 	
 	 @Override
      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		 Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		 Component comp;
 		 switch(column) {
-		 	case 1: comp = super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
-		 			break;
-		 	case 2: comp = super.getTableCellRendererComponent(table, String.valueOf(value) + " ", isSelected, hasFocus, row, column);
-		 			break;
+		 	case 1:  comp = super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
+		 			 break;
 		 	default: comp = super.getTableCellRendererComponent(table, " " + String.valueOf(value), isSelected, hasFocus, row, column);
+		 			 break;
 		 }
-		 
+		 if (isSelected) {
+			 comp.setForeground(Color.WHITE);
+			 comp.setBackground(Color.ORANGE);
+		 } else {
+			 comp.setForeground(Color.BLACK);
+			 comp.setBackground(Color.WHITE);
+		 }
 		 return comp;
 	 }
-	
 }

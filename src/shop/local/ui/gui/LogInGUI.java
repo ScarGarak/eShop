@@ -22,9 +22,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -123,9 +120,9 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	private JLabel registerLabel = new JLabel("<html><u>Registrieren</u></html>");
 	
 //	register objekte
-	private JLabel backLab = new JLabel("<html><u>zurück</u></html>");
+	private JLabel backLab = new JLabel("<html><u>zur\u00fcck</u></html>");
 	private JLabel regLab = new JLabel("<html><u>Registrieren</u></html>");
-	private JLabel changeLab = new JLabel("<html><u>ändern</u></html>");
+	private JLabel changeLab = new JLabel("<html><u>\u00e4ndern</u></html>");
 	private JTextField gebDatField = new JTextField("");
 	private JTextField nameField = new JTextField("");
 	private JTextField streetField = new JTextField("");
@@ -167,7 +164,8 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		regLab.addMouseListener(this);
 		backLab.addMouseListener(this);
 		
-		
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 	
 	private void addGB(Component component, int gridx, int gridy, int gridwidth, int gridheight,
@@ -574,7 +572,7 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	
 	public void keyPressed(KeyEvent kp) {
 		key = kp.getKeyCode();
-		System.out.println("key in pressed: " + key);
+//		System.out.println("key in pressed: " + key);
 //		System.out.println(usernameField.getWidth());
 //		System.out.println(usernameField.getHeight());
 	}
@@ -615,8 +613,8 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
             public void run() {
 				try {
 					JFrame frame = new LogInGUI();
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
+					//frame.setLocationRelativeTo(null);
+					//frame.setVisible(true);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

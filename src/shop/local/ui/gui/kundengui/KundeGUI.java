@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -32,6 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import shop.local.domain.ShopVerwaltung;
 import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
@@ -62,7 +64,7 @@ public class KundeGUI extends JFrame {
 	private JPanel headerPanel;
 	private JButton accountButton;
 	private JButton logoutButton;
-	private JPanel accountPanel;
+	private JPanel logoutPanel;
 	private JTextField searchField;
 	private JButton searchButton;
 	private JPanel warenkorbPanel;
@@ -70,6 +72,23 @@ public class KundeGUI extends JFrame {
 	private JPanel kaufenLeerenPanel;
 	private JButton kaufenButton;
 	private JButton leerenButton;
+	
+	// Account
+	private JPanel accountPanel;
+	private JTextField name;
+	private JTextField strasse;
+	private JTextField plz;
+	private JTextField wohnort;
+	private JTextField altesPasswort;
+	private JTextField neuesPasswort;
+	private JTextField confirmPasswort;
+	private JTextArea errorName;
+	private JLabel errorStrasse;
+	private JLabel errorPlz;
+	private JLabel errorWohnort;
+	private JTextArea errorPasswort;
+	private JButton abbrechenButton;
+	private JButton speichernButton;
 	
 	// Search Table & Warenkorb Table
 	private JPanel tablePanel;
@@ -82,7 +101,6 @@ public class KundeGUI extends JFrame {
 	private JPanel tableFooterPanel;
 	private JTextArea rechnung;
 	private JPanel rechnungPanel;
-	private JButton pdfButton;
 	
 	// Details
 	private JPanel detailsPanel;
@@ -116,6 +134,7 @@ public class KundeGUI extends JFrame {
 		addWindowListener(new WindowCloser());
 		
 		createHeader();
+		createAccount();
 		createTableSearch();
 		createTableWarenkorb();
 		createDetails();
@@ -130,12 +149,13 @@ public class KundeGUI extends JFrame {
 
 	private void createHeader() {
 		accountButton = new JAccountButton(kunde.getName());
+		accountButton.addActionListener(new AccountButtonListener());
 		logoutButton = new JButton("Abmelden");
-		logoutButton.addActionListener(new logoutListener());
-		accountPanel = new JPanel();
-		accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.PAGE_AXIS));
-		accountPanel.add(accountButton);
-		accountPanel.add(logoutButton);
+		logoutButton.addActionListener(new LogoutListener());
+		logoutPanel = new JPanel();
+		logoutPanel.setLayout(new BoxLayout(logoutPanel, BoxLayout.PAGE_AXIS));
+		logoutPanel.add(accountButton);
+		logoutPanel.add(logoutButton);
 		JPanel searchPanel = new JPanel();
 		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.LINE_AXIS));
 		searchPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 25, 0));
@@ -166,16 +186,99 @@ public class KundeGUI extends JFrame {
 		warenkorbPanel.add(warenkorbButton, BorderLayout.NORTH);
 		headerPanel = new JPanel();
 		headerPanel.setLayout(new BorderLayout());
-		headerPanel.add(accountPanel, BorderLayout.WEST);
+		headerPanel.add(logoutPanel, BorderLayout.WEST);
 		headerPanel.add(searchPanel, BorderLayout.CENTER);
 		headerPanel.add(warenkorbPanel, BorderLayout.EAST);
+	}
+	
+	public void createAccount() {
+		name = new JTextField();
+		JTextField username = new JTextField();
+		username.setText(kunde.getUsername());
+		username.setEnabled(false);
+		JPanel namePanel = new JPanel();
+		namePanel.setLayout(new GridLayout(2,2));
+		namePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+		namePanel.add(new JLabel("Name:"));
+		namePanel.add(name);
+		namePanel.add(new JLabel("Username:"));
+		namePanel.add(username);
+		errorName = new JTextArea();
+		errorName.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+		errorName.setForeground(Color.RED);
+		errorName.setLineWrap(true);
+		errorName.setWrapStyleWord(true);
+		errorName.setEditable(false);
+		errorName.setOpaque(false);
+		strasse = new JTextField();
+		plz = new JTextField();
+		wohnort = new JTextField();
+		JPanel adressPanel = new JPanel();
+		adressPanel.setLayout(new GridLayout(3,2));
+		adressPanel.add(new JLabel("Stra\u00dfe:"));
+		adressPanel.add(strasse);
+		adressPanel.add(new JLabel("PLZ:"));
+		adressPanel.add(plz);
+		adressPanel.add(new JLabel("Wohnort:"));
+		adressPanel.add(wohnort);
+		errorStrasse = new JLabel();
+		errorStrasse.setForeground(Color.RED);
+		errorPlz = new JLabel();
+		errorPlz.setForeground(Color.RED);
+		errorWohnort = new JLabel();
+		errorWohnort.setForeground(Color.RED);
+		JPanel errorPanel = new JPanel();
+		errorPanel.setLayout(new GridLayout(3,1));
+		errorPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		errorPanel.add(errorStrasse);
+		errorPanel.add(errorPlz);
+		errorPanel.add(errorWohnort);
+		altesPasswort = new JPasswordField();
+		neuesPasswort = new JPasswordField();
+		confirmPasswort = new JPasswordField();
+		JPanel passwortPanel = new JPanel();
+		passwortPanel.setLayout(new GridLayout(3,2));
+		passwortPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		passwortPanel.add(new JLabel("Altes Passwort:"));
+		passwortPanel.add(altesPasswort);
+		passwortPanel.add(new JLabel("Neues Passwort:"));
+		passwortPanel.add(neuesPasswort);
+		passwortPanel.add(new JLabel("Best\u00e4tige neues Passwort:"));
+		passwortPanel.add(confirmPasswort);
+		errorPasswort = new JTextArea();
+		errorPasswort.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
+		errorPasswort.setForeground(Color.RED);
+		errorPasswort.setLineWrap(true);
+		errorPasswort.setWrapStyleWord(true);
+		errorPasswort.setEditable(false);
+		errorPasswort.setOpaque(false);
+		abbrechenButton = new JButton("Abbrechen");
+		abbrechenButton.addActionListener(new AccountListener());
+		speichernButton = new JButton("Speichern");
+		speichernButton.addActionListener(new AccountListener());
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(60, 60, 0, 0));
+		buttonPanel.add(abbrechenButton);
+		buttonPanel.add(speichernButton);
+		accountPanel = new JPanel();
+		accountPanel.setLayout(new GridLayout(4,2));
+		accountPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY), BorderFactory.createEmptyBorder(20, 10, 10, 10)));
+		accountPanel.add(namePanel);
+		accountPanel.add(passwortPanel);
+		accountPanel.add(errorName);
+		accountPanel.add(errorPasswort);
+		accountPanel.add(adressPanel);
+		accountPanel.add(errorPanel);
+		accountPanel.add(new JLabel());
+		accountPanel.add(buttonPanel);
 	}
 	
 	private void createTableSearch() {
 		searchTable = new JTable(new ArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung()));
 		searchTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		searchTable.getSelectionModel().addListSelectionListener(new SelectionDetailListener());
-		searchTable.setDefaultRenderer(Object.class, new ArtikelTableCellRenderer(searchTable));
+		setTableCellAlignment(new ArtikelTableCellRenderer(searchTable), searchTable, JLabel.LEFT);
 		searchTable.setAutoCreateRowSorter(true);
 		searchTable.setShowGrid(true);
 		searchTable.setGridColor(Color.LIGHT_GRAY);
@@ -191,7 +294,7 @@ public class KundeGUI extends JFrame {
 		warenkorbTable = new JTable(new WarenkorbArtikelTableModel(kunde.getWarenkorbVerwaltung().getWarenkorb()));
 		warenkorbTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		warenkorbTable.getSelectionModel().addListSelectionListener(new SelectionDetailListener());
-		warenkorbTable.setDefaultRenderer(Object.class, new WarenkorbArtikelTableCellRenderer(warenkorbTable));
+		setTableCellAlignment(new WarenkorbArtikelTableCellRenderer(warenkorbTable), warenkorbTable, JLabel.LEFT);
 		warenkorbTable.setAutoCreateRowSorter(true);
 		warenkorbTable.setShowGrid(true);
 		warenkorbTable.setGridColor(Color.LIGHT_GRAY);
@@ -209,20 +312,16 @@ public class KundeGUI extends JFrame {
 		tableFooterPanel.add(artikelanzahl, BorderLayout.WEST);
 		tableFooterPanel.add(gesamtpreis, BorderLayout.EAST);
 		rechnung = new JTextArea();
+		rechnung.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		rechnung.setEditable(false);
 		JScrollPane rechnungPane = new JScrollPane(rechnung);
-		rechnungPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), BorderFactory.createTitledBorder("Rechnung")));
-		pdfButton = new JButton("Rechnung als PDF");
-		pdfButton.addActionListener(new PDFListener()); 
-		JPanel pdfPanel = new JPanel();
-		pdfPanel.setLayout(new BorderLayout());
-		pdfPanel.add(pdfButton, BorderLayout.EAST);
+		rechnungPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Rechnung"), BorderFactory.createEmptyBorder(0, 5, 10, 5))));
+		rechnungPane.setOpaque(false);
 		rechnungPanel = new JPanel();
 		rechnungPanel.setLayout(new BorderLayout());
 		rechnungPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		rechnungPanel.add(new JLabel("Vielen Dank für ihren Einkauf und besuchen Sie uns bald wieder!"), BorderLayout.NORTH);
+		rechnungPanel.add(new JLabel("Vielen Dank f\u00fcr ihren Einkauf und besuchen Sie uns bald wieder!"), BorderLayout.NORTH);
 		rechnungPanel.add(rechnungPane, BorderLayout.CENTER);
-		rechnungPanel.add(pdfPanel, BorderLayout.SOUTH);
 	}
 	
 	private void createDetails() {
@@ -252,7 +351,7 @@ public class KundeGUI extends JFrame {
 		mengePanel.setLayout(new GridLayout(1,2));
 		mengePanel.add(new JLabel("  Menge:"));
 		mengePanel.add(menge);
-		JTextArea stueckzahlLabel = new JTextArea(" Stückzahl ändern:");
+		JTextArea stueckzahlLabel = new JTextArea(" St\u00fcckzahl \u00e4ndern:");
 		stueckzahlLabel.setEditable(false);
 		stueckzahlLabel.setLineWrap(true);
 		stueckzahlLabel.setOpaque(false);
@@ -282,6 +381,14 @@ public class KundeGUI extends JFrame {
 		searchTable.setModel(atm);
 		atm.fireTableDataChanged();
 	}
+	
+	private void setTableCellAlignment(DefaultTableCellRenderer renderer, JTable table, int alignment) {
+		renderer.setHorizontalAlignment(alignment);
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			table.setDefaultRenderer(table.getColumnClass(i), renderer);
+		}
+		table.updateUI();
+	} 
 	
 	private void updateArtikelMenge(Artikel a) {
 		menge.removeAllItems();
@@ -328,29 +435,28 @@ public class KundeGUI extends JFrame {
 		gesamtpreis.setText(String.format("Gesamtpreis: %.2f ", kunde.getWarenkorbVerwaltung().getGesamtpreis()) + Currency.getInstance(Locale.GERMANY));
 	}
 	
-	class logoutListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ae) {
-			if (ae.getSource().equals(logoutButton)) {
-//				try {
-//					dispose();
-//					shop.logoutGUI();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-			}
-		}
+
+	private void clearErrorMessages() {
+		errorMessage.setText("");
+		errorName.setText("");
+		errorStrasse.setText("");
+		errorPlz.setText("");
+		errorWohnort.setText("");
+		errorPasswort.setText("");
 	}
 	
 	class SearchListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(searchButton) || ae.getSource().equals(searchField)) {
+				kaufenButton.setEnabled(true);
+				leerenButton.setEnabled(true);
 				warenkorbPanel.remove(kaufenLeerenPanel);
 				warenkorbPanel.add(warenkorbButton, BorderLayout.NORTH);
 				headerPanel.validate();
 				headerPanel.repaint();
+				remove(accountPanel);
+				add(tablePanel, BorderLayout.CENTER);
 				tablePanel.remove(warenkorbScrollPane);
 				tablePanel.remove(tableFooterPanel);
 				tablePanel.remove(rechnungPanel);
@@ -371,10 +477,14 @@ public class KundeGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(warenkorbButton)) {
+				kaufenButton.setEnabled(true);
+				leerenButton.setEnabled(true);
 				warenkorbPanel.remove(warenkorbButton);
 				warenkorbPanel.add(kaufenLeerenPanel, BorderLayout.CENTER);
 				headerPanel.validate();
 				headerPanel.repaint();
+				remove(accountPanel);
+				add(tablePanel, BorderLayout.CENTER);
 				tablePanel.remove(searchScrollPane);
 				searchTable.clearSelection();
 				tablePanel.add(warenkorbScrollPane, BorderLayout.CENTER);
@@ -412,7 +522,7 @@ public class KundeGUI extends JFrame {
 				} catch (WarenkorbIstLeerException e) {
 					JOptionPane.showConfirmDialog(null,
 							"Ihr Warenkorb ist leer.\n" +
-							"Bitte fügen Sie zuerst einige Artikel in ihren Warenkorb.", "Kaufen",
+							"Bitte f\u00fcgen Sie zuerst einige Artikel in ihren Warenkorb.", "Kaufen",
 			                JOptionPane.PLAIN_MESSAGE);
 				}
 			}
@@ -426,7 +536,7 @@ public class KundeGUI extends JFrame {
 				if (kunde.getWarenkorbVerwaltung().getWarenkorb().isEmpty()) {
 					JOptionPane.showConfirmDialog(null,
 						"Ihr Warenkorb ist leer.\n" +
-						"Bitte fügen Sie zuerst einige Artikel in ihren Warenkorb.", "Warenkorb leeren",
+						"Bitte f\u00fcgen Sie zuerst einige Artikel in ihren Warenkorb.", "Warenkorb leeren",
 		                JOptionPane.PLAIN_MESSAGE);
 				} else
 				if (JOptionPane.showConfirmDialog(null,
@@ -442,7 +552,7 @@ public class KundeGUI extends JFrame {
 						tablePanel.repaint();
 					} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
 						JOptionPane.showConfirmDialog(null,
-								"Der Bestand eines Artikels ist keine Vielfache der Packungsgröße.", "Warenkorb leeren",
+								"Der Bestand eines Artikels ist keine Vielfache der Packungsgr\u00f6\u00dfe.", "Warenkorb leeren",
 				                JOptionPane.PLAIN_MESSAGE);
 					}
 				}
@@ -476,7 +586,7 @@ public class KundeGUI extends JFrame {
 				((JImagePanel) bildPanel).setImagePath("images/" + wa.getArtikel().getArtikelnummer() + ".jpg");
 				bezeichnung.setText(wa.getArtikel().getBezeichnung());
 				details.setText("");
-				details.append("Stückzahl: " + wa.getStueckzahl() + "\n");
+				details.append("St\u00fcckzahl: " + wa.getStueckzahl() + "\n");
 				details.append("Preis: " + String.format("%.2f ", wa.getArtikel().getPreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
 				auswahlPanel.remove(mengePanel);
 				auswahlPanel.add(stueckzahlPanel);
@@ -497,7 +607,7 @@ public class KundeGUI extends JFrame {
 				detailsPanel.validate();
 				detailsPanel.repaint();
 			}
-			errorMessage.setText("");
+			clearErrorMessages();
 		}
 	}
 	
@@ -514,13 +624,13 @@ public class KundeGUI extends JFrame {
 					tablePanel.repaint();
 					updateArtikelMenge(a);
 				} catch (NullPointerException e) {
-					errorMessage.setText("Bitte wählen Sie unten eine gültige Menge aus.");
+					errorMessage.setText("Bitte w\u00e4hlen Sie unten eine g\u00fcltige Menge aus.");
 				} catch (ArtikelBestandIstZuKleinException e) {
 					errorMessage.setText("Der Bestand dieses Artikels ist zu klein oder leer.");
 				} catch (ArtikelExistiertNichtException e) {
 					errorMessage.setText("Dieser Artikel existiert nicht.");
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					errorMessage.setText("Die gewählte Menge ist keine Vielfache der Packungsgröße dieses Artikels.");
+					errorMessage.setText("Die gew\u00e4hlte Menge ist keine Vielfache der Packungsgr\u00f6\u00dfe dieses Artikels.");
 				}
 			}
 		}
@@ -542,7 +652,7 @@ public class KundeGUI extends JFrame {
 				} catch (ArtikelExistiertNichtException e) {
 					errorMessage.setText("Dieser Artikel existiert nicht.");
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					errorMessage.setText("Die gewählte Stückzahl ist keine Vielfache der Packungsgröße dieses Artikels.");
+					errorMessage.setText("Die gew\u00e4hlte St\u00fcckzahl ist keine Vielfache der Packungsgr\u00f6\u00dfe dieses Artikels.");
 				}
 			}
 		}
@@ -561,7 +671,7 @@ public class KundeGUI extends JFrame {
 						tablePanel.validate();
 						tablePanel.repaint();
 						details.setText("");
-						details.append("Stückzahl: " + wa.getStueckzahl() + "\n");
+						details.append("St\u00fcckzahl: " + wa.getStueckzahl() + "\n");
 						details.append("Preis: " + String.format("%.2f ", wa.getArtikel().getPreis()) + Currency.getInstance(Locale.GERMANY) + "\n");
 						detailsPanel.validate();
 						detailsPanel.repaint();
@@ -571,40 +681,129 @@ public class KundeGUI extends JFrame {
 				} catch (ArtikelExistiertNichtException e) {
 					errorMessage.setText("Dieser Artikel existiert nicht.");
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
-					errorMessage.setText("Die gewählte Stückzahl ist keine Vielfache der Packungsgröße dieses Artikels.");
+					errorMessage.setText("Die gew\u00e4hlte St\u00fcckzahl ist keine Vielfache der Packungsgr\u00f6\u00dfe dieses Artikels.");
 				}
 			}
 		}
 	}
 	
-	class PDFListener implements ActionListener {
+	class AccountButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			if (ae.getSource().equals(pdfButton)) {
-				/*// Create a document and add a page to it
-				PDDocument document = new PDDocument();
-				PDPage page = new PDPage();
-				document.addPage( page );
-
-				// Create a new font object selecting one of the PDF base fonts
-				PDFont font = PDType1Font.HELVETICA_BOLD;
-
-				// Start a new content stream which will "hold" the to be created content
-				PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-				// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-				contentStream.beginText();
-				contentStream.setFont( font, 12 );
-				contentStream.moveTextPositionByAmount( 100, 700 );
-				contentStream.drawString( "Hello World" );
-				contentStream.endText();
-
-				// Make sure that the content stream is closed:
-				contentStream.close();
-
-				// Save the results and ensure that the document is properly closed:
-				document.save( "Hello World.pdf");
-				document.close();*/
+			if (ae.getSource().equals(accountButton)) {
+				name.setText(kunde.getName());
+				strasse.setText(kunde.getStrasse());
+				plz.setText(String.valueOf(kunde.getPlz()));
+				wohnort.setText(kunde.getWohnort());
+				altesPasswort.setText("");
+				neuesPasswort.setText("");
+				confirmPasswort.setText("");
+				kaufenButton.setEnabled(false);
+				leerenButton.setEnabled(false);
+				remove(tablePanel);
+				remove(detailsPanel);
+				add(accountPanel, BorderLayout.CENTER);
+				accountPanel.revalidate();
+				accountPanel.repaint();
+			}
+		}
+	}
+	
+	class LogoutListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().equals(logoutButton)) {
+				dispose();
+				try {
+					new LogInGUI();
+				} catch (IOException e) {
+					JOptionPane.showConfirmDialog(null, "IOException: " + e.getMessage(), "eShop", JOptionPane.PLAIN_MESSAGE);
+				}
+			}
+		}
+	}
+	
+	class AccountListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			if (ae.getSource().equals(abbrechenButton)) {
+				kaufenButton.setEnabled(true);
+				leerenButton.setEnabled(true);
+				remove(accountPanel);
+				add(tablePanel, BorderLayout.CENTER);
+				tablePanel.revalidate();
+				tablePanel.repaint();
+				clearErrorMessages();
+			}
+			if (ae.getSource().equals(speichernButton)) {
+				clearErrorMessages();
+				boolean ok = true;
+				if (name.getText().isEmpty()) {
+					errorName.setText("Der Name darf nicht leer sein. Bitte geben Sie einen g\u00fcltigen Namen ein.");
+					ok = false;
+				}
+				if (strasse.getText().isEmpty()) {
+					errorStrasse.setText("Die Stra\u00dfe darf nicht leer sein.");
+					ok = false;
+				}
+				if (plz.getText().isEmpty()) {
+					errorPlz.setText("Die Postleitzahl darf nicht leer sein.");
+					ok = false;
+				}
+				if (!plz.getText().isEmpty()) {
+					try {  
+						Integer.parseInt(plz.getText());
+					} catch(NumberFormatException nfe) {  
+						errorPlz.setText("Bitte geben Sie eine g\u00fcltige Postleitzahl ein.");  
+						ok = false;
+					}
+				} 
+				if (wohnort.getText().isEmpty()) {
+					errorWohnort.setText("Der Wohnort darf nicht leer sein.");
+					ok = false;
+				} 
+				if (!(altesPasswort.getText().isEmpty() && neuesPasswort.getText().isEmpty() && confirmPasswort.getText().isEmpty())) {
+					if (!altesPasswort.getText().equals(kunde.getPasswort())) {
+						errorPasswort.setText("Das alte Passwort ist falsch.");
+						ok = false;
+					} else
+					if (neuesPasswort.getText().equals(altesPasswort.getText())) {
+						errorPasswort.setText("Das neue Passwort darf nicht gleich das alte Passwort sein.");
+						ok = false;
+					} else
+					if (!confirmPasswort.getText().equals(neuesPasswort.getText())) {
+						errorPasswort.setText("Bitte best\u00e4tigen Sie das neue Passwort.");
+						ok = false;
+					} else
+					if (altesPasswort.getText().isEmpty() || neuesPasswort.getText().isEmpty() || confirmPasswort.getText().isEmpty()) {
+						errorPasswort.setText("Bitte geben Sie das alte Passwort, das neue Passwort und dessen Best\u00e4tigung ein.");
+						ok = false;
+					}
+				}
+				if (ok) {
+					if (!kunde.getName().equals(name.getText())) {
+						kunde.setName(name.getText());
+						accountButton.setText(kunde.getName());
+					}
+					if (!kunde.getStrasse().equals(strasse.getText())) {
+						kunde.setStrasse(strasse.getText());
+					}
+					if (kunde.getPlz() != Integer.parseInt(plz.getText())) {
+						kunde.setPlz(Integer.parseInt(plz.getText()));
+					}
+					if (!kunde.getWohnort().equals(wohnort.getText())) {
+						kunde.setWohnort(wohnort.getText());
+					}
+					if (!neuesPasswort.getText().isEmpty()) {
+						kunde.setPasswort(neuesPasswort.getText());
+					}
+					kaufenButton.setEnabled(true);
+					leerenButton.setEnabled(true);
+					remove(accountPanel);
+					add(tablePanel, BorderLayout.CENTER);
+					tablePanel.revalidate();
+					tablePanel.repaint();
+				}
 			}
 		}
 	}
@@ -626,7 +825,7 @@ public class KundeGUI extends JFrame {
 						shop.leeren(kunde);
 					} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e) {
 						JOptionPane.showConfirmDialog(null,
-								"Der Bestand eines Artikels ist keine Vielfache der Packungsgröße.", "Anwendung beenden",
+								"Der Bestand eines Artikels ist keine Vielfache der Packungsgr\u00f6\u00dfe.", "Anwendung beenden",
 				                JOptionPane.PLAIN_MESSAGE);
 					}
 					w.setVisible(false);

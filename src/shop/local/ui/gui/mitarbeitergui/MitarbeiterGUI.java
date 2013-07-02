@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
@@ -42,7 +41,6 @@ import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgr
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
-import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.ui.gui.LogInGUI;
@@ -126,7 +124,7 @@ public class MitarbeiterGUI extends JFrame{
 	private JTextField mitarbeiterUsernameInput;
 	private JTextField mitarbeiterNameInput;
 	private JTextField mitarbeiterGehaltInput;
-	private JComboBox<MitarbeiterFunktion> mitarbeiterFunktionInput;
+	private JComboBox mitarbeiterFunktionInput;
 	
 		//Mitarbeiter Footer
 	private JPanel mitarbeiterFooterWrapper;
@@ -800,7 +798,7 @@ public class MitarbeiterGUI extends JFrame{
 		mitarbeiterUsernameInput = new JTextField(10);
 		mitarbeiterNameInput = new JTextField(10);
 		mitarbeiterGehaltInput = new JTextField(10);
-		mitarbeiterFunktionInput = new JComboBox<MitarbeiterFunktion>();
+		mitarbeiterFunktionInput = new JComboBox();
 		MitarbeiterFunktion[] funktionWerte = MitarbeiterFunktion.values();
 		for(MitarbeiterFunktion mf : funktionWerte){
 			mitarbeiterFunktionInput.addItem(mf);
