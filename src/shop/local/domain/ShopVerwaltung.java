@@ -21,6 +21,7 @@ import shop.local.valueobjects.Ereignis;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Massengutartikel;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.MitarbeiterFunktion;
 import shop.local.valueobjects.Person;
 import shop.local.valueobjects.Rechnung;
 import shop.local.valueobjects.WarenkorbArtikel;
@@ -160,7 +161,7 @@ public class ShopVerwaltung {
 	public void fuegeMitarbeiterHinzu(int id, String username, String passwort, String name) throws MitarbeiterExistiertBereitsException, UsernameExistiertBereitsException{
 		this.existiertUsernameSchon(username, " - in fuegeMitarbeiterHinzu() !");
 		
-		Mitarbeiter m = new Mitarbeiter(id, username, passwort, name);
+		Mitarbeiter m = new Mitarbeiter(id, username, passwort, name, MitarbeiterFunktion.Mitarbeiter);
 		meineMitarbeiter.einfuegen(m);
 	}
 
@@ -310,6 +311,10 @@ public class ShopVerwaltung {
 	
 	public String gibBestandsHistorie(Artikel artikel) throws IOException{
 		return meineEreignisse.gibBestandsHistorie(artikel, "EinAuslagerung.log");
+	}
+	
+	public int[] gibBestandsHistorieDaten(Artikel artikel) throws IOException{
+		return meineEreignisse.gibBestandsHistorieDaten(artikel, "EinAuslagerung.log");
 	}
 	
 	public String gibLogDatei() throws IOException{
