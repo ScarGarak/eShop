@@ -24,8 +24,8 @@ public class MitarbeiterTableCellRenderer extends DefaultTableCellRenderer {
 		}
 		
 		if(isSelected){
-			comp.setBackground(new Color(35, 79, 154));
-			comp.setForeground(Color.WHITE);
+			comp.setBackground(Color.ORANGE);
+			comp.setForeground(Color.BLACK);
 		}else{
 			comp.setBackground(Color.WHITE);
 			comp.setForeground(Color.BLACK);

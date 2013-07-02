@@ -45,6 +45,7 @@ import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
+import shop.local.ui.gui.LogInGUI;
 import shop.local.ui.gui.components.BestandshistorieGraphik;
 import shop.local.ui.gui.components.JAccountButton;
 import shop.local.ui.gui.mitarbeitergui.table.ArtikelTableCellRenderer;
@@ -189,7 +190,7 @@ public class MitarbeiterGUI extends JFrame{
 	private void createHeader(){
 		accountButton = new JAccountButton(mitarbeiter.getName());
 		logoutButton = new JButton("Abmelden");
-		logoutButton.addActionListener(new logoutListener());
+		logoutButton.addActionListener(new LogoutListener());
 		JPanel accountPanel = new JPanel();
 		accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.PAGE_AXIS));
 		accountPanel.add(accountButton);
@@ -1378,18 +1379,16 @@ public class MitarbeiterGUI extends JFrame{
 		}
 	}
 	
-	class logoutListener implements ActionListener {
+	class LogoutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(logoutButton)) {
-//				try {
-//					p = null;
-//					dispose();
-//					shop.logoutGUI();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				dispose();
+				try {
+					new LogInGUI();
+				} catch (IOException e) {
+					JOptionPane.showConfirmDialog(null, "IOException: " + e.getMessage(), "eShop", JOptionPane.PLAIN_MESSAGE);
+				}
 			}
 		}
 	}

@@ -37,8 +37,8 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer{
 			if(column == 2){
 				comp = super.getTableCellRendererComponent(table, String.format(" %.2f ", value) + Currency.getInstance(Locale.GERMANY), isSelected, hasFocus, row, column);
 			}
-			comp.setBackground(new Color(35, 79, 154));
-			comp.setForeground(Color.WHITE);
+			comp.setBackground(Color.ORANGE);
+			comp.setForeground(Color.BLACK);
 		}
 		return comp; 
 	} 
