@@ -27,7 +27,7 @@ public class WarenkorbArtikelTableCellRenderer extends DefaultTableCellRenderer 
 		 			 break;
 		 }
 		 if (isSelected) {
-			 comp.setForeground(Color.WHITE);
+			 comp.setForeground(Color.BLACK);
 			 comp.setBackground(Color.ORANGE);
 		 } else {
 			 comp.setForeground(Color.BLACK);

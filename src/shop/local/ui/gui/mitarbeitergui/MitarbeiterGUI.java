@@ -42,6 +42,7 @@ import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
+import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.ui.gui.LogInGUI;
 import shop.local.ui.gui.components.BestandshistorieGraphik;
 import shop.local.ui.gui.components.JAccountButton;
@@ -187,7 +188,7 @@ public class MitarbeiterGUI extends JFrame{
 	private void createHeader(){
 		accountButton = new JAccountButton(mitarbeiter.getName());
 		logoutButton = new JButton("Abmelden");
-		logoutButton.addActionListener(new logoutListener());
+		logoutButton.addActionListener(new LogoutListener());
 		JPanel accountPanel = new JPanel();
 		accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.PAGE_AXIS));
 		accountPanel.add(accountButton);
@@ -1376,7 +1377,7 @@ public class MitarbeiterGUI extends JFrame{
 		}
 	}
 	
-	class logoutListener implements ActionListener {
+	class LogoutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(logoutButton)) {

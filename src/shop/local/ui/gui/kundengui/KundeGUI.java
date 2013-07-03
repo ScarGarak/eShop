@@ -93,8 +93,10 @@ public class KundeGUI extends JFrame {
 	// Search Table & Warenkorb Table
 	private JPanel tablePanel;
 	private JTable searchTable;
+	private ArtikelTableModel artikelTableModel;
 	private JScrollPane searchScrollPane;
 	private JTable warenkorbTable;
+	private WarenkorbArtikelTableModel warenkorbArtikelTableModel;
 	private JScrollPane warenkorbScrollPane;
 	private JLabel artikelanzahl;
 	private JLabel gesamtpreis;
@@ -377,9 +379,15 @@ public class KundeGUI extends JFrame {
 	}
 	
 	private void updateSearchTable(List<Artikel> artikel) {
-		ArtikelTableModel atm = new ArtikelTableModel(artikel);
-		searchTable.setModel(atm);
-		atm.fireTableDataChanged();
+		artikelTableModel = new ArtikelTableModel(artikel);
+		searchTable.setModel(artikelTableModel);
+		artikelTableModel.fireTableDataChanged();
+	}
+	
+	private void updateWarenkorbTable(List<WarenkorbArtikel> warenkorbArtikel) {
+		warenkorbArtikelTableModel = new WarenkorbArtikelTableModel(warenkorbArtikel);
+		warenkorbTable.setModel(warenkorbArtikelTableModel);
+		warenkorbArtikelTableModel.fireTableDataChanged();
 	}
 	
 	private void setTableCellAlignment(DefaultTableCellRenderer renderer, JTable table, int alignment) {
@@ -438,10 +446,17 @@ public class KundeGUI extends JFrame {
 	private void clearErrorMessages() {
 		errorMessage.setText("");
 		errorName.setText("");
+		name.setBackground(Color.WHITE);
 		errorStrasse.setText("");
+		strasse.setBackground(Color.WHITE);
 		errorPlz.setText("");
+		plz.setBackground(Color.WHITE);
 		errorWohnort.setText("");
+		wohnort.setBackground(Color.WHITE);
 		errorPasswort.setText("");
+		altesPasswort.setBackground(Color.WHITE);
+		neuesPasswort.setBackground(Color.WHITE);
+		confirmPasswort.setBackground(Color.WHITE);
 	}
 	
 	class SearchListener implements ActionListener {
@@ -456,6 +471,7 @@ public class KundeGUI extends JFrame {
 				headerPanel.repaint();
 				remove(accountPanel);
 				add(tablePanel, BorderLayout.CENTER);
+				add(detailsPanel, BorderLayout.SOUTH);
 				tablePanel.remove(warenkorbScrollPane);
 				tablePanel.remove(tableFooterPanel);
 				tablePanel.remove(rechnungPanel);
@@ -484,11 +500,13 @@ public class KundeGUI extends JFrame {
 				headerPanel.repaint();
 				remove(accountPanel);
 				add(tablePanel, BorderLayout.CENTER);
+				add(detailsPanel, BorderLayout.SOUTH);
 				tablePanel.remove(searchScrollPane);
 				searchTable.clearSelection();
 				tablePanel.add(warenkorbScrollPane, BorderLayout.CENTER);
 				warenkorbTable.clearSelection();
 				updateArtikelanzahl();
+				updateWarenkorbTable(kunde.getWarenkorbVerwaltung().getWarenkorb());
 				updateGesamtpreis();
 				tablePanel.add(tableFooterPanel, BorderLayout.SOUTH);
 				tablePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
@@ -506,6 +524,7 @@ public class KundeGUI extends JFrame {
 					Rechnung r = shop.kaufen(kunde);
 					rechnung.setText(r.toString());
 					updateArtikelanzahl();
+					updateWarenkorbTable(kunde.getWarenkorbVerwaltung().getWarenkorb());
 					warenkorbPanel.remove(kaufenLeerenPanel);
 					warenkorbTable.clearSelection();
 					tablePanel.remove(warenkorbScrollPane);
@@ -545,6 +564,7 @@ public class KundeGUI extends JFrame {
 					try {
 						shop.leeren(kunde);
 						updateArtikelanzahl();
+						updateWarenkorbTable(kunde.getWarenkorbVerwaltung().getWarenkorb());
 						updateGesamtpreis();
 						warenkorbTable.clearSelection();
 						tablePanel.validate();
@@ -644,6 +664,7 @@ public class KundeGUI extends JFrame {
 				try {
 					shop.ausDemWarenkorbHerausnehmen(kunde, wa.getArtikel());
 					updateArtikelanzahl();
+					updateWarenkorbTable(kunde.getWarenkorbVerwaltung().getWarenkorb());
 					updateGesamtpreis();
 					warenkorbTable.clearSelection();
 					tablePanel.validate();
@@ -690,6 +711,7 @@ public class KundeGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource().equals(accountButton)) {
+				clearErrorMessages();
 				name.setText(kunde.getName());
 				strasse.setText(kunde.getStrasse());
 				plz.setText(String.valueOf(kunde.getPlz()));
@@ -730,8 +752,11 @@ public class KundeGUI extends JFrame {
 				leerenButton.setEnabled(true);
 				remove(accountPanel);
 				add(tablePanel, BorderLayout.CENTER);
+				add(detailsPanel, BorderLayout.SOUTH);
 				tablePanel.revalidate();
 				tablePanel.repaint();
+				detailsPanel.revalidate();
+				detailsPanel.repaint();
 				clearErrorMessages();
 			}
 			if (ae.getSource().equals(speichernButton)) {
@@ -739,14 +764,17 @@ public class KundeGUI extends JFrame {
 				boolean ok = true;
 				if (name.getText().isEmpty()) {
 					errorName.setText("Der Name darf nicht leer sein. Bitte geben Sie einen g\u00fcltigen Namen ein.");
+					name.setBackground(new Color(250,240,230));
 					ok = false;
 				}
 				if (strasse.getText().isEmpty()) {
 					errorStrasse.setText("Die Stra\u00dfe darf nicht leer sein.");
+					strasse.setBackground(new Color(250,240,230));
 					ok = false;
 				}
 				if (plz.getText().isEmpty()) {
 					errorPlz.setText("Die Postleitzahl darf nicht leer sein.");
+					plz.setBackground(new Color(250,240,230));
 					ok = false;
 				}
 				if (!plz.getText().isEmpty()) {
@@ -754,28 +782,36 @@ public class KundeGUI extends JFrame {
 						Integer.parseInt(plz.getText());
 					} catch(NumberFormatException nfe) {  
 						errorPlz.setText("Bitte geben Sie eine g\u00fcltige Postleitzahl ein.");  
+						plz.setBackground(new Color(250,240,230));
 						ok = false;
 					}
 				} 
 				if (wohnort.getText().isEmpty()) {
 					errorWohnort.setText("Der Wohnort darf nicht leer sein.");
+					wohnort.setBackground(new Color(250,240,230));
 					ok = false;
 				} 
 				if (!(altesPasswort.getText().isEmpty() && neuesPasswort.getText().isEmpty() && confirmPasswort.getText().isEmpty())) {
 					if (!altesPasswort.getText().equals(kunde.getPasswort())) {
 						errorPasswort.setText("Das alte Passwort ist falsch.");
+						altesPasswort.setBackground(new Color(250, 240, 230));
 						ok = false;
 					} else
 					if (neuesPasswort.getText().equals(altesPasswort.getText())) {
 						errorPasswort.setText("Das neue Passwort darf nicht gleich das alte Passwort sein.");
+						neuesPasswort.setBackground(new Color(250, 240, 230));
 						ok = false;
 					} else
 					if (!confirmPasswort.getText().equals(neuesPasswort.getText())) {
 						errorPasswort.setText("Bitte best\u00e4tigen Sie das neue Passwort.");
+						confirmPasswort.setBackground(new Color(250, 240, 230));
 						ok = false;
 					} else
 					if (altesPasswort.getText().isEmpty() || neuesPasswort.getText().isEmpty() || confirmPasswort.getText().isEmpty()) {
 						errorPasswort.setText("Bitte geben Sie das alte Passwort, das neue Passwort und dessen Best\u00e4tigung ein.");
+						if (altesPasswort.getText().isEmpty()) altesPasswort.setBackground(new Color(250, 240, 230));
+						if (neuesPasswort.getText().isEmpty()) neuesPasswort.setBackground(new Color(250, 240, 230));
+						if (confirmPasswort.getText().isEmpty()) confirmPasswort.setBackground(new Color(250, 240, 230));
 						ok = false;
 					}
 				}
@@ -800,8 +836,11 @@ public class KundeGUI extends JFrame {
 					leerenButton.setEnabled(true);
 					remove(accountPanel);
 					add(tablePanel, BorderLayout.CENTER);
+					add(detailsPanel, BorderLayout.SOUTH);
 					tablePanel.revalidate();
 					tablePanel.repaint();
+					detailsPanel.revalidate();
+					detailsPanel.repaint();
 				}
 			}
 		}
