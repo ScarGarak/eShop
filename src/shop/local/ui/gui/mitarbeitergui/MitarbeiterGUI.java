@@ -1106,7 +1106,6 @@ public class MitarbeiterGUI extends JFrame{
 		
 		logScrollPane = new JScrollPane(logTable);
 		
-		
 		logPanel.add(logScrollPane, BorderLayout.CENTER);
 	}
 	
