@@ -27,7 +27,7 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer {
 		 			 break;
 		 }
 		 if (isSelected) {
-			 comp.setForeground(Color.WHITE);
+			 comp.setForeground(Color.BLACK);
 			 comp.setBackground(Color.ORANGE);
 		 } else {
 			 comp.setForeground(Color.BLACK);
@@ -35,4 +35,5 @@ public class ArtikelTableCellRenderer extends DefaultTableCellRenderer {
 		 }
 		 return comp;
 	 }
+	 
 }

@@ -43,15 +43,6 @@ public class WarenkorbArtikelTableModel extends AbstractTableModel {
     public boolean isCellEditable(int row, int column) {
        return false;
     }
-
-	@Override
-	public Class<?> getColumnClass(int column) {
-		if (getValueAt(0, column) != null) {
-			return getValueAt(0, column).getClass();
-		} else {
-			return Object.class;
-		}
-	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
