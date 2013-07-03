@@ -10,7 +10,7 @@ import shop.local.valueobjects.Massengutartikel;
 @SuppressWarnings("serial")
 public class ArtikelTableModel extends AbstractTableModel {
 
-	private String[] columnNames = {"Artikelnummer", "Bezeichnung", "Preis", "Packungsgrš§e", "Bestand"};
+	private String[] columnNames = {"Artikelnummer", "Bezeichnung", "Preis", "Packungsgr\u00f6\u00dfe", "Bestand"};
 	private List<Artikel> artikelListe;
 	
 	public ArtikelTableModel(List<Artikel> artikelListe) {

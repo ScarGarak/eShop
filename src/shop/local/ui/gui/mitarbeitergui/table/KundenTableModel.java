@@ -7,7 +7,7 @@ import shop.local.valueobjects.Kunde;
 @SuppressWarnings("serial")
 public class KundenTableModel extends AbstractTableModel{
 	
-	private String[] columnNames = {"ID", "Username", "Name", "Stra§e", "Wohnort", "Postleitzahl", "Blockiert"};
+	private String[] columnNames = {"ID", "Username", "Name", "Stra\u00dfe", "Wohnort", "Postleitzahl", "Blockiert"};
 	private List<Kunde> kundenListe;
 	
 	public KundenTableModel(List<Kunde> kundenListe) {

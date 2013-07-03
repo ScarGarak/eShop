@@ -5,7 +5,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class LogTableModel extends AbstractTableModel{
 
-	private String[] columnNames = {"Datum", "Uhrzeit", "Personentyp", "Person ID", "St\u00fcckzahl", "ArtikelID", "Aktion"};
+	private String[] columnNames = {"Datum", "Uhrzeit", "Personentyp", "Person ID", "St\u00fcckzahl", "Artikel ID", "Aktion"};
 	private String[] logDatei;
 	
 	public LogTableModel(String logDatei) {

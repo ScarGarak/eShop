@@ -11,10 +11,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -30,11 +32,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableRowSorter;
 
 import shop.local.domain.ShopVerwaltung;
 import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
@@ -124,7 +128,7 @@ public class MitarbeiterGUI extends JFrame{
 	private JTextField mitarbeiterUsernameInput;
 	private JTextField mitarbeiterNameInput;
 	private JTextField mitarbeiterGehaltInput;
-	private JComboBox mitarbeiterFunktionInput;
+	private JComboBox<MitarbeiterFunktion> mitarbeiterFunktionInput;
 	
 		//Mitarbeiter Footer
 	private JPanel mitarbeiterFooterWrapper;
@@ -152,6 +156,8 @@ public class MitarbeiterGUI extends JFrame{
 	//////////// Log Panel ////////////
 	private JPanel logPanel;
 	private JScrollPane logScrollPane;
+	private JTable logTable;
+	private TableRowSorter<LogTableModel> sorter;
 	
 	//////////// Header ////////////
 	private JPanel headerPanel;
@@ -360,16 +366,20 @@ public class MitarbeiterGUI extends JFrame{
 						// weil -1 kein gültiger Wert ist
 						throw new NumberFormatException();
 					}
-					if(artikelPackungsGroesseInput.getText().equals("") || artikelPackungsGroesseInput.getText().equals("1")){
-						shop.fuegeArtikelEin(mitarbeiter, artikelnummer, bezeichnung, preis, bestand);
-						updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+					if(bezeichnung != null && !bezeichnung.equals("")){
+						if(artikelPackungsGroesseInput.getText().equals("") || artikelPackungsGroesseInput.getText().equals("1")){
+							shop.fuegeArtikelEin(mitarbeiter, artikelnummer, bezeichnung, preis, bestand);
+							updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+						}else{
+							int packungsgroesse = Integer.parseInt(artikelPackungsGroesseInput.getText());
+							shop.fuegeMassengutartikelEin(mitarbeiter, artikelnummer, bezeichnung, preis, packungsgroesse, bestand);
+							updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+						}
+						success = true;
 					}else{
-						int packungsgroesse = Integer.parseInt(artikelPackungsGroesseInput.getText());
-						shop.fuegeMassengutartikelEin(mitarbeiter, artikelnummer, bezeichnung, preis, packungsgroesse, bestand);
-						updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+						setErrorMsg("Sie m\u00fcssen eine Artikelbezeichnung angeben!", artikelFooterWrapper);
 					}
-
-					success = true;
+					
 				}catch (NumberFormatException nfe){
 					setErrorMsg("Bitte f\u00fcgen Sie richtige Werte ein!", artikelFooterWrapper);
 				} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException ex) {
@@ -510,7 +520,7 @@ public class MitarbeiterGUI extends JFrame{
 		
 		artikelBearbeitenEingabeFeld.add(new JLabel("   Preis:"));
 		artikelBearbeitenEingabeFeld.add(artikelPreisInput);
-		artikelPreisInput.setText(a.getPreis()+"");
+		artikelPreisInput.setText(new DecimalFormat("##.00").format(a.getPreis())+"");
 		
 		if(a instanceof Massengutartikel){
 			artikelBearbeitenEingabeFeld.add(new JLabel("   Packungsgr\u00f6\u00dfe:"));
@@ -903,7 +913,7 @@ public class MitarbeiterGUI extends JFrame{
 		
 		mitarbeiterBearbeitenEingabeFeld.add(new JLabel("   Gehalt:"));
 		mitarbeiterBearbeitenEingabeFeld.add(mitarbeiterGehaltInput);
-		mitarbeiterGehaltInput.setText(m.getGehalt()+"");
+		mitarbeiterGehaltInput.setText(new DecimalFormat("##.00").format(m.getGehalt())+"");
 		
 		mitarbeiterBearbeitenEingabeFeld.add(new JLabel("   Funktion:"));
 		mitarbeiterBearbeitenEingabeFeld.add(mitarbeiterFunktionInput);
@@ -1082,13 +1092,15 @@ public class MitarbeiterGUI extends JFrame{
 		logPanel = new JPanel(new BorderLayout());
 		
 		LogTableModel logTableModel = new LogTableModel(shop.gibLogDatei());
-		JTable logTable = new JTable(logTableModel);
+		sorter = new TableRowSorter<LogTableModel>(logTableModel); 
+		
+		logTable = new JTable(logTableModel);
+		logTable.setRowSorter(sorter);
 		logTable.setShowGrid(true);
 		logTable.setGridColor(Color.LIGHT_GRAY);
 		
 		logTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		logTable.getTableHeader().setReorderingAllowed(false);
-		logTable.setAutoCreateRowSorter(true);
 		
 		setTableCellAlignment(new DefaultTableCellRenderer(), logTable, JLabel.LEFT);
 		
@@ -1201,27 +1213,26 @@ public class MitarbeiterGUI extends JFrame{
 					
 					if(yWerte != null){
 						BestandshistorieGraphik g = new BestandshistorieGraphik(yWerte, a);
+						g.setPreferredSize(new Dimension(300,180));
 						
-						JButton zurueck = new JButton("Zur\u00fcck");
-						zurueck.addActionListener(new ActionListener() {
-							//////////// Zurueck ////////////
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								artikelPanel.removeAll();
-								artikelPanel.add(artikelCenterPanel, BorderLayout.CENTER);
-								artikelPanel.add(artikelFooterWrapper, BorderLayout.SOUTH);
-								artikelPanel.revalidate();
-								artikelPanel.repaint();
-							}
-						});
-						
+						JButton vergroessern = new JButton("Verg\u00f6\u00dfern");
+						vergroessern.addActionListener(new BestandshistorieVergroessernListener(g));
 						JPanel tmp = new JPanel();
-						tmp.add(zurueck);
+						tmp.add(vergroessern);
 						
-						artikelPanel.removeAll();
-						artikelPanel.add(g, BorderLayout.CENTER);
-						artikelPanel.add(tmp, BorderLayout.EAST);
-						artikelPanel.revalidate();
+						
+						// Fuege jetzt noch die entsprechenden Panels zum Artikelfooter hinzu
+						artikelFooterPanel.add(Box.createGlue());
+						artikelFooterPanel.add(g);
+						artikelFooterPanel.add(Box.createRigidArea(new Dimension(75, 50)));
+						artikelFooterPanel.add(tmp);
+						artikelFooterPanel.add(Box.createGlue());
+						artikelFooterPanel.revalidate();
+						artikelFooterPanel.repaint();
+
+						// Setze das Artikelfooter in den Wrapper
+						artikelFooterWrapper.add(artikelFooterPanel);
+						artikelFooterWrapper.setVisible(true);
 					}
 
 				}else if(e.getSource().equals(artikelEntfernen)){					// Artikel Entfernen
@@ -1251,6 +1262,42 @@ public class MitarbeiterGUI extends JFrame{
 				artikelFooterWrapper.setVisible(true);
 			}
 		}
+	}
+	
+	class BestandshistorieVergroessernListener implements ActionListener{
+
+		private BestandshistorieGraphik g;
+		
+		public BestandshistorieVergroessernListener(BestandshistorieGraphik g){
+			this.g = g;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton zurueck = new JButton("Zur\u00fcck");
+			zurueck.addActionListener(new ActionListener() {
+				//////////// Zurueck ////////////
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					artikelPanel.removeAll();
+					artikelFooterWrapper.setVisible(false);
+					
+					artikelPanel.add(artikelCenterPanel, BorderLayout.CENTER);
+					artikelPanel.add(artikelFooterWrapper, BorderLayout.SOUTH);
+					artikelPanel.revalidate();
+					artikelPanel.repaint();
+				}
+			});
+
+			JPanel tmp = new JPanel();
+			tmp.add(zurueck);
+
+			artikelPanel.removeAll();
+			artikelPanel.add(g, BorderLayout.CENTER);
+			artikelPanel.add(tmp, BorderLayout.EAST);
+			artikelPanel.revalidate();
+		}
+		
 	}
 	
 	class MitarbeiterPanelListener implements ActionListener {
@@ -1400,9 +1447,10 @@ public class MitarbeiterGUI extends JFrame{
 				if(index != -1){
 					switch(index){
 					case 0: updateArtikelTableModel(shop.sucheArtikel(searchField.getText()));
+							clearArtikelTableSelection();
 							break;
 					case 1: mitarbeiterFooterWrapper.setVisible(false);
-							clearErrorMsg();
+							clearErrorMsg(); 
 							try{
 								int id = Integer.parseInt(searchField.getText());
 								List<Mitarbeiter> m = new Vector<Mitarbeiter>();
@@ -1420,6 +1468,7 @@ public class MitarbeiterGUI extends JFrame{
 								setErrorMsg("Ein Mitarbeiter mit der angegebenen ID existiert nicht!", mitarbeiterFooterWrapper);
 								mitarbeiterFooterWrapper.setVisible(true);
 							}
+							clearMitarbeiterTableSelection();
 							break;
 					case 2: kundenFooterWrapper.setVisible(false);
 							try{
@@ -1438,8 +1487,19 @@ public class MitarbeiterGUI extends JFrame{
 								setErrorMsg("Ein Kunde mit der angegebenen ID existiert nicht!", kundenFooterWrapper);
 								kundenFooterWrapper.setVisible(true);
 							}
+							clearKundenTableSelection();
 							break;
-					case 3: //System.out.println("Log Tab!");
+					case 3: 
+							String artikelID = searchField.getText();
+							RowFilter<LogTableModel, Object> rf = null;
+							if(!artikelID.equals("")){
+								try {
+									rf = RowFilter.regexFilter(artikelID);
+								} catch (PatternSyntaxException e) {
+									//do nothing
+								}
+							}
+							sorter.setRowFilter(rf);
 							break;
 					default:System.err.println("Interner Fehler: 'Anzahl der Tabs \u00fcberschritten'!");
 					}
@@ -1492,8 +1552,8 @@ public class MitarbeiterGUI extends JFrame{
 						mitarbeiterFooterWrapper.setVisible(false);
 					break;
 					
-			case 3: searchField.setEnabled(false);
-					searchButton.setEnabled(false);
+			case 3: searchField.setEnabled(true);
+					searchButton.setEnabled(true);
 					
 					// Alles von den anderen Tabs zurücksetzen
 					clearArtikelTableSelection();
