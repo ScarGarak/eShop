@@ -443,6 +443,7 @@ public class KundeGUI extends JFrame {
 		gesamtpreis.setText(String.format("Gesamtpreis: %.2f ", kunde.getWarenkorbVerwaltung().getGesamtpreis()) + Currency.getInstance(Locale.GERMANY));
 	}
 	
+
 	private void clearErrorMessages() {
 		errorMessage.setText("");
 		errorName.setText("");
