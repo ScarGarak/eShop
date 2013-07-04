@@ -287,6 +287,20 @@ public class ShopVerwaltung {
 		meineKunden.leeren(k);
 	}
 	
+	public Kunde loginVergessen(String name, String strasse, int zip, String wohnort){
+		Kunde result = null;
+		Iterator<Kunde> itK = meineKunden.getKundenListe().iterator();
+		while(itK.hasNext()){
+			Kunde k = itK.next();
+			if(k.getName().equals(name) && k.getStrasse().equals(strasse) && k.getPlz() == zip && k.getWohnort().equals(wohnort)){
+				result = k;
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
 	/**
 	 * Methode zur überprüfung des Logins auf basis des Usernamens und des Passwortes
 	 * @param username

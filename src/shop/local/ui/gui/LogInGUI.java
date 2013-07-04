@@ -123,7 +123,6 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	private JLabel backLab = new JLabel("<html><u>zur\u00fcck</u></html>");
 	private JLabel regLab = new JLabel("<html><u>Registrieren</u></html>");
 	private JLabel changeLab = new JLabel("<html><u>\u00e4ndern</u></html>");
-	private JTextField gebDatField = new JTextField("");
 	private JTextField nameField = new JTextField("");
 	private JTextField streetField = new JTextField("");
 	private JTextField zipField = new JTextField("");
@@ -163,6 +162,7 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		registerLabel.addMouseListener(this);
 		regLab.addMouseListener(this);
 		backLab.addMouseListener(this);
+		changeLab.addMouseListener(this);
 		
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -189,6 +189,40 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 	private void addGB(Component component, int gridx, int gridy, int width, int ipadx, int ipady) {
         addGB(component, gridx, gridy, width, 1, GridBagConstraints.BOTH, 0.0, 0.0, CENTER, new Insets(5, 5, 5, 5), ipadx, ipady);
     }
+	
+	private void loginVergessen(){
+		Kunde k = null;
+		String name = nameField.getText();
+		String strasse = streetField.getText();
+		String zipStr = zipField.getText();
+		String stadt = cityField.getText();
+		
+		String passwort = pwField.getText();
+		String passwortWiederholung = wpwField.getText();
+		
+		try{
+			int zip = Integer.parseInt(zipStr);
+			k = shop.loginVergessen(name, strasse, zip, stadt);
+		} catch (NumberFormatException nfe){
+			//TODO
+			System.err.println("Bitte geben Sie fŸr die Postleitzahl nur Ziffern ein!");
+		}
+		
+		if(k != null){
+			usernameField.setText(k.getUsername());
+			if(passwort.equals(passwortWiederholung)){
+				k.setPasswort(passwort);
+				zeichneLogin();
+			}else{
+				//TODO
+				System.err.println("Das Passwort und die Passwort Wiederholung m/u00fcssen gleich sein!");
+			}
+		}else{
+			//TODO
+			System.err.println("Kein Account mit diesen Angaben gefunden!");
+		}
+		
+	}
 	
 	private void registrierung() {
 //		prüfe welche id die letzte war dann +1
@@ -289,7 +323,7 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		mittePan.setLayout(new GridLayout(5, 1, 0, 2));
 		mittePan.add(usernameLabel);
 		mittePan.add(usernameField);
-		usernameField.enable();
+		usernameField.setEnabled(true);
 		usernameField.requestFocus();
 		mittePan.add(passwordLabel);
 		mittePan.add(passwordField);
@@ -315,7 +349,6 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		usernameField.setText("");
 		
 		JLabel nameLab = new JLabel("Name");
-		JLabel gebDatLab = new JLabel("Geburtsdatum");
 		JLabel streetLab = new JLabel("Strasse/HNr.");
 		JLabel zipLab = new JLabel("Postleitzahl/zip");
 		JLabel cityLab = new JLabel("Stadt");
@@ -332,10 +365,10 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		linksPan.add(nameLab);
 		linksPan.add(nameField);
 		nameField.requestFocus();
-		linksPan.add(gebDatLab);
-		linksPan.add(gebDatField);
 		linksPan.add(streetLab);
 		linksPan.add(streetField);
+		linksPan.add(new JLabel(""));
+		linksPan.add(new JLabel(""));
 		linksPan.repaint();
 		linksPan.validate();
 		
@@ -347,7 +380,7 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		mittePan.add(cityField);
 		mittePan.add(usernameLabel);
 		mittePan.add(usernameField);
-		usernameField.disable();
+		usernameField.setEnabled(false);
 		mittePan.repaint();
 		mittePan.validate();
 		
@@ -357,10 +390,8 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 //		rechtsPan.add(opwField);
 		rechtsPan.add(passwordLabel);
 		rechtsPan.add(pwField);
-		pwField.disable();
 		rechtsPan.add(wpwLab);
 		rechtsPan.add(wpwField);
-		wpwField.disable();
 		rechtsPan.add(rechts3);
 		rechtsPan.add(rechts4);
 		rechtsPan.repaint();
@@ -393,11 +424,10 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		resizePan();
 		usernameField.setBackground(Color.WHITE);
 		usernameField.setText("");
-		pwField.enable();
-		wpwField.enable();
+		pwField.setEnabled(true);
+		wpwField.setEnabled(true);
 		
 		JLabel nameLab = new JLabel("Name");
-		JLabel gebDatLab = new JLabel("Geburtsdatum");
 		JLabel streetLab = new JLabel("Strasse/HNr.");
 		JLabel zipLab = new JLabel("Postleitzahl/zip");
 		JLabel cityLab = new JLabel("Stadt");
@@ -412,10 +442,10 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		linksPan.add(nameLab);
 		linksPan.add(nameField);
 		nameField.requestFocus();
-		linksPan.add(gebDatLab);
-		linksPan.add(gebDatField);
 		linksPan.add(streetLab);
 		linksPan.add(streetField);
+		linksPan.add(new JLabel(""));
+		linksPan.add(new JLabel(""));
 		linksPan.repaint();
 		linksPan.validate();
 		
@@ -566,6 +596,9 @@ public class LogInGUI extends JFrame implements ActionListener, KeyListener, Mou
 		}
 		if (comp.equals(backLab)) {
 			zeichneLogin();
+		}
+		if (comp.equals(changeLab)) {
+			loginVergessen();
 		}
 	}
 	
