@@ -400,7 +400,7 @@ public class EreignisVerwaltung {
 		lpm.openForReading(dateiname);
 		String zeile = "";
 		
-		// Suche nachd er ersten Zeile die nicht Šlter als 30 Tage ist
+		// Suche nach der ersten Zeile die nicht Šlter als 30 Tage ist
 		while(!(zeile = lpm.ladeEinAuslagerung()).equals("")){
 			String[] tokens = zeile.split(" ");
 			if(istDatumGueltig(tokens[0]+" "+tokens[1])){
@@ -412,6 +412,17 @@ public class EreignisVerwaltung {
 		
 		// Lšschen aller Zeilen, die sich vor der gefundenen Zeile befinden
 		lpm.cleanLogdatei(zeile, dateiname);
+	}
+	
+	/**
+	 * Dies Methode entfernt ale Eintraege eines Artikels aus der Log Datei um damit
+	 * die Probleme zu verhindern, wenn dessen ID nochmals benutzt wird.
+	 * @param a Artikel zum entfernen
+	 * @param dateiname Name der Logdatei
+	 * @throws IOException
+	 */
+	public void entferneArtikelAusLog(int artikelnummer, String dateiname) throws IOException{
+		lpm.entferneArtikelAusLog(artikelnummer+"", dateiname);
 	}
 	
 	/**

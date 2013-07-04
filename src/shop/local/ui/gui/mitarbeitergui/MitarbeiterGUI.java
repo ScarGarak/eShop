@@ -15,7 +15,6 @@ import java.text.DecimalFormat;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 import java.util.regex.PatternSyntaxException;
 
 import javax.swing.BorderFactory;
@@ -44,9 +43,7 @@ import shop.local.domain.ShopVerwaltung;
 import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
-import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
-import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.ui.gui.LogInGUI;
 import shop.local.ui.gui.components.BestandshistorieGraphik;
@@ -1117,6 +1114,13 @@ public class MitarbeiterGUI extends JFrame{
 		
 		logPanel.add(logScrollPane, BorderLayout.CENTER);
 	}
+
+	private void updateLogTableModel(String logDatei){
+		LogTableModel logTableModel = new LogTableModel(logDatei);
+		logSorter.setModel(logTableModel);
+		logTable.setModel(logTableModel);
+		logScrollPane.setViewportView(logTable);
+	}
 	
 	////////////////////// Listener //////////////////////
 	
@@ -1255,11 +1259,15 @@ public class MitarbeiterGUI extends JFrame{
 						if(choice == 0){
 							shop.entferneArtikel(mitarbeiter, a.getArtikelnummer());
 							updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+							updateLogTableModel(shop.gibLogDatei());
 							clearArtikelTableSelection();
 						}
 						artikelFooterWrapper.setVisible(false);
 					} catch (ArtikelExistiertNichtException e1) {
 						setErrorMsg("Das Artikel existiert nicht!", artikelFooterWrapper);
+						artikelFooterWrapper.setVisible(true);
+					} catch (IOException e1) {
+						setErrorMsg("Fehler beim anpassen der Logdatei!", artikelFooterWrapper);
 						artikelFooterWrapper.setVisible(true);
 					}
 

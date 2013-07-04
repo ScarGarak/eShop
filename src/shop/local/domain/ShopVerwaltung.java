@@ -33,6 +33,11 @@ import shop.local.valueobjects.WarenkorbArtikel;
  * @version 1.0.0
  */
 public class ShopVerwaltung {
+	
+	private String artikelDateiname = "SHOP_A.ser";
+	private String mitarbeiterDateiname = "SHOP_M.ser";
+	private String kundenDateiname = "SHOP_K.ser";
+	private String logDateiname = "EinAuslagerung.log";
 
 	private ArtikelVerwaltung meineArtikel;
 	private MitarbeiterVerwaltung meineMitarbeiter;
@@ -57,14 +62,14 @@ public class ShopVerwaltung {
 	 */
 	public ShopVerwaltung() throws IOException {
 		meineArtikel = new ArtikelVerwaltung();
-		meineArtikel.liesDaten("SHOP_A.ser");
+		meineArtikel.liesDaten(artikelDateiname);
 		
 		meineMitarbeiter = new MitarbeiterVerwaltung();
-		meineMitarbeiter.liesDaten("SHOP_M.ser");
+		meineMitarbeiter.liesDaten(mitarbeiterDateiname);
 		mitarbeiterNextId = meineMitarbeiter.getMitarbeiterListe().get(meineMitarbeiter.getMitarbeiterListe().size()-1).getId() + 1;
 		
 		meineKunden = new KundenVerwaltung();
-		meineKunden.liesDaten("SHOP_K.ser");
+		meineKunden.liesDaten(kundenDateiname);
 		kundenNextId = meineKunden.getKundenListe().get(meineKunden.getKundenListe().size()-1).getId() + 1;
 		
 		meineEreignisse = new EreignisVerwaltung();
@@ -111,9 +116,8 @@ public class ShopVerwaltung {
 		return meineArtikel.sucheArtikel(bezeichnung); 
 	}
 	
-	public void entferneArtikel(Mitarbeiter m, int artikelnummer) throws ArtikelExistiertNichtException {
-		Artikel a = gibArtikel(artikelnummer);
-		meineEreignisse.hinzufuegen(new Ereignis(new Date(), a, -a.getBestand(), m));
+	public void entferneArtikel(Mitarbeiter m, int artikelnummer) throws ArtikelExistiertNichtException, IOException {
+		meineEreignisse.entferneArtikelAusLog(artikelnummer, logDateiname);
 		
 		meineArtikel.entfernen(artikelnummer);
 	}
@@ -124,7 +128,7 @@ public class ShopVerwaltung {
 	 * @throws IOException
 	 */
 	public void schreibeArtikel() throws IOException {
-		meineArtikel.schreibeDaten("SHOP_A.ser");
+		meineArtikel.schreibeDaten(artikelDateiname);
 	}
 	
 	// Mitarbeiter Methoden
@@ -176,7 +180,7 @@ public class ShopVerwaltung {
 	 * @throws IOException
 	 */
 	public void schreibeMitarbeiter() throws IOException{
-		meineMitarbeiter.schreibeDaten("SHOP_M.ser");
+		meineMitarbeiter.schreibeDaten(mitarbeiterDateiname);
 	}
 	
 	/**
@@ -253,7 +257,7 @@ public class ShopVerwaltung {
  	* @throws IOException
  	*/
 	public void schreibeKunden() throws IOException{
-		meineKunden.schreibeDaten("SHOP_K.ser");
+		meineKunden.schreibeDaten(kundenDateiname);
 	}
 	
 	public void inDenWarenkorbLegen(Kunde kunde, Artikel artikel, int stueckzahl) throws ArtikelBestandIstZuKleinException, ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
@@ -313,19 +317,19 @@ public class ShopVerwaltung {
 	// Ereignis Methoden
 	
 	public void schreibeEreignisse() throws IOException{
-		meineEreignisse.schreibeDaten("EinAuslagerung.log");
+		meineEreignisse.schreibeDaten(logDateiname);
 	}
 	
 	public String gibBestandsHistorie(Artikel artikel) throws IOException{
-		return meineEreignisse.gibBestandsHistorie(artikel, "EinAuslagerung.log");
+		return meineEreignisse.gibBestandsHistorie(artikel, logDateiname);
 	}
 	
 	public int[] gibBestandsHistorieDaten(Artikel artikel) throws IOException{
-		return meineEreignisse.gibBestandsHistorieDaten(artikel, "EinAuslagerung.log");
+		return meineEreignisse.gibBestandsHistorieDaten(artikel, logDateiname);
 	}
 	
 	public String gibLogDatei() throws IOException{
-		return meineEreignisse.liesLogDatei("EinAuslagerung.log");
+		return meineEreignisse.liesLogDatei(logDateiname);
 	}
 	
 }
