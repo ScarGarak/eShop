@@ -21,6 +21,7 @@ import shop.local.domain.exceptions.WarenkorbIstLeerException;
 import shop.local.valueobjects.Artikel;
 import shop.local.valueobjects.Kunde;
 import shop.local.valueobjects.Mitarbeiter;
+import shop.local.valueobjects.MitarbeiterFunktion;
 import shop.local.valueobjects.Person;
 import shop.local.valueobjects.PersonTyp;
 import shop.local.valueobjects.WarenkorbArtikel;
@@ -110,9 +111,6 @@ public class ShopClientCUI {
 	private void verarbeiteAnmeldungEingabe(String line) throws IOException {
 		if (line.equals("r")) {
 			System.out.print("Registrierung >");
-			System.out.print("ID >");
-			String strId = liesEingabe();
-			int id = Integer.parseInt(strId);
 			System.out.print("Username >");
 			String username = liesEingabe();
 			System.out.print("Passwort >");
@@ -127,7 +125,7 @@ public class ShopClientCUI {
 			System.out.println("Wohnort >");
 			String wohnort = liesEingabe();
 			try {
-				shop.fuegeKundenHinzu(id, username, passwort, name, strasse, plz, wohnort);
+				shop.fuegeKundenHinzu(username, passwort, name, strasse, plz, wohnort);
 				System.out.println("Kunde wurde hinzugef¸gt!");
 			} catch (KundeExistiertBereitsException e) {
 				System.err.println(e.getMessage());
@@ -259,18 +257,28 @@ public class ShopClientCUI {
 			}
 		}
 		else if (line.equals("me")) {
-			System.out.print("Mitarbeiter ID >");
-			String strId = liesEingabe();
 			System.out.print("Username >");
 			String username = liesEingabe();
 			System.out.print("Passwort >");
 			String passwort = liesEingabe();
 			System.out.print("Name >");
 			String name = liesEingabe();
+			System.out.print("Funktion: \tMitarbeiter / Admin >");
+			String funktionStr = liesEingabe();
+			
 			try{
-				int id = Integer.parseInt(strId);
+				MitarbeiterFunktion funktion = null;
+				if(funktionStr.equals("Mitarbeiter")){
+					funktion = MitarbeiterFunktion.Mitarbeiter;
+				}else if(funktionStr.equals("Admin")){
+					funktion = MitarbeiterFunktion.Admin;
+				}
 				
-				shop.fuegeMitarbeiterHinzu(id, username, passwort, name);
+				if(funktion != null){
+					shop.fuegeMitarbeiterHinzu(username, passwort, name, funktion, 0);
+				}else{
+					System.err.println("Die Funktion hat keinen gültigen Wert!");
+				}
 			} catch (MitarbeiterExistiertBereitsException e){
 				System.err.println(e.getMessage());
 			} catch (UsernameExistiertBereitsException e){

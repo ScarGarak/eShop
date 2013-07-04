@@ -192,19 +192,28 @@ public class CopyOfShopClientCUI {
 			}
 		}
 		else if (line.equals("me")) {
-			System.out.print("Mitarbeiter ID >");
-			String strId = liesEingabe();
 			System.out.print("Username >");
 			String username = liesEingabe();
 			System.out.print("Passwort >");
 			String passwort = liesEingabe();
 			System.out.print("Name >");
 			String name = liesEingabe();
+			System.out.print("Funktion: \tMitarbeiter / Admin >");
+			String funktionStr = liesEingabe();
+			
 			try{
-				int id = Integer.parseInt(strId);
+				MitarbeiterFunktion funktion = null;
+				if(funktionStr.equals("Mitarbeiter")){
+					funktion = MitarbeiterFunktion.Mitarbeiter;
+				}else if(funktionStr.equals("Admin")){
+					funktion = MitarbeiterFunktion.Admin;
+				}
 				
-				shop.fuegeMitarbeiterHinzu(id, username, passwort, name);
-				shop.sucheMitarbeiter(id).setFunktion(MitarbeiterFunktion.Mitarbeiter);
+				if(funktion != null){
+					shop.fuegeMitarbeiterHinzu(username, passwort, name, funktion, 0);
+				}else{
+					System.err.println("Die Funktion hat keinen gŸltigen Wert!");
+				}
 				
 			} catch (MitarbeiterExistiertBereitsException e){
 				System.err.println(e.getMessage());
@@ -212,8 +221,6 @@ public class CopyOfShopClientCUI {
 				System.err.println(e.getMessage());
 			} catch (NumberFormatException e){
 				System.err.println("Die id ist keine Zahl! Bitte versuchen Sie es erneut.");
-			} catch (MitarbeiterExistiertNichtException e) {
-				System.err.println("Fehler!");
 			}
 		}
 		else if (line.equals("ma")) {
@@ -241,9 +248,6 @@ public class CopyOfShopClientCUI {
 				e1.printStackTrace();
 			}
 		}else  if(line.equals("ke")){
-			System.out.print("Kunden ID >");
-			String strId = liesEingabe();
-			int id = Integer.parseInt(strId);
 			System.out.print("Username >");
 			String username = liesEingabe();
 			System.out.print("Passwort >");
@@ -258,7 +262,7 @@ public class CopyOfShopClientCUI {
 			System.out.println("Wohnort >");
 			String wohnort = liesEingabe();
 			try {
-				shop.fuegeKundenHinzu(id, username, passwort, name, strasse, plz, wohnort);
+				shop.fuegeKundenHinzu(username, passwort, name, strasse, plz, wohnort);
 			} catch (KundeExistiertBereitsException e) {
 				System.err.println(e.getMessage());
 			} catch (UsernameExistiertBereitsException e) {

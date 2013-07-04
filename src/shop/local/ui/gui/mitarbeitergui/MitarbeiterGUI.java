@@ -45,6 +45,7 @@ import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgr
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
 import shop.local.domain.exceptions.KundeExistiertNichtException;
+import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
 import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.ui.gui.LogInGUI;
@@ -68,6 +69,8 @@ public class MitarbeiterGUI extends JFrame{
 	
 	public static double MINDESTLOHN = 1800;
 	
+	public String standardPasswort = "123";
+	
 	private Mitarbeiter mitarbeiter;
 	private ShopVerwaltung shop;
 	
@@ -76,6 +79,7 @@ public class MitarbeiterGUI extends JFrame{
 	//////////// Artikel Panel ////////////
 	private JPanel artikelPanel;
 	private ArtikelTableModel artikelTableModel;
+	private JScrollPane artikelTableScrollPane;
 	private ArtikelTableCellRenderer artikelTableCellRenderer;
 	
 		//Artikel Center Panel
@@ -117,12 +121,14 @@ public class MitarbeiterGUI extends JFrame{
 	//////////// Mitarbeiter Panel ////////////
 	private JPanel mitarbeiterPanel;
 	private JTable mitarbeiterTable;
+	private JScrollPane mitarbeiterTableScrollPane;
 	private MitarbeiterTableModel mitarbeiterTableModel;
 	private JPanel mitarbeiterButtonsPanel;
 	private JButton mitarbeiterHinzufuegen;
 	private JButton mitarbeiterBearbeiten;
 	private JButton mitarbeiterEntfernen;
 	private JButton mitarbeiterBlockieren;
+	private TableRowSorter<MitarbeiterTableModel> mitarbeiterSorter;
 	
 		//Artikel Eingabe Feld Komponenten
 	private JTextField mitarbeiterUsernameInput;
@@ -145,10 +151,12 @@ public class MitarbeiterGUI extends JFrame{
 	//////////// Kunden Panel ////////////
 	private JPanel kundenPanel;
 	private JTable kundenTable;
+	private JScrollPane kundenTableScrollPane;
 	private KundenTableModel kundenTableModel;
 	private JPanel kundenButtonsPanel;
 	private JButton kundenEntfernen;
 	private JButton kundenBlockieren;
+	private TableRowSorter<KundenTableModel> kundenSorter;
 	
 		//Mitarbeiter Footer
 	private JPanel kundenFooterWrapper;
@@ -157,7 +165,7 @@ public class MitarbeiterGUI extends JFrame{
 	private JPanel logPanel;
 	private JScrollPane logScrollPane;
 	private JTable logTable;
-	private TableRowSorter<LogTableModel> sorter;
+	private TableRowSorter<LogTableModel> logSorter;
 	
 	//////////// Header ////////////
 	private JPanel headerPanel;
@@ -259,7 +267,7 @@ public class MitarbeiterGUI extends JFrame{
 		artikelTableCellRenderer = new ArtikelTableCellRenderer(artikelTable);
 		setTableCellAlignment(artikelTableCellRenderer, artikelTable, JLabel.LEFT);
 		
-		JScrollPane artikelTableScrollPane = new JScrollPane(artikelTable);
+		artikelTableScrollPane = new JScrollPane(artikelTable);
 		artikelTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
 		artikelTableScrollPane.setAlignmentY(TOP_ALIGNMENT);
 		
@@ -712,7 +720,7 @@ public class MitarbeiterGUI extends JFrame{
 	private void updateArtikelTableModel(List<Artikel> artikelListe){
 		artikelTableModel = new ArtikelTableModel(artikelListe);
 		artikelTable.setModel(artikelTableModel);
-		artikelTableModel.fireTableDataChanged();
+		artikelTableScrollPane.setViewportView(artikelTable);
 	}
 	
 	
@@ -725,19 +733,20 @@ public class MitarbeiterGUI extends JFrame{
 		north.setLayout(new BoxLayout(north, BoxLayout.X_AXIS));
 		
 		mitarbeiterTableModel = new MitarbeiterTableModel(shop.gibAlleMitarbeiter(), mitarbeiter.getFunktion());
+		mitarbeiterSorter = new TableRowSorter<MitarbeiterTableModel>(mitarbeiterTableModel);
 		
 		mitarbeiterTable = new JTable(mitarbeiterTableModel);
+		mitarbeiterTable.setRowSorter(mitarbeiterSorter);
 		mitarbeiterTable.setShowGrid(true);
 		mitarbeiterTable.setGridColor(Color.LIGHT_GRAY);
 		
 		mitarbeiterTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mitarbeiterTable.getTableHeader().setReorderingAllowed(false);
-		mitarbeiterTable.setAutoCreateRowSorter(true);
 		mitarbeiterTable.getSelectionModel().addListSelectionListener(new MitarbeiterSelectionListener());
 		MitarbeiterTableCellRenderer mitarbeiterTableCellRenderer = new MitarbeiterTableCellRenderer(artikelTable);
 		setTableCellAlignment(mitarbeiterTableCellRenderer, mitarbeiterTable, JLabel.LEFT);
 		
-		JScrollPane mitarbeiterTableScrollPane = new JScrollPane(mitarbeiterTable);
+		mitarbeiterTableScrollPane = new JScrollPane(mitarbeiterTable);
 		mitarbeiterTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
 		mitarbeiterTableScrollPane.setAlignmentY(TOP_ALIGNMENT);
 		
@@ -808,7 +817,7 @@ public class MitarbeiterGUI extends JFrame{
 		mitarbeiterUsernameInput = new JTextField(10);
 		mitarbeiterNameInput = new JTextField(10);
 		mitarbeiterGehaltInput = new JTextField(10);
-		mitarbeiterFunktionInput = new JComboBox();
+		mitarbeiterFunktionInput = new JComboBox<MitarbeiterFunktion>();
 		MitarbeiterFunktion[] funktionWerte = MitarbeiterFunktion.values();
 		for(MitarbeiterFunktion mf : funktionWerte){
 			mitarbeiterFunktionInput.addItem(mf);
@@ -862,19 +871,16 @@ public class MitarbeiterGUI extends JFrame{
 					if(username.equals("") || name.equals("")){
 						setErrorMsg("Sie m\u00fcssen 'Username' und 'Name' angeben!", mitarbeiterFooterWrapper);
 					}else{
-//						shop.fuegeMitarbeiterHinzu(ID, username, "123" , name);
-//						shop.sucheMitarbeiter(ID).setGehalt(gehalt);
+						shop.fuegeMitarbeiterHinzu(username, standardPasswort , name, mf, gehalt);
 						success = true;
 					}
 				} catch (NumberFormatException nfe){
 					setErrorMsg("Bitte geben Sie nur g\u00fcltige Werte an!", mitarbeiterFooterWrapper);
-				}// catch (MitarbeiterExistiertBereitsException ex) {
-//					setErrorMsg("Es existiert bereits ein Mitarbeiter mit dieser ID!", mitarbeiterFooterWrapper);
-//				} catch (UsernameExistiertBereitsException ex) {
-//					setErrorMsg("Dieser Username ist bereits vergeben!", mitarbeiterFooterWrapper);
-//				} catch (MitarbeiterExistiertNichtException ex) {
-//					setErrorMsg("Interner Fehler: 'Mitarbeiter existiert nicht: Gehalt wurde nicht gesetzt!'", mitarbeiterFooterWrapper);
-//				}
+				} catch (MitarbeiterExistiertBereitsException ex) {
+					setErrorMsg("Es existiert bereits ein Mitarbeiter mit dieser ID!", mitarbeiterFooterWrapper);
+				} catch (UsernameExistiertBereitsException ex) {
+					setErrorMsg("Dieser Username ist bereits vergeben!", mitarbeiterFooterWrapper);
+				}
 				
 				if(success){
 					updateMitarbeiterTableModel(shop.gibAlleMitarbeiter());
@@ -1000,8 +1006,9 @@ public class MitarbeiterGUI extends JFrame{
 
 	private void updateMitarbeiterTableModel(List<Mitarbeiter> mitarbeiterListe){
 		mitarbeiterTableModel = new MitarbeiterTableModel(mitarbeiterListe, mitarbeiter.getFunktion());
+		mitarbeiterSorter.setModel(mitarbeiterTableModel);
 		mitarbeiterTable.setModel(mitarbeiterTableModel);
-		mitarbeiterTableModel.fireTableDataChanged();
+		mitarbeiterTableScrollPane.setViewportView(mitarbeiterTable);
 	}
 	
 	//////////////////////  Kunden Panels  //////////////////////
@@ -1013,18 +1020,19 @@ public class MitarbeiterGUI extends JFrame{
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
 		
 		kundenTableModel = new KundenTableModel(shop.gibAlleKunden());
+		kundenSorter = new TableRowSorter<KundenTableModel>(kundenTableModel); 
 		
 		kundenTable = new JTable(kundenTableModel);
+		kundenTable.setRowSorter(kundenSorter);
 		kundenTable.setShowGrid(true);
 		kundenTable.setGridColor(Color.LIGHT_GRAY);
 		
 		kundenTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		kundenTable.getTableHeader().setReorderingAllowed(false);
-		kundenTable.setAutoCreateRowSorter(true);
 		kundenTable.getSelectionModel().addListSelectionListener(new KundenSelectionListener());
 		setTableCellAlignment(new KundenTableCellRenderer(), kundenTable, JLabel.LEFT);
 		
-		JScrollPane kundenTableScrollPane = new JScrollPane(kundenTable);
+		kundenTableScrollPane = new JScrollPane(kundenTable);
 		kundenTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
 		kundenTableScrollPane.setAlignmentY(TOP_ALIGNMENT);
 		
@@ -1072,8 +1080,9 @@ public class MitarbeiterGUI extends JFrame{
 	
 	private void updateKundenTableModel(List<Kunde> kundenListe){
 		kundenTableModel = new KundenTableModel(kundenListe);
+		kundenSorter.setModel(kundenTableModel);
 		kundenTable.setModel(kundenTableModel);
-		kundenTableModel.fireTableDataChanged();
+		kundenTableScrollPane.setViewportView(kundenTable);
 	}
 	
 	private void clearKundenTableSelection(){
@@ -1092,10 +1101,10 @@ public class MitarbeiterGUI extends JFrame{
 		logPanel = new JPanel(new BorderLayout());
 		
 		LogTableModel logTableModel = new LogTableModel(shop.gibLogDatei());
-		sorter = new TableRowSorter<LogTableModel>(logTableModel); 
+		logSorter = new TableRowSorter<LogTableModel>(logTableModel); 
 		
 		logTable = new JTable(logTableModel);
-		logTable.setRowSorter(sorter);
+		logTable.setRowSorter(logSorter);
 		logTable.setShowGrid(true);
 		logTable.setGridColor(Color.LIGHT_GRAY);
 		
@@ -1216,6 +1225,7 @@ public class MitarbeiterGUI extends JFrame{
 						
 						JButton vergroessern = new JButton("Verg\u00f6\u00dfern");
 						vergroessern.addActionListener(new BestandshistorieVergroessernListener(g));
+						
 						JPanel tmp = new JPanel();
 						tmp.add(vergroessern);
 						
@@ -1223,9 +1233,9 @@ public class MitarbeiterGUI extends JFrame{
 						// Fuege jetzt noch die entsprechenden Panels zum Artikelfooter hinzu
 						artikelFooterPanel.add(Box.createGlue());
 						artikelFooterPanel.add(g);
-						artikelFooterPanel.add(Box.createRigidArea(new Dimension(75, 50)));
-						artikelFooterPanel.add(tmp);
 						artikelFooterPanel.add(Box.createGlue());
+						artikelFooterPanel.add(tmp);
+						artikelFooterPanel.add(Box.createRigidArea(new Dimension(0,0)));
 						artikelFooterPanel.revalidate();
 						artikelFooterPanel.repaint();
 
@@ -1448,57 +1458,38 @@ public class MitarbeiterGUI extends JFrame{
 					case 0: updateArtikelTableModel(shop.sucheArtikel(searchField.getText()));
 							clearArtikelTableSelection();
 							break;
-					case 1: mitarbeiterFooterWrapper.setVisible(false);
-							clearErrorMsg(); 
-							try{
-								int id = Integer.parseInt(searchField.getText());
-								List<Mitarbeiter> m = new Vector<Mitarbeiter>();
-								m.add(shop.sucheMitarbeiter(id));
-								
-								updateMitarbeiterTableModel(m);
-							}catch (NumberFormatException e){
-								if(searchField.getText().equals("")){
-									updateMitarbeiterTableModel(shop.gibAlleMitarbeiter());
-								}else{
-									setErrorMsg("Bitte geben Sie eine ID Nummer an!", mitarbeiterFooterWrapper);
-									mitarbeiterFooterWrapper.setVisible(true);
-								}
-							} catch (MitarbeiterExistiertNichtException e) {
-								setErrorMsg("Ein Mitarbeiter mit der angegebenen ID existiert nicht!", mitarbeiterFooterWrapper);
-								mitarbeiterFooterWrapper.setVisible(true);
-							}
-							clearMitarbeiterTableSelection();
-							break;
-					case 2: kundenFooterWrapper.setVisible(false);
-							try{
-								int id = Integer.parseInt(searchField.getText());
-								List<Kunde> k = new Vector<Kunde>();
-								k.add(shop.sucheKunde(id));
-								updateKundenTableModel(k);
-							}catch (NumberFormatException e){
-								if(searchField.getText().equals("")){
-									updateKundenTableModel(shop.gibAlleKunden());
-								}else{
-									setErrorMsg("Bitte geben Sie eine ID Nummer an!", kundenFooterWrapper);
-									kundenFooterWrapper.setVisible(true);
-								}
-							} catch (KundeExistiertNichtException e) {
-								setErrorMsg("Ein Kunde mit der angegebenen ID existiert nicht!", kundenFooterWrapper);
-								kundenFooterWrapper.setVisible(true);
-							}
-							clearKundenTableSelection();
-							break;
-					case 3: 
-							String artikelID = searchField.getText();
-							RowFilter<LogTableModel, Object> rf = null;
-							if(!artikelID.equals("")){
+					case 1: String mitarbeiterText = searchField.getText();
+							RowFilter<MitarbeiterTableModel, Object> mitarbeiterRf = null;
+							if(!mitarbeiterText.equals("")){
 								try {
-									rf = RowFilter.regexFilter(artikelID);
+									mitarbeiterRf = RowFilter.regexFilter(mitarbeiterText);
 								} catch (PatternSyntaxException e) {
 									//do nothing
 								}
 							}
-							sorter.setRowFilter(rf);
+							mitarbeiterSorter.setRowFilter(mitarbeiterRf);
+							break;
+					case 2: String kundenText = searchField.getText();
+							RowFilter<KundenTableModel, Object> kundenRf = null;
+							if(!kundenText.equals("")){
+								try {
+									kundenRf = RowFilter.regexFilter(kundenText);
+								} catch (PatternSyntaxException e) {
+									//do nothing
+								}
+							}
+							kundenSorter.setRowFilter(kundenRf);
+							break;
+					case 3: String logText = searchField.getText();
+							RowFilter<LogTableModel, Object> logRf = null;
+							if(!logText.equals("")){
+								try {
+									logRf = RowFilter.regexFilter(logText);
+								} catch (PatternSyntaxException e) {
+									//do nothing
+								}
+							}
+							logSorter.setRowFilter(logRf);
 							break;
 					default:System.err.println("Interner Fehler: 'Anzahl der Tabs \u00fcberschritten'!");
 					}

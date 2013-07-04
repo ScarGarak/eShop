@@ -39,6 +39,9 @@ public class ShopVerwaltung {
 	private KundenVerwaltung meineKunden;
 	private EreignisVerwaltung meineEreignisse;
 	
+	private int mitarbeiterNextId;
+	private int kundenNextId;
+	
 	/**
 	 * Konstruktor, der die Basisdaten (Artikel, Mitarbeiter, Kunden) aus Dateien einliest
 	 * (Initialisierung des Shops).
@@ -58,9 +61,11 @@ public class ShopVerwaltung {
 		
 		meineMitarbeiter = new MitarbeiterVerwaltung();
 		meineMitarbeiter.liesDaten("SHOP_M.ser");
+		mitarbeiterNextId = meineMitarbeiter.getMitarbeiterListe().get(meineMitarbeiter.getMitarbeiterListe().size()-1).getId() + 1;
 		
 		meineKunden = new KundenVerwaltung();
 		meineKunden.liesDaten("SHOP_K.ser");
+		kundenNextId = meineKunden.getKundenListe().get(meineKunden.getKundenListe().size()-1).getId() + 1;
 		
 		meineEreignisse = new EreignisVerwaltung();
 	}
@@ -158,11 +163,12 @@ public class ShopVerwaltung {
 	 * @throws MitarbeiterExistiertBereitsException
 	 * @throws UsernameExistiertBereitsException 
 	 */
-	public void fuegeMitarbeiterHinzu(int id, String username, String passwort, String name) throws MitarbeiterExistiertBereitsException, UsernameExistiertBereitsException{
+	public void fuegeMitarbeiterHinzu(String username, String passwort, String name, MitarbeiterFunktion funktion, double gehalt) throws MitarbeiterExistiertBereitsException, UsernameExistiertBereitsException{
 		this.existiertUsernameSchon(username, " - in fuegeMitarbeiterHinzu() !");
 		
-		Mitarbeiter m = new Mitarbeiter(id, username, passwort, name, MitarbeiterFunktion.Mitarbeiter);
+		Mitarbeiter m = new Mitarbeiter(mitarbeiterNextId, username, passwort, name, funktion, gehalt);
 		meineMitarbeiter.einfuegen(m);
+		mitarbeiterNextId++;
 	}
 
 	/**
@@ -234,11 +240,12 @@ public class ShopVerwaltung {
 	 * @throws KundeExistiertBereitsException
 	 * @throws UsernameExistiertBereitsException 
 	 */
-	public void fuegeKundenHinzu(int id, String username, String passwort, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException, UsernameExistiertBereitsException{
+	public void fuegeKundenHinzu(String username, String passwort, String name, String strasse, int plz, String wohnort) throws KundeExistiertBereitsException, UsernameExistiertBereitsException{
 		this.existiertUsernameSchon(username, " - in fuegeKundenHinzu() !");
 		
-		Kunde k = new Kunde(id, username, passwort, name, strasse, plz, wohnort);
+		Kunde k = new Kunde(kundenNextId, username, passwort, name, strasse, plz, wohnort);
 		meineKunden.einfuegen(k);
+		kundenNextId++;
 	}
 
 	/**

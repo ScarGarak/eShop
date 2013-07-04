@@ -25,9 +25,9 @@ public class Mitarbeiter extends Person{
 	 * @param passwort Passwort des Mitarbeiters
 	 * @param name Name des Mitarbeiters
 	 */
-	public Mitarbeiter(int id, String username, String passwort, String name, MitarbeiterFunktion funktion){
+	public Mitarbeiter(int id, String username, String passwort, String name, MitarbeiterFunktion funktion, double gehalt){
 		super(id, username, passwort, name, PersonTyp.Mitarbeiter);
-		gehalt = 0;
+		this.gehalt = gehalt;
 		this.funktion = funktion;
 	}
 	
