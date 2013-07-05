@@ -43,7 +43,9 @@ import shop.local.domain.ShopVerwaltung;
 import shop.local.domain.exceptions.ArtikelBestandIstKeineVielfacheDerPackungsgroesseException;
 import shop.local.domain.exceptions.ArtikelExistiertBereitsException;
 import shop.local.domain.exceptions.ArtikelExistiertNichtException;
+import shop.local.domain.exceptions.KundeExistiertNichtException;
 import shop.local.domain.exceptions.MitarbeiterExistiertBereitsException;
+import shop.local.domain.exceptions.MitarbeiterExistiertNichtException;
 import shop.local.domain.exceptions.UsernameExistiertBereitsException;
 import shop.local.ui.gui.LogInGUI;
 import shop.local.ui.gui.components.BestandshistorieGraphik;
@@ -234,7 +236,8 @@ public class MitarbeiterGUI extends JFrame{
 		tabbedPane.addTab("Kunden", kundenPanel);
 
 		createLogPanel();
-		tabbedPane.addTab("Log", logPanel);
+		if(mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Admin))
+			tabbedPane.addTab("Log", logPanel);
 		
 		tabbedPane.addChangeListener(new TabListener());
 	}
@@ -360,9 +363,10 @@ public class MitarbeiterGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean success = false;
+				int artikelnummer = -1;
 
 				try{
-					int artikelnummer = Integer.parseInt(artikelNummerInput.getText());
+					artikelnummer = Integer.parseInt(artikelNummerInput.getText());
 					String bezeichnung = artikelBezeichnungInput.getText();
 					double preis = Double.parseDouble(artikelPreisInput.getText());
 					int bestand = Integer.parseInt(artikelBestandInput.getText());
@@ -397,6 +401,13 @@ public class MitarbeiterGUI extends JFrame{
 				if(success){
 					artikelFooterWrapper.setVisible(false);
 					artikelFooterWrapper.remove(artikelFooterPanel);
+					
+					// Wähle die hinzugefügte Zeile aus
+					int index = artikelTableModel.getRowIndex(artikelnummer);
+					
+					if(index != -1){
+						artikelTable.setRowSelectionInterval(index, index);
+					}
 
 					// Reset von allen Input Felden
 					clearEingabeFelder();
@@ -481,10 +492,15 @@ public class MitarbeiterGUI extends JFrame{
 				if(a == null){
 					setErrorMsg("Interner Fehler: 'Kein Artikel gefunden' !", artikelFooterWrapper);
 				}else if(success){
-					a.setBezeichnung(bezeichnung);
-					a.setPreis(preis);
+					try {
+						shop.artikelBearbeiten(a.getArtikelnummer(), preis, bezeichnung);
+					} catch (ArtikelExistiertNichtException e1) {
+						setErrorMsg("Interner Fehler! Artikel existiert nicht..." , artikelFooterWrapper);
+						return;
+					}
 					
 					updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+					clearArtikelTableSelection();
 					
 					artikelFooterWrapper.setVisible(false);
 					// Resetten
@@ -569,13 +585,17 @@ public class MitarbeiterGUI extends JFrame{
 					setErrorMsg("Interner Fehler: 'Kein Artikel gefunden' !", artikelFooterWrapper);
 				}else if(success){
 					try {
-						a.setBestand(a.getBestand()+anzahl);
+						shop.artikelBestandVeraendern(mitarbeiter, a.getArtikelnummer(), anzahl);
 					} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e1) {
 						setErrorMsg("Die Anzahl ist keine Vielfache der Packungsgroesse!", artikelFooterWrapper);
+						return;
+					} catch (ArtikelExistiertNichtException e1) {
+						setErrorMsg("Interner Fehler! Das Artikel existiert nicht...", artikelFooterWrapper);
 						return;
 					}
 					
 					updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+					clearArtikelTableSelection();
 					
 					artikelFooterWrapper.setVisible(false);
 					// Resetten
@@ -650,13 +670,17 @@ public class MitarbeiterGUI extends JFrame{
 					setErrorMsg("Interner Fehler: 'Kein Artikel gefunden' !", artikelFooterWrapper);
 				}else if(success){
 					try {
-						a.setBestand(a.getBestand()-anzahl);
+						shop.artikelBestandVeraendern(mitarbeiter, a.getArtikelnummer(), -anzahl);
 					} catch (ArtikelBestandIstKeineVielfacheDerPackungsgroesseException e1) {
 						setErrorMsg("Die Anzahl ist keine Vielfache der Packungsgroesse!", artikelFooterWrapper);
+						return;
+					} catch (ArtikelExistiertNichtException e1) {
+						setErrorMsg("Interner Fehler! Das Artikel existiert nicht...", artikelFooterWrapper);
 						return;
 					}
 					
 					updateArtikelTableModel(shop.gibAlleArtikelSortiertNachBezeichnung());
+					clearArtikelTableSelection();
 					
 					artikelFooterWrapper.setVisible(false);
 					// Resetten
@@ -746,44 +770,41 @@ public class MitarbeiterGUI extends JFrame{
 		mitarbeiterTableScrollPane = new JScrollPane(mitarbeiterTable);
 		mitarbeiterTableScrollPane.setBorder(BorderFactory.createEtchedBorder());
 		mitarbeiterTableScrollPane.setAlignmentY(TOP_ALIGNMENT);
-		
-		if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
-			/////////// Mitarbeiter Buttons ///////////
-			mitarbeiterButtonsPanel = new JPanel(new GridLayout(0,1));
 
-			MitarbeiterPanelListener listener = new MitarbeiterPanelListener();
+		/////////// Mitarbeiter Buttons ///////////
+		mitarbeiterButtonsPanel = new JPanel(new GridLayout(0,1));
 
-			mitarbeiterHinzufuegen = new JButton("Hinzuf\u00fcgen");
-			mitarbeiterHinzufuegen.addActionListener(listener);
+		MitarbeiterPanelListener listener = new MitarbeiterPanelListener();
 
-			mitarbeiterBearbeiten = new JButton("Bearbeiten");
-			mitarbeiterBearbeiten.addActionListener(listener);
-			mitarbeiterBearbeiten.setEnabled(false);
-			
-			mitarbeiterBlockieren =   new JButton("Blockieren");
-			mitarbeiterBlockieren.addActionListener(listener);
-			mitarbeiterBlockieren.setEnabled(false);
+		mitarbeiterHinzufuegen = new JButton("Hinzuf\u00fcgen");
+		mitarbeiterHinzufuegen.addActionListener(listener);
 
-			mitarbeiterEntfernen =   new JButton("Entfernen");
-			mitarbeiterEntfernen.addActionListener(listener);
-			mitarbeiterEntfernen.setEnabled(false);
-			
+		mitarbeiterBearbeiten = new JButton("Bearbeiten");
+		mitarbeiterBearbeiten.addActionListener(listener);
+		mitarbeiterBearbeiten.setEnabled(false);
 
-			mitarbeiterButtonsPanel.setMaximumSize(new Dimension(100, 4*25));
-			mitarbeiterButtonsPanel.add(mitarbeiterHinzufuegen);
-			mitarbeiterButtonsPanel.add(mitarbeiterBearbeiten);
-			mitarbeiterButtonsPanel.add(mitarbeiterBlockieren);
-			mitarbeiterButtonsPanel.add(mitarbeiterEntfernen);
-			mitarbeiterButtonsPanel.setAlignmentY(TOP_ALIGNMENT);
-		}
+		mitarbeiterBlockieren =   new JButton("Blockieren");
+		mitarbeiterBlockieren.addActionListener(listener);
+		mitarbeiterBlockieren.setEnabled(false);
+
+		mitarbeiterEntfernen =   new JButton("Entfernen");
+		mitarbeiterEntfernen.addActionListener(listener);
+		mitarbeiterEntfernen.setEnabled(false);
+
+
+		mitarbeiterButtonsPanel.setMaximumSize(new Dimension(100, 4*25));
+		mitarbeiterButtonsPanel.add(mitarbeiterHinzufuegen);
+		mitarbeiterButtonsPanel.add(mitarbeiterBearbeiten);
+		mitarbeiterButtonsPanel.add(mitarbeiterBlockieren);
+		mitarbeiterButtonsPanel.add(mitarbeiterEntfernen);
+		mitarbeiterButtonsPanel.setAlignmentY(TOP_ALIGNMENT);
 		
 		north.add(mitarbeiterTableScrollPane);
 		
-		if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
+		if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter))
 			north.add(mitarbeiterButtonsPanel);
-			createMitarbeiterFooterWrapper();
-			mitarbeiterPanel.add(mitarbeiterFooterWrapper, BorderLayout.SOUTH);
-		}
+		createMitarbeiterFooterWrapper();
+		mitarbeiterPanel.add(mitarbeiterFooterWrapper, BorderLayout.SOUTH);
 		
 		mitarbeiterPanel.add(north, BorderLayout.CENTER);
 	}
@@ -853,14 +874,21 @@ public class MitarbeiterGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean success = false;
+				String username = "";
 				
 				try{
-					String username = mitarbeiterUsernameInput.getText();
+					username = mitarbeiterUsernameInput.getText();
 					String name = mitarbeiterNameInput.getText();
 					double gehalt = 0;
 
 					if(!mitarbeiterGehaltInput.getText().equals("")){
 						gehalt = Double.parseDouble(mitarbeiterGehaltInput.getText());
+						if(gehalt < MINDESTLOHN){
+							setErrorMsg("Der Mindestlohn betr\u00e4gt "+MINDESTLOHN+" EUR!", mitarbeiterFooterWrapper);
+							return;
+						}
+					}else{
+						gehalt = MINDESTLOHN;
 					}
 					
 					MitarbeiterFunktion mf = (MitarbeiterFunktion)mitarbeiterFunktionInput.getSelectedItem();
@@ -881,6 +909,16 @@ public class MitarbeiterGUI extends JFrame{
 				
 				if(success){
 					updateMitarbeiterTableModel(shop.gibAlleMitarbeiter());
+					
+					// Resette Search
+					searchField.setText("");
+					mitarbeiterSorter.setRowFilter(null);
+					
+					int index = mitarbeiterTableModel.getRowIndex(username);
+					
+					if(index != -1){
+						mitarbeiterTable.setRowSelectionInterval(index, index);
+					}
 					
 					//Setze alles zurück
 					clearErrorMsg();
@@ -947,12 +985,15 @@ public class MitarbeiterGUI extends JFrame{
 						}else if(gehalt < MINDESTLOHN){
 							setErrorMsg(String.format("Der Mindestlohn f\u00fcr Mitarbeiter betr\u00e4gt: %.2f "+ Currency.getInstance(Locale.GERMANY), MINDESTLOHN) , mitarbeiterFooterWrapper);
 						}else{
-							m.setGehalt(gehalt);
-							m.setFunktion((MitarbeiterFunktion)mitarbeiterFunktionInput.getSelectedItem());
+							shop.mitarbeiterBearbeiten(m.getId(), m.getPasswort(), m.getName(), (MitarbeiterFunktion)mitarbeiterFunktionInput.getSelectedItem(), gehalt, m.getBlockiert());
 							success = true;
 						}
 					} catch (NumberFormatException nfe){
 						setErrorMsg("Bitte geben Sie einen g\u00fcltigen Wert an!", mitarbeiterFooterWrapper);
+						return;
+					} catch (MitarbeiterExistiertNichtException e1) {
+						setErrorMsg("Interner Fehler! Mitarbeiter existiert nicht...", mitarbeiterFooterWrapper);
+						return;
 					}
 				}else{
 					setErrorMsg("Keine Zeile ausgew\u00e4hlt!", mitarbeiterFooterWrapper);
@@ -993,12 +1034,10 @@ public class MitarbeiterGUI extends JFrame{
 	private void clearMitarbeiterTableSelection(){
 		mitarbeiterTable.clearSelection();
 
-		if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
-			mitarbeiterBearbeiten.setEnabled(false);
-			mitarbeiterEntfernen.setEnabled(false);
-			mitarbeiterBlockieren.setEnabled(false);
-			mitarbeiterBlockieren.setText("Blockieren");
-		}
+		mitarbeiterBearbeiten.setEnabled(false);
+		mitarbeiterEntfernen.setEnabled(false);
+		mitarbeiterBlockieren.setEnabled(false);
+		mitarbeiterBlockieren.setText("Blockieren");
 	}
 
 	private void updateMitarbeiterTableModel(List<Mitarbeiter> mitarbeiterListe){
@@ -1039,10 +1078,12 @@ public class MitarbeiterGUI extends JFrame{
 		
 		KundenPanelListener listener = new KundenPanelListener();
 		
+		
+		kundenEntfernen =  new JButton("Entfernen");
+		kundenEntfernen.addActionListener(listener);
+		kundenEntfernen.setEnabled(false);
+		
 		if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
-			kundenEntfernen =  new JButton("Entfernen");
-			kundenEntfernen.addActionListener(listener);
-			kundenEntfernen.setEnabled(false);
 			kundenButtonsPanel.add(kundenEntfernen);
 			buttonCounter++;
 		}
@@ -1085,9 +1126,7 @@ public class MitarbeiterGUI extends JFrame{
 	private void clearKundenTableSelection(){
 		kundenTable.clearSelection();
 
-		if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
-			kundenEntfernen.setEnabled(false);
-		}
+		kundenEntfernen.setEnabled(false);
 		kundenBlockieren.setEnabled(false);
 		kundenBlockieren.setText("Blockieren");
 	}
@@ -1218,7 +1257,7 @@ public class MitarbeiterGUI extends JFrame{
 					
 					int[] yWerte = null;
 					try {
-						 yWerte = shop.gibBestandsHistorieDaten(a);
+						yWerte = shop.gibBestandsHistorieDaten(a);
 					} catch (IOException e1) {
 						setErrorMsg("Fehler beim Lesen der Log Datei aufgetreten!", artikelFooterWrapper);
 					}
@@ -1367,12 +1406,18 @@ public class MitarbeiterGUI extends JFrame{
 
 					}else if(e.getSource().equals(mitarbeiterBlockieren)) {					// Mitarbeiter Blockieren
 
-						m.setBlockiert(!m.getBlockiert());
+						try {
+							shop.mitarbeiterBearbeiten(m.getId(), m.getPasswort(), m.getName(), m.getFunktion(), m.getGehalt(), !m.getBlockiert());
+						} catch (MitarbeiterExistiertNichtException e1) {
+							setErrorMsg("Interner Fehler! Mitarbeiter existiert nicht...", mitarbeiterFooterWrapper);
+							mitarbeiterFooterWrapper.setVisible(true);
+							return;
+						}
 						updateMitarbeiterTableModel(shop.gibAlleMitarbeiter());
 						
 						mitarbeiterTable.setRowSelectionInterval(row, row);
 
-					}else if(e.getSource().equals(mitarbeiterEntfernen)){
+					}else if(e.getSource().equals(mitarbeiterEntfernen)){					// Mitarbeiter Entfernen
 						
 						int choice = JOptionPane.showConfirmDialog(new JFrame(), "Sind Sie sicher, dass Sie Mitarbeiter '" + m.getName() + "'\n"
 								+"(ID: "+m.getId()+") l\u00f6schen m\u00f6chten?", "Sicher?!", JOptionPane.YES_NO_OPTION, 
@@ -1409,24 +1454,28 @@ public class MitarbeiterGUI extends JFrame{
 			if(row != -1){
 				Kunde k = kundenTableModel.getKunde(kundenTable.convertRowIndexToModel(row));
 
-				if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
-					if(e.getSource().equals(kundenEntfernen)){					//Kunde Entfernen
+				if(e.getSource().equals(kundenEntfernen)){					//Kunde Entfernen
 
-						int choice = JOptionPane.showConfirmDialog(new JFrame(), "Sind Sie sicher, dass Sie Kunde '"+k.getName()+"'\n"
-								+ "(ID: "+k.getId()+") l\u00f6schen m\u00f6chten!", "Sicher?!",
-								JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+					int choice = JOptionPane.showConfirmDialog(new JFrame(), "Sind Sie sicher, dass Sie Kunde '"+k.getName()+"'\n"
+							+ "(ID: "+k.getId()+") l\u00f6schen m\u00f6chten!", "Sicher?!",
+							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-						if(choice == JOptionPane.YES_OPTION){
-							shop.kundenLoeschen(k);
-							updateKundenTableModel(shop.gibAlleKunden());
-							clearKundenTableSelection();
-						}
+					if(choice == JOptionPane.YES_OPTION){
+						shop.kundenLoeschen(k);
+						updateKundenTableModel(shop.gibAlleKunden());
+						clearKundenTableSelection();
 					}
 					
 				}
 				if(e.getSource().equals(kundenBlockieren)){			// Kunde Blockieren
 
-					k.setBlockiert(!k.getBlockiert());
+					try {
+						shop.kundenBearbeiten(k.getId(), k.getPasswort(), k.getName(), k.getStrasse(), k.getPlz(), k.getWohnort(), !k.getBlockiert());
+					} catch (KundeExistiertNichtException e1) {
+						setErrorMsg("Interner Fehler! Kunde existiert nicht...", kundenFooterWrapper);
+						kundenFooterWrapper.setVisible(true);
+						return;
+					}
 					updateKundenTableModel(shop.gibAlleKunden());
 					
 					kundenTable.setRowSelectionInterval(row, row);
@@ -1520,9 +1569,8 @@ public class MitarbeiterGUI extends JFrame{
 					
 					// Alles von den anderen Tabs zurücksetzen
 					clearMitarbeiterTableSelection();
-					
-					if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter))
-						mitarbeiterFooterWrapper.setVisible(false);
+
+					mitarbeiterFooterWrapper.setVisible(false);
 					
 					clearKundenTableSelection();
 					kundenFooterWrapper.setVisible(false);
@@ -1545,9 +1593,8 @@ public class MitarbeiterGUI extends JFrame{
 					clearArtikelTableSelection();
 					artikelFooterWrapper.setVisible(false);
 					clearMitarbeiterTableSelection();
-					
-					if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter))
-						mitarbeiterFooterWrapper.setVisible(false);
+
+					mitarbeiterFooterWrapper.setVisible(false);
 					break;
 					
 			case 3: searchField.setEnabled(true);
@@ -1557,9 +1604,8 @@ public class MitarbeiterGUI extends JFrame{
 					clearArtikelTableSelection();
 					artikelFooterWrapper.setVisible(false);
 					clearMitarbeiterTableSelection();
-					
-					if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter))
-						mitarbeiterFooterWrapper.setVisible(false);
+
+					mitarbeiterFooterWrapper.setVisible(false);
 					
 					clearKundenTableSelection();
 					kundenFooterWrapper.setVisible(false);
@@ -1608,6 +1654,7 @@ public class MitarbeiterGUI extends JFrame{
 						mitarbeiterBlockieren.setText("Blockieren");
 					}
 				}
+
 			}
 		}
 		
@@ -1619,9 +1666,7 @@ public class MitarbeiterGUI extends JFrame{
 		public void valueChanged(ListSelectionEvent e) {
 			if(!e.getValueIsAdjusting()){
 				kundenFooterWrapper.setVisible(false);
-				if(!mitarbeiter.getFunktion().equals(MitarbeiterFunktion.Mitarbeiter)){
-					kundenEntfernen.setEnabled(true);
-				}
+				kundenEntfernen.setEnabled(true);
 				kundenBlockieren.setEnabled(true);
 				int row = kundenTable.getSelectedRow();
 				if(row != -1){

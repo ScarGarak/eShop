@@ -1,5 +1,6 @@
 package shop.local.ui.gui.mitarbeitergui.table;
 
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import shop.local.valueobjects.Mitarbeiter;
@@ -63,6 +64,18 @@ public class MitarbeiterTableModel extends AbstractTableModel{
 	
 	public Mitarbeiter getMitarbeiter(int row){
 		return mitarbeiterListe.get(row);
+	}
+	
+	public int getRowIndex(String username){
+		Iterator<Mitarbeiter> iter = mitarbeiterListe.iterator();
+		while(iter.hasNext()){
+			Mitarbeiter m = iter.next();
+			if(m.getUsername().equals(username)){
+				return mitarbeiterListe.indexOf(m);
+			}
+		}
+		
+		return -1;
 	}
 
 }

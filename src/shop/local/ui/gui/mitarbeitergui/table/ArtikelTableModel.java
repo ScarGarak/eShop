@@ -1,5 +1,6 @@
 package shop.local.ui.gui.mitarbeitergui.table;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -69,6 +70,18 @@ public class ArtikelTableModel extends AbstractTableModel {
 	
 	public Artikel getArtikel(int row){
 		return artikelListe.get(row);
+	}
+	
+	public int getRowIndex(int artikelnummer){
+		Iterator<Artikel> iter = artikelListe.iterator();
+		while(iter.hasNext()){
+			Artikel a = iter.next();
+			if(a.getArtikelnummer() == artikelnummer){
+				return artikelListe.indexOf(a);
+			}
+		}
+		
+		return -1;
 	}
 	
 }

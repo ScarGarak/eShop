@@ -279,7 +279,11 @@ public class EreignisVerwaltung {
 	private void fuegeVorgeschichteHinzu(Vector<String[]> bestandsHistorie){
 		try {
 			Calendar datum = Calendar.getInstance();
-			datum.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(bestandsHistorie.get(0)[0]));
+			if(bestandsHistorie.size() == 0){
+				datum.setTime(new Date());
+			}else{
+				datum.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(bestandsHistorie.get(0)[0]));
+			}
 			
 			while(bestandsHistorie.size() < 30){
 				datum.add(Calendar.DAY_OF_MONTH, -1);

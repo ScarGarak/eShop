@@ -95,8 +95,8 @@ public class ShopVerwaltung {
 		return meineArtikel.getArtikel(artikelnummer);
 	}
 	
-	public void artikelBestandErhoehen(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, IOException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
-		meineArtikel.bestandErhoehen(artikelnummer, anzahl);
+	public void artikelBestandVeraendern(Mitarbeiter mitarbeiter, int artikelnummer, int anzahl) throws ArtikelExistiertNichtException, ArtikelBestandIstKeineVielfacheDerPackungsgroesseException {
+		meineArtikel.bestandVeraendern(artikelnummer, anzahl);
 		meineEreignisse.hinzufuegen(new Ereignis(new Date(), gibArtikel(artikelnummer), anzahl, mitarbeiter));
 	}
 	
@@ -114,6 +114,12 @@ public class ShopVerwaltung {
 	
 	public List<Artikel> sucheArtikel(String bezeichnung) {
 		return meineArtikel.sucheArtikel(bezeichnung); 
+	}
+	
+	public void artikelBearbeiten(int artikelnummer, double preis, String bezeichnung) throws ArtikelExistiertNichtException{
+		Artikel a = gibArtikel(artikelnummer);
+		a.setPreis(preis);
+		a.setBezeichnung(bezeichnung);
 	}
 	
 	public void entferneArtikel(Mitarbeiter m, int artikelnummer) throws ArtikelExistiertNichtException, IOException {
@@ -184,6 +190,24 @@ public class ShopVerwaltung {
 	}
 	
 	/**
+	 * Diese Methode ist zum bearbeiten von Mitarbeitern.
+	 * @param id
+	 * @param passwort
+	 * @param name
+	 * @param funktion
+	 * @param gehalt
+	 * @param blockiert
+	 * @throws MitarbeiterExistiertNichtException
+	 */
+	public void mitarbeiterBearbeiten(int id, String passwort, String name, MitarbeiterFunktion funktion, double gehalt, boolean blockiert) throws MitarbeiterExistiertNichtException{
+		Mitarbeiter m = sucheMitarbeiter(id);
+		m.setPasswort(passwort);
+		m.setFunktion(funktion);
+		m.setGehalt(gehalt);
+		m.setBlockiert(blockiert);
+	}
+	
+	/**
 	 * Diese Methode iteriert zuerst durch die Mitarbeiterliste und dann durch die Kundenliste und 
 	 * vergleicht die Usernamen.
 	 * Beim ersten Treffer wird eine UsernameExistiertBereitsException geworfen.
@@ -250,6 +274,27 @@ public class ShopVerwaltung {
 		Kunde k = new Kunde(kundenNextId, username, passwort, name, strasse, plz, wohnort);
 		meineKunden.einfuegen(k);
 		kundenNextId++;
+	}
+	
+	/**
+	 * Diese Methode ist zum bearbeiten einer Kunden Instanz zustaendig.
+	 * @param id
+	 * @param passwort
+	 * @param name
+	 * @param strasse
+	 * @param plz
+	 * @param wohnort
+	 * @param blockiert
+	 * @throws KundeExistiertNichtException
+	 */
+	public void kundenBearbeiten(int id, String passwort, String name, String strasse, int plz, String wohnort, boolean blockiert) throws KundeExistiertNichtException{
+		Kunde k = sucheKunde(id);
+		k.setPasswort(passwort);
+		k.setName(name);
+		k.setStrasse(strasse);
+		k.setPlz(plz);
+		k.setWohnort(wohnort);
+		k.setBlockiert(blockiert);
 	}
 
 	/**

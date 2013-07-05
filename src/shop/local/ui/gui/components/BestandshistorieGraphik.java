@@ -118,10 +118,6 @@ public class BestandshistorieGraphik extends JPanel{
 		// Markierungen Y-Axe
 		for(int i = 0; i < max+yAxeInterval; i++){
 			if(yAxeInterval == 1 || (i != 0 && i % yAxeInterval == 0)){
-				System.out.println("yAxeInterval = "+yAxeInterval);
-				System.out.println("i = "+i);
-				System.out.println("Pixel Wert von y = "+(int)(i+1)*yAxePixelProPunkt);
-				System.out.println();
 				int x0 = ABSTANDZUMRAND - (MARKIERUNGSLAENGE/2);
 				int y0 = getHeight() - ABSTANDZUMRAND - (int)((i+1)*yAxePixelProPunkt);
 				int x1 = x0 + MARKIERUNGSLAENGE;

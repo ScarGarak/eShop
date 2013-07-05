@@ -129,7 +129,7 @@ public class CopyOfShopClientCUI {
 				System.out.print("Artikelanzahl > ");
 				int anzahl = Integer.parseInt(liesEingabe());
 				boolean ok = false;
-				shop.artikelBestandErhoehen(m, nummer, anzahl);
+				shop.artikelBestandVeraendern(m, nummer, anzahl);
 				ok = true;
 				if (ok)
 					System.out.println("Bestand erhšhen ok");
